@@ -1,0 +1,39 @@
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools" android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    tools:context="com.example.utarbustrackingsystemapplication.ScheduleActivity"
+    android:background="#fec353"
+    android:orientation="vertical">
+
+    <android.support.v4.widget.SwipeRefreshLayout
+        xmlns:android="http://schemas.android.com/apk/res/android"
+        android:id="@+id/swiperefresh"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent">
+
+        <ListView
+            android:id="@+id/scheduleLV"
+            android:divider="#E6E6E6"
+            android:dividerHeight="0dp"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content">
+        </ListView>
+
+    </android.support.v4.widget.SwipeRefreshLayout>
+
+    <!--<ImageView
+        android:id="@+id/imageView1"
+        android:layout_width="wrap_content"
+        android:layout_height="400dp" />
+
+    <Button
+        android:id="@+id/btnChangeImage"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:text="Change Image" />-->
+    <!--<WebView
+        android:id="@+id/webView"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"></WebView>-->
+
+</LinearLayout>

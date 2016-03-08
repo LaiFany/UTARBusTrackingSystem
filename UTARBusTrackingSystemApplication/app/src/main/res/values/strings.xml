@@ -1,0 +1,13 @@
+<resources>
+    <string name="app_name">UTAR Bus Tracking System Application</string>
+
+    <string name="hello_world">Hello world!</string>
+    <string name="map_btn_label">Click for some awesome stuff!</string>
+    <string name="action_settings">Settings</string>
+    <string name="title_activity_map">MapActivity</string>
+    <string name="title_activity_news">NewsActivity</string>
+    <string name="title_activity_schedule">ScheduleActivity</string>
+
+    <string name="drawer_open">Open navigation drawer</string>
+    <string name="drawer_close">Close navigation drawer</string>
+</resources>

@@ -1,0 +1,27 @@
+<resources>
+    <string name="app_name">BusDriverApp</string>
+
+    <string-array name="bus_array">
+        <item>Bus 3 (BHG 7344)</item>
+        <item>Bus 4 (WMF 7345)</item>
+        <item>Bus 6 (BJE 7349)</item>
+        <item>Bus 7 (BJE 7350)</item>
+        <item>Bus 8 (BJE 7351)</item>
+        <item>Bus 9 (BJU 7359)</item>
+        <item>Bus 12 (BLD 7366)</item>
+        <!--<item>Bus 1</item>
+        <item>Bus 2</item>
+        <item>Bus 3</item>
+        <item>Bus 4</item>
+        <item>Bus 5</item>-->
+    </string-array>
+    <string-array name="route_array">
+        <item>Route 1 : Bandar Sg Long and Palm Walk 1</item>
+        <item>Route 2 :  Bandar Sg Long and Palm Walk 2</item>
+        <item>Route 3 :  Bandar Sg Long and Palm Walk 3</item>
+        <item>Route 4 : Bandar Mahkota Cheras 1 </item>
+        <item>Route 5 : Bandar Mahkota Cheras 2</item>
+        <item>Route 6 : KTM Serdang 1</item>
+        <item>Route 7 : KTM Serdang 2</item>
+    </string-array>
+</resources>

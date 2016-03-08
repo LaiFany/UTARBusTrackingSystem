@@ -1,0 +1,219 @@
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:background="#e94167"
+    android:orientation="vertical">
+
+        <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+            xmlns:tools="http://schemas.android.com/tools" android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:layout_weight="0.35"
+            android:orientation="vertical"
+            tools:context="com.example.utarbustrackingsystemapplication.MapActivity">
+
+            <fragment xmlns:android="http://schemas.android.com/apk/res/android"
+                xmlns:tools="http://schemas.android.com/tools"
+                xmlns:map="http://schemas.android.com/apk/res-auto"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:id="@+id/map"
+                tools:context=".MapsActivity"
+                android:name="com.google.android.gms.maps.SupportMapFragment"
+                map:cameraTargetLat="3.0408043087568917"
+                map:cameraTargetLng="101.79446781107264"
+                map:cameraTilt="30"
+                map:cameraZoom="15"/>
+
+            <com.github.florent37.materialtextfield.MaterialTextField
+
+                android:id="@+id/mtfRoute"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="35dp"
+                android:layout_marginLeft="15dp"
+                android:layout_marginRight="15dp"
+                app:mtf_image="@drawable/route"
+                >
+                <EditText
+                    android:id="@+id/route"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="-5dp"
+                    android:layout_marginBottom="-5dp"
+                    android:hint=""
+                    android:textColor="#333"
+                    android:textColorHint="#666"
+                    android:textSize="20sp"
+                    android:cursorVisible="false"
+                    android:focusable="false"
+                    android:focusableInTouchMode="false"/>
+
+            </com.github.florent37.materialtextfield.MaterialTextField>
+
+        </RelativeLayout>
+
+        <ScrollView xmlns:android="http://schemas.android.com/apk/res/android"
+            xmlns:tools="http://schemas.android.com/tools"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:fadeScrollbars="false"
+            android:layout_weight="1.65"
+            tools:context=".MainActivity" >
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:orientation="vertical" >
+
+                <!--<com.github.florent37.materialtextfield.MaterialTextField
+
+                    android:id="@+id/mtfId"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:paddingTop="15dp"
+                    android:layout_marginLeft="15dp"
+                    android:layout_marginRight="15dp"
+                    app:mtf_image="@drawable/server"
+                    >
+                    <EditText
+                        android:id="@+id/id"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:hint="ID"
+                        android:textColor="#333"
+                        android:textColorHint="#666"
+                        android:textSize="20sp"
+                        android:cursorVisible="false"
+                        android:focusable="false"
+                        android:focusableInTouchMode="false"/>
+
+                </com.github.florent37.materialtextfield.MaterialTextField>-->
+
+                <com.github.florent37.materialtextfield.MaterialTextField
+
+                    android:id="@+id/mtfBus"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:paddingTop="15dp"
+                    android:layout_marginLeft="15dp"
+                    android:layout_marginRight="15dp"
+                    app:mtf_image="@drawable/bus"
+                    >
+                    <EditText
+                        android:id="@+id/bus"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:hint="Bus"
+                        android:textColor="#333"
+                        android:textColorHint="#666"
+                        android:textSize="20sp"
+                        android:cursorVisible="false"
+                        android:focusable="false"
+                        android:focusableInTouchMode="false"/>
+
+                </com.github.florent37.materialtextfield.MaterialTextField>
+
+                <com.github.florent37.materialtextfield.MaterialTextField
+
+                    android:id="@+id/mtfDistanceToUser"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:paddingTop="15dp"
+                    android:layout_marginLeft="15dp"
+                    android:layout_marginRight="15dp"
+                    app:mtf_image="@drawable/user"
+                    >
+                    <EditText
+                        android:id="@+id/distanceToUser"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:hint="Distance To You"
+                        android:textColor="#333"
+                        android:textColorHint="#666"
+                        android:textSize="20sp"
+                        android:cursorVisible="false"
+                        android:focusable="false"
+                        android:focusableInTouchMode="false"/>
+
+                </com.github.florent37.materialtextfield.MaterialTextField>
+
+                <com.github.florent37.materialtextfield.MaterialTextField
+
+                    android:id="@+id/mtfDistanceToUtar"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:paddingTop="15dp"
+                    android:layout_marginLeft="15dp"
+                    android:layout_marginRight="15dp"
+                    app:mtf_image="@drawable/utar"
+                    >
+                    <EditText
+                        android:id="@+id/distanceToUtar"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:hint="Distance To UTAR"
+                        android:textColor="#333"
+                        android:textColorHint="#666"
+                        android:textSize="20sp"
+                        android:cursorVisible="false"
+                        android:focusable="false"
+                        android:focusableInTouchMode="false"/>
+
+                </com.github.florent37.materialtextfield.MaterialTextField>
+
+                <com.github.florent37.materialtextfield.MaterialTextField
+
+                    android:id="@+id/mtfEtaToUser"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:paddingTop="15dp"
+                    android:layout_marginLeft="15dp"
+                    android:layout_marginRight="15dp"
+                    app:mtf_image="@drawable/time"
+                    >
+                    <EditText
+                        android:id="@+id/etaToUser"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:hint="ETA To You"
+                        android:textColor="#333"
+                        android:textColorHint="#666"
+                        android:textSize="20sp"
+                        android:cursorVisible="false"
+                        android:focusable="false"
+                        android:focusableInTouchMode="false"/>
+
+                </com.github.florent37.materialtextfield.MaterialTextField>
+
+                <com.github.florent37.materialtextfield.MaterialTextField
+
+                    android:id="@+id/mtfNoOfPassengers"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:paddingTop="15dp"
+                    android:layout_marginLeft="15dp"
+                    android:layout_marginRight="15dp"
+                    app:mtf_image="@drawable/passengers"
+                    >
+                    <EditText
+                        android:id="@+id/noOfPassengers"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:hint="No. of Passengers"
+                        android:textColor="#333"
+                        android:textColorHint="#666"
+                        android:textSize="20sp"
+                        android:cursorVisible="false"
+                        android:focusable="false"
+                        android:focusableInTouchMode="false"/>
+
+                </com.github.florent37.materialtextfield.MaterialTextField>
+
+            </LinearLayout>
+
+        </ScrollView>
+
+    </LinearLayout>
+
+

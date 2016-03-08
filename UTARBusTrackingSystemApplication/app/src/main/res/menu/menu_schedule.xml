@@ -1,0 +1,18 @@
+<menu xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    tools:context="com.example.utarbustrackingsystemapplication.ScheduleActivity">
+    <!--<item android:id="@+id/action_settings" android:title="@string/action_settings"
+        android:orderInCategory="100" app:showAsAction="always" />-->
+    <item android:id="@+id/news"
+        android:title="News Portal"
+        android:icon="@drawable/news"
+        android:orderInCategory="101"
+        app:showAsAction="always" />
+
+    <item android:id="@+id/map"
+        android:title="Map"
+        android:icon="@drawable/map"
+        android:orderInCategory="101"
+        app:showAsAction="always" />
+</menu>
