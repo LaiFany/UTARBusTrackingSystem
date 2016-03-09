@@ -132,7 +132,6 @@ public class MapActivity extends ActionBarActivity implements GoogleMap.OnMarker
     ListView list;
 
     Polyline[] line;
-    public LatLng[] latLngList;
 
     String[] itemRouteNo;
     String[] itemRouteName;
@@ -346,10 +345,10 @@ public class MapActivity extends ActionBarActivity implements GoogleMap.OnMarker
         rlp.setMargins(0, 0, 30, 30);
 
         //add marker to position of UTAR
-        final Marker marker = map.addMarker(new MarkerOptions().position(UtarPos).title("UTAR"));
+        final Marker marker = map.addMarker(new MarkerOptions().position(UtarPos).title("UTAR").icon(BitmapDescriptorFactory.fromResource(R.mipmap.greenmarker)));
 
-        //set position of marker
-        MarkerOptions mo = new MarkerOptions().position(UtarPos).icon(BitmapDescriptorFactory.fromResource(R.drawable.busicon4));
+        //set position of marker // originally is R.drawable.busicon4
+        MarkerOptions mo = new MarkerOptions().position(UtarPos).icon(BitmapDescriptorFactory.fromResource(R.mipmap.redmarker));
         for(int i = 0; i < noOfRouteInTable; i++){
             m[i] = map.addMarker(mo);
         }
@@ -369,7 +368,7 @@ public class MapActivity extends ActionBarActivity implements GoogleMap.OnMarker
                     String[] coordinates = wayPointStops[j].split(",");
                     Double lat = Double.parseDouble(coordinates[0]);
                     Double lng = Double.parseDouble(coordinates[1]);
-                    MarkerOptions wmo = new MarkerOptions().position(new LatLng(lat, lng)).title(wayPointStopNames[j]);
+                    MarkerOptions wmo = new MarkerOptions().position(new LatLng(lat, lng)).title(wayPointStopNames[j]).icon(BitmapDescriptorFactory.fromResource(R.mipmap.greenmarker));
                     mWayPoint[j] = map.addMarker(wmo);
                 }
                 mWayPointList.add(mWayPoint);
@@ -621,7 +620,8 @@ public class MapActivity extends ActionBarActivity implements GoogleMap.OnMarker
                 for(int i = 0; i < number.length; i++) {
                     try {
                         LatLng busPos = new LatLng(Double.parseDouble(asyncLat[i]), Double.parseDouble(asyncLng[i]));
-                        m[i].setPosition(busPos);
+                        //m[i].setPosition(busPos);
+                        animateMarker(m[i], busPos);
                         m[i].setTitle("Route " + asyncRouteNo[i] + " : " + asyncRouteName[i]);
                         m[i].setSnippet(asyncBus[i]);
 
@@ -820,14 +820,26 @@ public class MapActivity extends ActionBarActivity implements GoogleMap.OnMarker
 
                                 getSupportActionBar().setTitle(selecteditem);
                                 if (selecteditem == "All Routes") {
+                                    //show all bus markers
                                     for (int i = 0; i < noOfRouteInTable; i++) {
                                         m[i].setVisible(true);
                                     }
-                                    for(int i = 0; i < line.length; i++){
+                                    //show all stop markers and route paths
+                                    for(int i = 0; i < mWayPointList.size(); i++){
+                                        Marker[] markers = mWayPointList.get(i);
+                                        for(int j = 0; j < markers.length; j++){
+                                            markers[j].setVisible(true);
+                                        }
+                                        if(line[i] != null){
+                                            line[i].setVisible(true);
+                                            //System.out.println("line["+i+"] not null");
+                                        }
+                                    }
+                                    /*for(int i = 0; i < line.length; i++){
                                         if(line[i] != null){
                                             line[i].setVisible(true);
                                         }
-                                    }
+                                    }*/
 
                                     //set data to textviews
                                     selectedRoute = 100;
@@ -942,8 +954,7 @@ public class MapActivity extends ActionBarActivity implements GoogleMap.OnMarker
         }
     }
 
-    public void animateMarker(final Marker marker, final LatLng toPosition,
-                              final boolean hideMarker) {
+    public void animateMarker(final Marker marker, final LatLng toPosition) {
         final Handler handler = new Handler();
         final long start = SystemClock.uptimeMillis();
         Projection proj = map.getProjection();
@@ -969,11 +980,11 @@ public class MapActivity extends ActionBarActivity implements GoogleMap.OnMarker
                     // Post again 16ms later.
                     handler.postDelayed(this, 16);
                 } else {
-                    if (hideMarker) {
+                    /*if (hideMarker) {
                         marker.setVisible(false);
                     } else {
                         marker.setVisible(true);
-                    }
+                    }*/
                 }
             }
         });
