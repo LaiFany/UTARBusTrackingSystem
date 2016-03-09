@@ -49,8 +49,8 @@ public class NewsAdapter extends ArrayAdapter<String> {
         View rowView=inflater.inflate(R.layout.news_items, parent, false);
 
         //TextView idTv = (TextView) rowView.findViewById(R.id.no);
-        TextView title = (TextView) rowView.findViewById(R.id.title);
-        TextView desc = (TextView) rowView.findViewById(R.id.desc);
+        final TextView title = (TextView) rowView.findViewById(R.id.title);
+        final TextView desc = (TextView) rowView.findViewById(R.id.desc);
         TextView dateTv = (TextView) rowView.findViewById(R.id.date);
 
         //idTv.setText(String.valueOf(id[position]));
@@ -71,9 +71,23 @@ public class NewsAdapter extends ArrayAdapter<String> {
             }
         }
 
-        //make textview scroll horizaontally
-        title.setSelected(true);
-        desc.setSelected(true);
+        rowView.setOnLongClickListener(new View.OnLongClickListener() {
+            @Override
+            public boolean onLongClick(View v) {
+                //make textview scroll horizaontally
+                if (title.isSelected()) {
+                    title.setSelected(false);
+                } else {
+                    title.setSelected(true);
+                }
+                if (desc.isSelected()) {
+                    desc.setSelected(false);
+                } else {
+                    desc.setSelected(true);
+                }
+                return false;
+            }
+        });
 
         return rowView;
     }

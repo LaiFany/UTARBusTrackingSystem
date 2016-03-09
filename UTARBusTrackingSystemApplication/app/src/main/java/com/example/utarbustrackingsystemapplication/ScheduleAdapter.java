@@ -42,7 +42,7 @@ public class ScheduleAdapter extends ArrayAdapter<String> {
         View rowView=inflater.inflate(R.layout.schedule_items, parent, false);
 
         //TextView idTv = (TextView) rowView.findViewById(R.id.no);
-        TextView route = (TextView) rowView.findViewById(R.id.route);
+        final TextView route = (TextView) rowView.findViewById(R.id.route);
         TextView bus = (TextView) rowView.findViewById(R.id.bus);
         TextView dateTv = (TextView) rowView.findViewById(R.id.date);
 
@@ -50,9 +50,18 @@ public class ScheduleAdapter extends ArrayAdapter<String> {
         bus.setText(busNo[position]);
         dateTv.setText(date[position]);
 
-        //make textview scroll horizaontally
-        route.setSelected(true);
-
+        rowView.setOnLongClickListener(new View.OnLongClickListener() {
+            @Override
+            public boolean onLongClick(View v) {
+                //make textview scroll horizaontally
+                if (route.isSelected()) {
+                    route.setSelected(false);
+                } else {
+                    route.setSelected(true);
+                }
+                return false;
+            }
+        });
 
         return rowView;
     }

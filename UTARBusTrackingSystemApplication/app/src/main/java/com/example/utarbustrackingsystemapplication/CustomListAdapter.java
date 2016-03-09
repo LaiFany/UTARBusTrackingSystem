@@ -35,8 +35,8 @@ public class CustomListAdapter extends ArrayAdapter<String> {
         LayoutInflater inflater=context.getLayoutInflater();
         View rowView=inflater.inflate(R.layout.drawer_listview_item, null, true);
 
-        TextView txtTitle = (TextView) rowView.findViewById(R.id.et1);
-        TextView sub = (TextView) rowView.findViewById(R.id.subet);
+        final TextView txtTitle = (TextView) rowView.findViewById(R.id.et1);
+        final TextView sub = (TextView) rowView.findViewById(R.id.subet);
         //ImageView imageView = (ImageView) rowView.findViewById(R.id.icon);
         if(itemRouteNo[position] == "All Routes"){
             txtTitle.setText(itemRouteNo[position]);
@@ -47,11 +47,29 @@ public class CustomListAdapter extends ArrayAdapter<String> {
         sub.setText(itemRouteName[position]);
         //imageView.setImageResource(imgid[position]);
         if(position == pos){
-            txtTitle.setTextColor(Color.BLACK);
-            sub.setTextColor(Color.BLACK);
-            rowView.setBackgroundColor(Color.parseColor("#ffffff"));
+            txtTitle.setTextColor(Color.WHITE);
+            sub.setTextColor(Color.WHITE);
+            rowView.setBackgroundColor(Color.parseColor("#e94167"));
             //rowView.setBackgroundResource(R.drawable.white_navbar_bg_gradient);
         }
+
+        rowView.setOnLongClickListener(new View.OnLongClickListener() {
+            @Override
+            public boolean onLongClick(View v) {
+                //make textview scroll horizaontally
+                if (txtTitle.isSelected()) {
+                    txtTitle.setSelected(false);
+                } else {
+                    txtTitle.setSelected(true);
+                }
+                if (sub.isSelected()) {
+                    sub.setSelected(false);
+                } else {
+                    sub.setSelected(true);
+                }
+                return false;
+            }
+        });
         return rowView;
     };
 }
