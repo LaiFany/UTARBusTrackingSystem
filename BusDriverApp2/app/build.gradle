@@ -5,7 +5,7 @@ android {
     buildToolsVersion '22.0.1'
     defaultConfig {
         applicationId "com.example.busdriverapp"
-        minSdkVersion 9
+        minSdkVersion 14
         targetSdkVersion 22
         versionCode 1
         versionName "1.0"
@@ -26,4 +26,12 @@ dependencies {
     compile 'com.android.support:appcompat-v7:22.2.1'
     compile 'com.android.support:cardview-v7:22.2.1'
     compile 'com.skyfishjy.ripplebackground:library:1.0.1'
+
+    //download material design for edittext
+    compile 'com.github.florent37:materialtextfield:1.0.1@aar'
+    compile 'com.android.support:cardview-v7:22.2.1'
+    compile 'com.nineoldandroids:library:2.4.0'
+
+    //for ArrayUtils
+    compile files('libs/commons-lang3-3.4.jar')
 }
