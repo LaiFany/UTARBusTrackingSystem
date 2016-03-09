@@ -202,7 +202,3 @@
 	body { padding-top: 70px; }
 
 </style>
-
-<?php
-	session_destroy();
-?>

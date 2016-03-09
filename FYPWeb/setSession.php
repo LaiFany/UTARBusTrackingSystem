@@ -1,6 +1,8 @@
 <?php
 	
-	session_start();
+	if (session_status() == PHP_SESSION_NONE) {
+		session_start();
+	}
 	
 	if(isset($_POST['infoId']) && isset($_POST['routeNo']) && isset($_POST['routeName']) && isset($_POST['bus']) && isset($_POST['waypoint']) && isset($_POST['stopNames'])){
 		$_SESSION['infoId'] = $_POST['infoId'];
@@ -27,6 +29,13 @@
 		$_SESSION['scheduleBottomNote'] = $_POST['scheduleBottomNote'];
 		$_SESSION['scheduleTimetable'] = $_POST['scheduleTimetable'];
 		$_SESSION['scheduleDate'] = $_POST['scheduleDate'];
+	}
+	
+	if(isset($_POST['userId']) && isset($_POST['userUsername']) && isset($_POST['userPassword']) && isset($_POST['userPrivilege'])){
+		$_SESSION['userId'] = $_POST['userId'];
+		$_SESSION['userUsername'] = $_POST['userUsername'];
+		$_SESSION['userPassword'] = $_POST['userPassword'];
+		$_SESSION['userPrivilege'] = $_POST['userPrivilege'];
 	}
 	
 	if(isset($_POST['sessionLink'])){

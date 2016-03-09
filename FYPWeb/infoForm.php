@@ -317,18 +317,6 @@ enctype="multipart/form-data">
 		  </div>
 		</div>
 		
-		<div class="panel panel-info">
-		  <div class="panel-heading">Schedule</div>
-		  <div class="panel-body">
-			<div class = "row form-group has-feedback">
-				<label for="file" class="col-sm-2">Schedule link</label>
-				<div class="col-sm-4">
-					<input type="text" name="schedule" id="schedule" class="form-control">
-				</div>
-			</div>
-		  </div>
-		</div>
-		
 		<input type="submit" name="submit" value="Submit" class="btn btn-default pull-right">
 		</form>
 	  </div>
@@ -424,7 +412,3 @@ enctype="multipart/form-data">
 	body { padding-top: 70px; }
 
 </style>
-
-<?php
-	session_destroy();
-?>

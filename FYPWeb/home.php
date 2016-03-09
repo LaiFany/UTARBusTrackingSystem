@@ -14,15 +14,18 @@
 	if (session_status() == PHP_SESSION_NONE) {
 		session_start();
 	}
-	session_destroy();
-	
-	$_SESSION['link'] = '';
+	if(!isset($_SESSION['user'])){
+		header('Location:login.php');
+	}
 	
 	//navbar
 	include 'navBar.php';
 
 	$con=mysqli_connect('localhost', 'root', '', 'bustrackerdb');
 	mysqli_select_db($con, "bustrackerdb");
+	
+	//get updated data in user table
+	$userResult = mysqli_query($con, "SELECT * FROM user");
 	
 	//get updated data in info table
 	$infoResult = mysqli_query($con, "SELECT * FROM info");
@@ -32,6 +35,48 @@
 	
 	//get updated data in news table
 	$scheduleResult = mysqli_query($con, "SELECT * FROM schedule");
+	
+	if(!empty($userResult)){
+		//create table and populate them with data from info table in server
+		?>
+			<div class="panel panel-info">
+				<div class="panel-heading" style="padding : 20px;">User Table <button type="button" class="btn btn-info pull-right" id = "addUser" >Add</button></div>
+				<div class="panel-body">
+					<div class = "table-responsive">
+						<table class = "table table-hover">
+							<thead>
+								<tr>
+									<th>ID</th>
+									<th>Username</th>
+									<th>Password</th>
+									<th>Privilege</th>
+									<th>Options</th>
+								</tr>
+							</thead>
+							<tbody>
+							<?php
+							while($row = mysqli_fetch_array($userResult)){
+							?>
+							
+								<tr class = "infoClickable">
+									<td class = "userId"><?php echo $row['id'];?></td>
+									<td class = "userUsername"><?php echo $row['username'];?></td>
+									<td class = "userPassword"><?php echo $row['password'];?></td>
+									<td class = "userPrivilege"><?php echo $row['privilege'];?></td>
+									<td class = ""><button type="button" class="btn btn-default userEdit">Edit</button> <button type="button" class="btn btn-default userDelete" data-toggle="modal" data-target="#userModal">Delete</button></td>
+								</tr>
+								
+							<?php
+							}?>
+							</tbody>
+						</table>
+					</div>
+				</div>
+			</div>
+		<?php
+	}else{
+		echo 'user table empty';
+	}
 	
 	if(!empty($infoResult)){
 		
@@ -175,6 +220,28 @@
 ?>
 		</div>
 		
+		<!-- userModal -->
+		  <div class="modal fade" id="userModal" role="dialog">
+			<div class="modal-dialog">
+			
+			  <!-- Modal content-->
+			  <div class="modal-content">
+				<div class="modal-header">
+				  <button type="button" class="close" data-dismiss="modal">&times;</button>
+				  <h4 class="modal-title">Delete User</h4>
+				</div>
+				<div class="modal-body">
+				  <p id = "userModalMessage">Some text in the modal.</p>
+				</div>
+				<div class="modal-footer">
+				  <button type="button" class="btn btn-info" id = "deleteUser" >Delete</button>
+				  <button type="button" class="btn btn-default" data-dismiss="modal">Cancel</button>
+				</div>
+			  </div>
+			  
+			</div>
+		  </div>
+		
 		<!-- infoModal -->
 		  <div class="modal fade" id="infoModal" role="dialog">
 			<div class="modal-dialog">
@@ -266,7 +333,22 @@
 	var scheduleTimetable = '';
 	var scheduleDate = '';
 	
+	var userId = '';
+	var userUsername = '';
+	var userPassword = '';
+	var userPrivilege = '';
+	
 	var sessionLink;
+	
+	$('.userEdit').click(function(){
+		userId = $(this).closest('tr').children('td.userId').text();
+		userUsername = $(this).closest('tr').children('td.userUsername').text();
+		userPassword = $(this).closest('tr').children('td.userPassword').text();
+		userPrivilege = $(this).closest('tr').children('td.userPrivilege').text();
+		sessionLink = 'user';
+		$.post("setSession.php", {userId:userId, userUsername:userUsername, userPassword:userPassword, userPrivilege:userPrivilege, sessionLink:sessionLink});
+		window.location.href = "userForm.php";
+	});
 
 	$('.infoEdit').click(function(){
 		infoId = $(this).closest('tr').children('td.infoId').text();
@@ -304,6 +386,14 @@
 		window.location.href = "scheduleForm.php";
 	});
 	
+	$('.userDelete').click(function(){
+		userId = $(this).closest('tr').children('td.userId').text();
+		userUsername = $(this).closest('tr').children('td.userUsername').text();
+		userPassword = $(this).closest('tr').children('td.userPassword').text();
+		userPrivilege = $(this).closest('tr').children('td.userPrivilege').text();
+		$('#userModalMessage').text("Delete user no. " + userId + " with Username : " + userUsername + ", Password : " + userPassword + ", and Privilege : " + userPrivilege + "?");
+	});
+	
 	$('.infoDelete').click(function(){
 		infoId = $(this).closest('tr').children('td.infoId').text();
 		routeNo = $(this).closest('tr').children('td.infoRouteNo').text();
@@ -332,6 +422,11 @@
 		$('#scheduleModalMessage').text("Delete schedule no. " + scheduleId + " for " + scheduleRoute + " ?");
 	});
 	
+	$('#deleteUser').click(function(){
+		$.post("deleteRow.php", {userId:userId, userUsername:userUsername, userPassword:userPassword, userPrivilege:userPrivilege});
+		window.location.href = "home.php";
+	});
+	
 	$('#deleteRoute').click(function(){
 		$.post("deleteRow.php", {infoId:infoId, routeNo:routeNo, routeName:routeName, bus:bus});
 		window.location.href = "home.php";
@@ -345,6 +440,12 @@
 	$('#deleteSchedule').click(function(){
 		$.post("deleteRow.php", {scheduleId:scheduleId, scheduleRoute:scheduleRoute, scheduleBus:scheduleBus, scheduleTopNote:scheduleTopNote, scheduleBottomNote:scheduleBottomNote, scheduleTimetable:scheduleTimetable, scheduleDate:scheduleDate});
 		window.location.href = "home.php";
+	});
+	
+	$('#addUser').click(function(){
+		sessionLink = 'user';
+		$.post("setSession.php", {sessionLink:sessionLink});
+		window.location.href = "userForm.php";
 	});
 	
 	$('#addInfo').click(function(){

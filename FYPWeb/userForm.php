@@ -2,24 +2,24 @@
 	//session
 	session_start();
 	
-	$_SESSION['link'] = 'news';
+	$_SESSION['link'] = 'user';
 	
-	$newsId = '';
-	$newsTitle = '';
-	$newsDesc = '';
-	$newsContent = '';
+	$userId = '';
+	$userUsername = '';
+	$userPassword = '';
+	$userPrivilege = '';
 	
-	 if(isset($_SESSION['newsId'])){
-		 $newsId = $_SESSION['newsId'];
+	 if(isset($_SESSION['userId'])){
+		 $userId = $_SESSION['userId'];
 	 }
-	 if(isset($_SESSION['newsTitle'])){
-		 $newsTitle = $_SESSION['newsTitle'];
+	 if(isset($_SESSION['userUsername'])){
+		 $userUsername = $_SESSION['userUsername'];
 	 }
-	 if(isset($_SESSION['newsDesc'])){
-		 $newsDesc = $_SESSION['newsDesc'];
+	 if(isset($_SESSION['userPassword'])){
+		 $userPassword = $_SESSION['userPassword'];
 	 }
-	 if(isset($_SESSION['newsContent'])){
-		 $newsContent = $_SESSION['newsContent'];
+	 if(isset($_SESSION['userPrivilege'])){
+		 $userPrivilege = $_SESSION['userPrivilege'];
 	 }
 ?>
 <?php include 'navBar.php'; ?>
@@ -37,35 +37,56 @@
 <div class="container">
 
 	<div class="panel panel-primary">
-      <div class="panel-heading">Adding News</div>
+      <div class="panel-heading">Adding User</div>
       <div class="panel-body">
-		<form id = "newsForm" action="postNewsWeb.php" method="post"
+		<form id = "newsForm" action="postUserWeb.php" method="post"
 		enctype="multipart/form-data">
 		<div class = "row form-group has-feedback">
 			<label for="file" class="col-sm-2">ID No.</label>
 			<div class="col-sm-4 controls">
-				<input type="text" name="newsId" id="newsId" class="form-control" value = "<?php echo $newsId; ?>" readonly>
+				<input type="text" name="newsId" id="newsId" class="form-control" value = "<?php echo $userId; ?>" readonly>
 			</div>
 		</div>
 		<div class = "row form-group has-feedback">
-			<label for="file" class="col-sm-2">News Title</label>
+			<label for="file" class="col-sm-2">Username</label>
 			<div class="col-sm-4 controls">
-				<input type="text" name="newsTitle" id="newsTitle" class="form-control" value = "<?php echo $newsTitle; ?>">
+				<input type="text" name="username" id="username" class="form-control" value = "<?php echo $userUsername; ?>">
 			</div>
 		</div>
 		<div class = "row form-group has-feedback">
-			<label for="file" class="col-sm-2">News Description</label>
+			<label for="file" class="col-sm-2">Password</label>
 			<div class="col-sm-4 controls">
-				<input type="text" name="newsDesc" id="newsDesc" class="form-control" value = "<?php echo $newsDesc; ?>">
+				<input type="text" name="password" id="password" class="form-control" value = "<?php echo $userPassword; ?>">
 			</div>
 		</div>
 		<div class = "row form-group has-feedback">
-			<label for="file" class="col-sm-2">News Content</label>
+			<label for="file" class="col-sm-2">Privilege</label>
 			<div class="col-sm-4 controls">
-				<textarea rows="4" cols="50" name="newsContent" id="newsContent" class="form-control"><?php echo $newsContent; ?></textarea>
+				<label for="route">Select Privilege (select one):</label>
+				<select class="form-control" name = "privilege" id="privilege" required>
+				<?php
+					if($userPrivilege != ''){
+						?>			
+							<option value = "admin" <?php if($userPrivilege == 'admin') echo 'selected';?>>System Administrator</option>
+							<option value = "busdriver" <?php if($userPrivilege == 'admin') echo 'selected';?>>Bus Driver</option>
+						<?php
+					}else{
+						?>
+							<option value = "admin">System Administrator</option>
+							<option value = "busdriver">Bus Driver</option>
+						<?php
+					}
+				?>
 			</div>
 		</div>
 		<input type="submit" name="submit" value="Submit" class="btn btn-default pull-right">
+		<?php
+			if(isset($_SESSION['usernameDuplicate'])){
+				?>
+					<div class = "col-sm-4"><p style="color : red;">Username already exist</p></div>
+				<?php
+			}
+		?>
 		</form>
 	  </div>
     </div>
@@ -77,10 +98,10 @@
 
 	$('form').validate({
         rules: {
-            newsTitle: {
+            username: {
                 required: true
             },
-            newsContent: {
+            password: {
                 required: true
             }
         },

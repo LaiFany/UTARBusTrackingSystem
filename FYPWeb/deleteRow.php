@@ -25,5 +25,10 @@
 		$scheduleDate = $_POST['scheduleDate'];
 		
 		mysqli_query($con, "DELETE FROM schedule WHERE id='".$scheduleId."'");
+		
+	}else if(isset($_POST['userId'])){
+		$userId = $_POST['userId'];
+		
+		mysqli_query($con, "DELETE FROM user WHERE id='".$userId."'");
 	}
 ?>
