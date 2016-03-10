@@ -214,6 +214,21 @@ public class ScheduleActivity extends ActionBarActivity {
                 lv.setAdapter(adapter);
             }
         });
+
+        lv.setOnItemLongClickListener(new AdapterView.OnItemLongClickListener() {
+            @Override
+            public boolean onItemLongClick(AdapterView<?> parent, View view, int position, long id) {
+                TextView routeTextView = (TextView) view.findViewById(R.id.route);
+                //make textview scroll horizaontally
+                if (routeTextView.isSelected()) {
+                    routeTextView.setSelected(false);
+                } else {
+                    routeTextView.setSelected(true);
+                }
+                return true;
+            }
+        });
+
         lv.setOnItemClickListener(new AdapterView.OnItemClickListener() {
             @Override
             public void onItemClick(AdapterView<?> parent, View view, int position, long id) {

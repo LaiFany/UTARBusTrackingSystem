@@ -50,19 +50,6 @@ public class ScheduleAdapter extends ArrayAdapter<String> {
         bus.setText(busNo[position]);
         dateTv.setText(date[position]);
 
-        rowView.setOnLongClickListener(new View.OnLongClickListener() {
-            @Override
-            public boolean onLongClick(View v) {
-                //make textview scroll horizaontally
-                if (route.isSelected()) {
-                    route.setSelected(false);
-                } else {
-                    route.setSelected(true);
-                }
-                return false;
-            }
-        });
-
         return rowView;
     }
 }

@@ -60,34 +60,16 @@ public class NewsAdapter extends ArrayAdapter<String> {
 
         int pos = id.length - position - 1;
 
-        if(unreadId.length > 0){
-            for(int i = 0; i <unreadId.length; i++){
-                if(id[pos] == unreadId[i]){
+        if(unreadId.length > 0) {
+            for (int i = 0; i < unreadId.length; i++) {
+                if (id[pos] == unreadId[i]) {
                     title.setTypeface(null, Typeface.BOLD_ITALIC);
                     break;
-                }else if(i + 1 == unreadId.length){
+                } else if (i + 1 == unreadId.length) {
                     title.setTypeface(null, Typeface.NORMAL);
                 }
             }
         }
-
-        rowView.setOnLongClickListener(new View.OnLongClickListener() {
-            @Override
-            public boolean onLongClick(View v) {
-                //make textview scroll horizaontally
-                if (title.isSelected()) {
-                    title.setSelected(false);
-                } else {
-                    title.setSelected(true);
-                }
-                if (desc.isSelected()) {
-                    desc.setSelected(false);
-                } else {
-                    desc.setSelected(true);
-                }
-                return false;
-            }
-        });
 
         return rowView;
     }

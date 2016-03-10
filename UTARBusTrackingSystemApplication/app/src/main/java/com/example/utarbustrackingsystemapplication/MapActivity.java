@@ -40,6 +40,7 @@ package com.example.utarbustrackingsystemapplication;
         import android.widget.ImageView;
         import android.widget.ListView;
         import android.widget.RelativeLayout;
+        import android.widget.TextView;
         import android.widget.Toast;
 
         import com.github.florent37.materialtextfield.MaterialTextField;
@@ -773,6 +774,26 @@ public class MapActivity extends ActionBarActivity implements GoogleMap.OnMarker
                     //set up header for nav drawer
                     ImageView iv = (ImageView) findViewById(R.id.header);
                     iv.setEnabled(false);
+
+                    list.setOnItemLongClickListener(new AdapterView.OnItemLongClickListener() {
+                        @Override
+                        public boolean onItemLongClick(AdapterView<?> parent, View view, int position, long id) {
+                            TextView txtTitle = (TextView) view.findViewById(R.id.et1);
+                            TextView sub = (TextView) view.findViewById(R.id.subet);
+                            //make textview scroll horizaontally
+                            if (txtTitle.isSelected()) {
+                                txtTitle.setSelected(false);
+                            } else {
+                                txtTitle.setSelected(true);
+                            }
+                            if (sub.isSelected()) {
+                                sub.setSelected(false);
+                            } else {
+                                sub.setSelected(true);
+                            }
+                            return true;
+                        }
+                    });
 
                     //set item click listener to navigation drawer items
                     list.setOnItemClickListener(new AdapterView.OnItemClickListener() {

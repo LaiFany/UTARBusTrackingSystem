@@ -464,6 +464,27 @@ public class NewsActivity extends ActionBarActivity {
                 lv.setAdapter(adapter);
             }
         });
+
+        lv.setOnItemLongClickListener(new AdapterView.OnItemLongClickListener() {
+            @Override
+            public boolean onItemLongClick(AdapterView<?> parent, View view, int position, long id) {
+                TextView title = (TextView) view.findViewById(R.id.title);
+                TextView desc = (TextView) view.findViewById(R.id.desc);
+                //make textview scroll horizaontally
+                if (title.isSelected()) {
+                    title.setSelected(false);
+                } else {
+                    title.setSelected(true);
+                }
+                if (desc.isSelected()) {
+                    desc.setSelected(false);
+                } else {
+                    desc.setSelected(true);
+                }
+                return true;
+            }
+        });
+
         lv.setOnItemClickListener(new AdapterView.OnItemClickListener() {
             @Override
             public void onItemClick(AdapterView<?> parent, View view, int position, long id) {

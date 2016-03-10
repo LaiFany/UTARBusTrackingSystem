@@ -52,24 +52,6 @@ public class CustomListAdapter extends ArrayAdapter<String> {
             rowView.setBackgroundColor(Color.parseColor("#e94167"));
             //rowView.setBackgroundResource(R.drawable.white_navbar_bg_gradient);
         }
-
-        rowView.setOnLongClickListener(new View.OnLongClickListener() {
-            @Override
-            public boolean onLongClick(View v) {
-                //make textview scroll horizaontally
-                if (txtTitle.isSelected()) {
-                    txtTitle.setSelected(false);
-                } else {
-                    txtTitle.setSelected(true);
-                }
-                if (sub.isSelected()) {
-                    sub.setSelected(false);
-                } else {
-                    sub.setSelected(true);
-                }
-                return false;
-            }
-        });
         return rowView;
     };
 }
