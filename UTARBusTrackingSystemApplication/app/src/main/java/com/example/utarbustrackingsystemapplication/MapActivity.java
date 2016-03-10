@@ -193,8 +193,14 @@ public class MapActivity extends ActionBarActivity implements GoogleMap.OnMarker
         //initialize views in layout
         initializeViews();
 
-        //click materialtextfield
-        mtfClick();
+        //delay for 300ms
+        Handler handler = new Handler();
+        handler.postDelayed(new Runnable() {
+            public void run() {
+                //click materialtextfield
+                mtfClick();
+            }
+        }, 300);
 
         ActionBar bar = getSupportActionBar();
 
@@ -532,6 +538,11 @@ public class MapActivity extends ActionBarActivity implements GoogleMap.OnMarker
 
         //disable click
         mtfRoute.setClickable(false);
+        mtfBus.setClickable(false);
+        mtfDistanceToUser.setClickable(false);
+        mtfDistanceToUtar.setClickable(false);
+        mtfEtaToUser.setClickable(false);
+        mtfNoOfPassengers.setClickable(false);
     }
 
     //async tasks to obtain the last position of all registered bus in db
