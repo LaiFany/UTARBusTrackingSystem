@@ -50,6 +50,8 @@
 									<th>Username</th>
 									<th>Password</th>
 									<th>Privilege</th>
+									<th>Default Route</th>
+									<th>Default Bus</th>
 									<th>Options</th>
 								</tr>
 							</thead>
@@ -63,6 +65,8 @@
 									<td class = "userUsername"><?php echo $row['username'];?></td>
 									<td class = "userPassword"><?php echo $row['password'];?></td>
 									<td class = "userPrivilege"><?php echo $row['privilege'];?></td>
+									<td class = "userDefaultRoute"><?php echo $row['defaultRoute'];?></td>
+									<td class = "userDefaultBus"><?php echo $row['defaultBus'];?></td>
 									<td class = ""><button type="button" class="btn btn-default userEdit">Edit</button> <button type="button" class="btn btn-default userDelete" data-toggle="modal" data-target="#userModal">Delete</button></td>
 								</tr>
 								
@@ -93,8 +97,16 @@
 									<th>Route No.</th>
 									<th>Route Name</th>
 									<th>Bus</th>
-									<th>Waypoint Coordinates</th>
-									<th>Stop Names</th>
+									<?php
+										for($i = 0; $i < 8; $i++){
+											$j = $i + 1;
+											?>
+												<th><?php echo 'Stop '.$j?></th>
+											<?php
+										}
+									?>
+									<th style="display : none;">Waypoint Coordinates</th>
+									<th style="display : none;">Stop Names</th>
 									<th>Options</th>
 								</tr>
 							</thead>
@@ -108,8 +120,53 @@
 									<td class = "infoRouteNo"><?php echo $row['routeNo'];?></td>
 									<td class = "infoRouteName"><?php echo $row['routeName'];?></td>
 									<td class = "infoBus"><?php echo $row['bus'];?></td>
-									<td class = "infoWaypoint"><?php echo $row['waypoint'];?></td>
-									<td class = "infoStopNames"><?php echo $row['stopNames'];?></td>
+									
+									<?php
+										$waypoint = '';
+										$stopNames = '';
+										
+										$lat = array('', '', '', '', '', '', '', '');
+										$lng = array('', '', '', '', '', '', '', '');
+										
+										$eachStopName = array('', '', '', '', '', '', '', '');
+										
+										$waypoint = $row['waypoint'];
+										$stopNames = $row['stopNames'];
+										
+										//split waypoint coordinates
+										 if($waypoint != ''){
+											 $coordinates = explode('|', $waypoint);
+											 $length = sizeOf($coordinates);
+											 for($i = 0; $i < $length; $i++){
+												 $data = explode(',', $coordinates[$i]);
+												 $lat[$i] = $data[0];
+												 $lng[$i] = $data[1];
+											 }
+										 }
+										 
+										 //split stopNames
+										 if(!empty($stopNames)){
+											 $stopName = explode('|', $stopNames);
+											 $length2 = sizeOf($stopName);
+											 for($i = 0; $i < $length2; $i++){
+												 $eachStopName[$i] = $stopName[$i];
+											 }
+										 }
+										 for($i = 0; $i < 8; $i++){
+											if(!empty($eachStopName[$i])){
+											 ?>
+												<td><?php echo $eachStopName[$i].' ('.$lat[$i].', '.$lng[$i].')';?></td>
+											 <?php
+											}else{
+											 ?>
+												<td></td>
+											 <?php
+											}
+										 }									 
+										 
+									?>
+									<td class = "infoWaypoint" style="display : none;"><?php echo $row['waypoint'];?></td>
+									<td class = "infoStopNames" style="display : none;"><?php echo $row['stopNames'];?></td>
 									<td class = ""><button type="button" class="btn btn-default infoEdit">Edit</button> <button type="button" class="btn btn-default infoDelete" data-toggle="modal" data-target="#infoModal">Delete</button></td>
 								</tr>
 								
@@ -201,7 +258,8 @@
 									<td class = "scheduleBus"><?php echo $row['bus'];?></td>
 									<td class = "scheduleTopNote"><?php echo $row['topNote'];?></td>
 									<td class = "scheduleBottomNote"><?php echo $row['bottomNote'];?></td>
-									<td class = "scheduleTimetable"><?php echo $row['timetable'];?></td>
+									<td class = ""><a class = "scheduleEdit" href = "scheduleForm.php">View</a></td>
+									<td class = "scheduleTimetable" style="display : none;"><?php echo $row['timetable'];?></td>
 									<td class = "scheduleDate"><?php echo $row['date'];?></td>
 									<td class = ""><button type="button" class="btn btn-default scheduleEdit">Edit</button> <button type="button" class="btn btn-default scheduleDelete" data-toggle="modal" data-target="#scheduleModal">Delete</button></td>
 								</tr>
@@ -337,6 +395,8 @@
 	var userUsername = '';
 	var userPassword = '';
 	var userPrivilege = '';
+	var userDefaultRoute = '';
+	var userDefaultBus = '';
 	
 	var sessionLink;
 	
@@ -345,8 +405,10 @@
 		userUsername = $(this).closest('tr').children('td.userUsername').text();
 		userPassword = $(this).closest('tr').children('td.userPassword').text();
 		userPrivilege = $(this).closest('tr').children('td.userPrivilege').text();
+		userDefaultRoute = $(this).closest('tr').children('td.userDefaultRoute').text();
+		userDefaultBus = $(this).closest('tr').children('td.userDefaultBus').text();
 		sessionLink = 'user';
-		$.post("setSession.php", {userId:userId, userUsername:userUsername, userPassword:userPassword, userPrivilege:userPrivilege, sessionLink:sessionLink});
+		$.post("setSession.php", {userId:userId, userUsername:userUsername, userPassword:userPassword, userPrivilege:userPrivilege, userDefaultRoute:userDefaultRoute, userDefaultBus:userDefaultBus, sessionLink:sessionLink});
 		window.location.href = "userForm.php";
 	});
 

@@ -22,6 +22,7 @@ import android.provider.Settings;
 import android.support.v7.app.ActionBar;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
+import android.text.Html;
 import android.util.Log;
 import android.view.View;
 import android.view.Window;
@@ -224,6 +225,8 @@ public class MainActivity extends AppCompatActivity {
                     busSpinner.setAdapter(busAdapter);
                     routeSpinner.setAdapter(routeAdapter);
 
+                    initializeIntent();
+
                     if (MainActivity.this.pd != null) {
                         MainActivity.this.pd.dismiss();
                     }
@@ -239,6 +242,26 @@ public class MainActivity extends AppCompatActivity {
         //adding dynamic data into spinner
         busAdapter = new ArrayAdapter<String>(this, android.R.layout.simple_spinner_dropdown_item, new ArrayList<String>());
         routeAdapter = new ArrayAdapter<String>(this, android.R.layout.simple_spinner_dropdown_item, new ArrayList<String>());
+    }
+
+    public void initializeIntent(){
+        if(getIntent().hasExtra("defaultRoute") && getIntent().hasExtra("defaultBus")){
+            for(int i = 0; i < routeSpinner.getCount(); i++){
+                if(routeSpinner.getItemAtPosition(i).toString().equals(getIntent().getStringExtra("defaultRoute"))){
+                    routeSpinner.setSelection(i);
+                    break;
+                }
+            }
+            for(int i = 0; i < busSpinner.getCount(); i++) {
+                if (busSpinner.getItemAtPosition(i).toString().equals(getIntent().getStringExtra("defaultBus"))){
+                    busSpinner.setSelection(i);
+                    break;
+                }
+            }
+        }
+        else{
+            System.out.println("No extra passed to this activity");
+        }
     }
 
     public void start(View v){

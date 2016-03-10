@@ -239,6 +239,26 @@ public class MainActivity extends AppCompatActivity {
         routeAdapter = new ArrayAdapter<String>(this, android.R.layout.simple_spinner_dropdown_item, new ArrayList<String>());
     }
 
+    public void initializeIntent(){
+        if(getIntent().hasExtra("defaultRoute") && getIntent().hasExtra("defaultBus")){
+            for(int i = 0; i < routeSpinner.getCount(); i++){
+                if(routeSpinner.getItemAtPosition(i).toString().equals(getIntent().getStringExtra("defaultRoute"))){
+                    routeSpinner.setSelection(i);
+                    break;
+                }
+            }
+            for(int i = 0; i < busSpinner.getCount(); i++) {
+                if (busSpinner.getItemAtPosition(i).toString().equals(getIntent().getStringExtra("defaultBus"))){
+                    busSpinner.setSelection(i);
+                    break;
+                }
+            }
+        }
+        else{
+            System.out.println("No extra passed to this activity");
+        }
+    }
+
     /*public void start(View v){
         SharedPreferences sp = getSharedPreferences("abc", Context.MODE_PRIVATE);
         SharedPreferences.Editor e = sp.edit();

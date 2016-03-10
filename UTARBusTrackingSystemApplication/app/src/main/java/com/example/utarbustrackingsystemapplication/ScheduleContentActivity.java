@@ -123,6 +123,10 @@ public class ScheduleContentActivity extends AppCompatActivity {
                 }
 
                 for(int j = 0; j < col.length; j++){
+                    if(tv[0].getText().toString().contains("*")){
+                        tv[j].setBackgroundResource(R.drawable.borderfriday);
+                        tv[j].setTextColor(Color.WHITE);
+                    }
                     tableRow.addView(tv[j]);
                 }
                 ll.addView(tableRow,i);

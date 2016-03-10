@@ -8,6 +8,8 @@
 	$userUsername = '';
 	$userPassword = '';
 	$userPrivilege = '';
+	$userDefaultRoute = '';
+	$userDefaultBus = '';
 	
 	 if(isset($_SESSION['userId'])){
 		 $userId = $_SESSION['userId'];
@@ -20,6 +22,12 @@
 	 }
 	 if(isset($_SESSION['userPrivilege'])){
 		 $userPrivilege = $_SESSION['userPrivilege'];
+	 }
+	 if(isset($_SESSION['userDefaultRoute'])){
+		 $userDefaultRoute = $_SESSION['userDefaultRoute'];
+	 }
+	 if(isset($_SESSION['userDefaultBus'])){
+		 $userDefaultBus = $_SESSION['userDefaultBus'];
 	 }
 ?>
 <?php include 'navBar.php'; ?>
@@ -39,12 +47,12 @@
 	<div class="panel panel-primary">
       <div class="panel-heading">Adding User</div>
       <div class="panel-body">
-		<form id = "newsForm" action="postUserWeb.php" method="post"
+		<form id = "userForm" action="postUserWeb.php" method="post"
 		enctype="multipart/form-data">
 		<div class = "row form-group has-feedback">
 			<label for="file" class="col-sm-2">ID No.</label>
 			<div class="col-sm-4 controls">
-				<input type="text" name="newsId" id="newsId" class="form-control" value = "<?php echo $userId; ?>" readonly>
+				<input type="text" name="userId" id="userId" class="form-control" value = "<?php echo $userId; ?>" readonly>
 			</div>
 		</div>
 		<div class = "row form-group has-feedback">
@@ -68,7 +76,7 @@
 					if($userPrivilege != ''){
 						?>			
 							<option value = "admin" <?php if($userPrivilege == 'admin') echo 'selected';?>>System Administrator</option>
-							<option value = "busdriver" <?php if($userPrivilege == 'admin') echo 'selected';?>>Bus Driver</option>
+							<option value = "busdriver" <?php if($userPrivilege == 'busdriver') echo 'selected';?>>Bus Driver</option>
 						<?php
 					}else{
 						?>
@@ -76,6 +84,63 @@
 							<option value = "busdriver">Bus Driver</option>
 						<?php
 					}
+				?>
+			</div>
+		</div>
+		
+		<div class = "row form-group has-feedback" style = "display:none;">
+			<label for="file" class="col-sm-2">Dummy</label>
+			<div class="col-sm-4 controls">
+				<label for="route">Dummy</label>
+				<select class="form-control" name = "Dummy" id="Dummy">
+					<option value = ""></option>
+				</select>
+			</div>
+		</div>
+		
+		<div class = "row form-group has-feedback">
+			<label for="file" class="col-sm-2">Default Route</label>
+			<div class="col-sm-4 controls">
+				<label for="route">Select Default Route (select one):</label>
+				<select class="form-control" name = "defaultRoute" id="defaultRoute" required>
+					<option value = "none" <?php if($userDefaultRoute == "none") echo 'selected';?>>None</option>
+			<?php
+				$con=mysqli_connect('localhost', 'root', '', 'bustrackerdb');
+				mysqli_select_db($con, "bustrackerdb");
+				
+				//get updated data in info table
+				$routeResult = mysqli_query($con, "SELECT routeNo, routeName FROM info");
+				$busResult = mysqli_query($con, "SELECT bus FROM info");
+				
+				if(!empty($routeResult)){
+					while($row = mysqli_fetch_array($routeResult)){
+				?>
+						<option value = "<?php echo 'Route '.$row['routeNo'].' : '.$row['routeName'];?>" <?php if($userDefaultRoute == ('Route '.$row['routeNo'].' : '.$row['routeName'])) echo 'selected';?>><?php echo 'Route '.$row['routeNo'].' : '.$row['routeName'];?></option>
+				<?php
+					}
+				}
+				?>
+				</select>
+			</div>
+		</div>
+				
+		<div class = "row form-group has-feedback">
+			<label for="file" class="col-sm-2">Default Bus</label>
+			<div class="col-sm-4 controls">
+				<label for="route">Select Default Bus (select one):</label>
+				<select class="form-control" name = "defaultBus" id="defaultBus" required>
+					<option value = "none" <?php if($userDefaultBus == "none") echo 'selected';?>>None</option>
+				<?php
+				if(!empty($busResult)){
+					while($row2 = mysqli_fetch_array($busResult)){
+				?>
+						<option value = "<?php echo 'Bus '.$row2['bus'];?>" <?php if($userDefaultBus == ('Bus '.$row2['bus'])) echo 'selected';?>><?php echo 'Bus '.$row2['bus'];?></option>
+				<?php
+					}
+				?>
+				</select>
+				<?php
+				}
 				?>
 			</div>
 		</div>

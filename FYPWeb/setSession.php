@@ -31,11 +31,13 @@
 		$_SESSION['scheduleDate'] = $_POST['scheduleDate'];
 	}
 	
-	if(isset($_POST['userId']) && isset($_POST['userUsername']) && isset($_POST['userPassword']) && isset($_POST['userPrivilege'])){
+	if(isset($_POST['userId']) && isset($_POST['userUsername']) && isset($_POST['userPassword']) && isset($_POST['userPrivilege']) && isset($_POST['userDefaultRoute']) && isset($_POST['userDefaultBus'])){
 		$_SESSION['userId'] = $_POST['userId'];
 		$_SESSION['userUsername'] = $_POST['userUsername'];
 		$_SESSION['userPassword'] = $_POST['userPassword'];
 		$_SESSION['userPrivilege'] = $_POST['userPrivilege'];
+		$_SESSION['userDefaultRoute'] = $_POST['userDefaultRoute'];
+		$_SESSION['userDefaultBus'] = $_POST['userDefaultBus'];
 	}
 	
 	if(isset($_POST['sessionLink'])){

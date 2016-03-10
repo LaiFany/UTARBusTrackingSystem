@@ -54,6 +54,10 @@ public class LoginActivity extends AppCompatActivity {
     String[] username;
     String[] password;
     String[] privilege;
+    String[] defaultRoute;
+    String[] defaultBus;
+
+    int index;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -164,6 +168,8 @@ public class LoginActivity extends AppCompatActivity {
                         username = new String[data.length()];
                         password = new String[data.length()];
                         privilege = new String[data.length()];
+                        defaultRoute = new String[data.length()];
+                        defaultBus = new String[data.length()];
 
                         // looping through All Products
                         for (int i = 0; i < data.length(); i++) {
@@ -173,6 +179,8 @@ public class LoginActivity extends AppCompatActivity {
                             username[i] = c.getString("username");
                             password[i] = c.getString("password");
                             privilege[i] = c.getString("privilege");
+                            defaultRoute[i] = c.getString("defaultRoute");
+                            defaultBus[i] = c.getString("defaultBus");
                         }
                     }
                     else{
@@ -198,6 +206,8 @@ public class LoginActivity extends AppCompatActivity {
                     if(validCredential()){
                         setLoginSP(usernameET.getText().toString(), passwordET.getText().toString());
                         Intent i = new Intent(LoginActivity.this, MainActivity.class);
+                        i.putExtra("defaultRoute", defaultRoute[index]);
+                        i.putExtra("defaultBus", defaultBus[index]);
                         startActivity(i);
                     }else{
                         errorTV.setText("Invalid Username or Password");
@@ -234,6 +244,7 @@ public class LoginActivity extends AppCompatActivity {
             if(usernameET.getText().toString().equals(username[j[i]])){
                 if(passwordET.getText().toString().equals(password[j[i]])){
                     valid = true;
+                    index = j[i];
                     break;
                 }
             }else if(i + 1 == j.length){

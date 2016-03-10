@@ -28,6 +28,8 @@
 		unset($_SESSION['userUsername']);
 		unset($_SESSION['userPassword']);
 		unset($_SESSION['userPrivilege']);
+		unset($_SESSION['userDefaultRoute']);
+		unset($_SESSION['userDefaultBus']);
 		
 		unset($_SESSION['link']);
 		
