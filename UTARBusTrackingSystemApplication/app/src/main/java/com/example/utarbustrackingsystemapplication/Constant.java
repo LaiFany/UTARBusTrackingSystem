@@ -5,7 +5,7 @@ package com.example.utarbustrackingsystemapplication;
  */
 public class Constant {
 
-    public static String ipAddress = "210.195.157.221";
+    public static String ipAddress = "utarbts.sytes.net";
 
     public static String retrieveDataURL = "http://" + ipAddress + "/getData.php";
     public static String retrieveImageURL = "http://" + ipAddress + "9/uploads/maxresdefault.jpg";
