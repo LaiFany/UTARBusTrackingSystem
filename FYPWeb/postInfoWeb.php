@@ -3,13 +3,18 @@
 	$con=mysqli_connect('localhost', 'root', '', 'bustrackerdb');
 	mysqli_select_db($con, "bustrackerdb");
 	
-	if(isset($_POST["infoId"]) && isset($_POST["routeNo"]) && isset($_POST["routeName"]) && isset($_POST["bus"])){
+	if(isset($_POST["infoId"]) && isset($_POST["route"]) && isset($_POST["bus"])){
 		$infoId = trim($_POST['infoId']);
-		$routeNo = trim($_POST['routeNo']);
-		$routeName = trim($_POST['routeName']);
+		$route = trim($_POST['route']);
 		$bus = trim($_POST['bus']);
+		$routeNo = '';
+		$routeName = '';
 		$waypoint = '';
 		$name = '';
+		
+		$temp = explode(':', $route);
+		$routeNo = trim(substr($temp[0], 6));
+		$routeName = trim($temp[1]);
 
 		$waypoint = parseWaypoint($waypoint);
 		$name = parseStopNames($name);

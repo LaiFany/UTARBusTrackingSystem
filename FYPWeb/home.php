@@ -24,6 +24,12 @@
 	$con=mysqli_connect('localhost', 'root', '', 'bustrackerdb');
 	mysqli_select_db($con, "bustrackerdb");
 	
+	//get updated data in route table
+	$routeResult = mysqli_query($con, "SELECT * FROM route");
+	
+	//get updated data in bus table
+	$busResult = mysqli_query($con, "SELECT * FROM bus");
+	
 	//get updated data in user table
 	$userResult = mysqli_query($con, "SELECT * FROM user");
 	
@@ -35,6 +41,86 @@
 	
 	//get updated data in news table
 	$scheduleResult = mysqli_query($con, "SELECT * FROM schedule");
+	
+	if(!empty($userResult)){
+		//create table and populate them with data from info table in server
+		?>
+			<div class="panel panel-info">
+				<div class="panel-heading" style="padding : 20px;">Route Table <button type="button" class="btn btn-info pull-right" id = "addRoute" >Add</button></div>
+				<div class="panel-body">
+					<div class = "table-responsive">
+						<table class = "table table-hover">
+							<thead>
+								<tr>
+									<th>ID</th>
+									<th>Route No.</th>
+									<th>Route Name</th>
+									<th>Options</th>
+								</tr>
+							</thead>
+							<tbody>
+							<?php
+							while($row = mysqli_fetch_array($routeResult)){
+							?>
+							
+								<tr class = "infoClickable">
+									<td class = "routeRouteId"><?php echo $row['id'];?></td>
+									<td class = "routeRouteNo"><?php echo $row['routeNo'];?></td>
+									<td class = "routeRouteName"><?php echo $row['routeName'];?></td>
+									<td class = ""><button type="button" class="btn btn-default routeEdit">Edit</button> <button type="button" class="btn btn-default routeDelete" data-toggle="modal" data-target="#routeModal">Delete</button></td>
+								</tr>
+								
+							<?php
+							}?>
+							</tbody>
+						</table>
+					</div>
+				</div>
+			</div>
+		<?php
+	}else{
+		echo 'route table empty';
+	}
+	
+	if(!empty($busResult)){
+		//create table and populate them with data from info table in server
+		?>
+			<div class="panel panel-info">
+				<div class="panel-heading" style="padding : 20px;">Bus Table <button type="button" class="btn btn-info pull-right" id = "addBus" >Add</button></div>
+				<div class="panel-body">
+					<div class = "table-responsive">
+						<table class = "table table-hover">
+							<thead>
+								<tr>
+									<th>ID</th>
+									<th>Bus No.</th>
+									<th>Bus No. Plate</th>
+									<th>Options</th>
+								</tr>
+							</thead>
+							<tbody>
+							<?php
+							while($row = mysqli_fetch_array($busResult)){
+							?>
+							
+								<tr class = "infoClickable">
+									<td class = "busBusId"><?php echo $row['id'];?></td>
+									<td class = "busBusNo"><?php echo $row['busNo'];?></td>
+									<td class = "busBusNoPlate"><?php echo $row['busNoPlate'];?></td>
+									<td class = ""><button type="button" class="btn btn-default busEdit">Edit</button> <button type="button" class="btn btn-default busDelete" data-toggle="modal" data-target="#busModal">Delete</button></td>
+								</tr>
+								
+							<?php
+							}?>
+							</tbody>
+						</table>
+					</div>
+				</div>
+			</div>
+		<?php
+	}else{
+		echo 'bus table empty';
+	}
 	
 	if(!empty($userResult)){
 		//create table and populate them with data from info table in server
@@ -182,51 +268,6 @@
 		echo 'info table empty';
 	}
 	
-	if(!empty($newsResult)){
-		
-		//create table and populate them with data from info table in server
-		?>
-			<div class="panel panel-info">
-				<div class="panel-heading" style="padding : 20px;">News Table <button type="button" class="btn btn-info pull-right" id = "addNews" >Add</button></div>
-				<div class="panel-body">
-					<div class = "table-responsive">
-						<table class = "table table-hover">
-							<thead>
-								<tr>
-									<th>ID</th>
-									<th>News Title</th>
-									<th>News Description</th>
-									<th>News Content</th>
-									<th>Date</th>
-									<th>Options</th>
-								</tr>
-							</thead>
-							<tbody>
-							<?php
-							while($row = mysqli_fetch_array($newsResult)){
-							?>
-							
-								<tr class = "newsClickable">
-									<td class = "newsId"><?php echo $row['id'];?></td>
-									<td class = "newsNewsTitle"><?php echo $row['newsTitle'];?></td>
-									<td class = "newsNewsDesc"><?php echo $row['newsDesc'];?></td>
-									<td class = "newsNewsContent"><?php echo $row['newsContent'];?></td>
-									<td class = "newsDate"><?php echo $row['date'];?></td>
-									<td class = ""><button type="button" class="btn btn-default newsEdit">Edit</button> <button type="button" class="btn btn-default newsDelete" data-toggle="modal" data-target="#newsModal">Delete</button></td>
-								</tr>
-								
-							<?php
-							}?>
-							</tbody>
-						</table>
-					</div>
-				</div>
-			</div>
-		<?php
-	}else{
-		echo 'news table empty';
-	}
-	
 	if(!empty($scheduleResult)){
 		
 		//create table and populate them with data from info table in server
@@ -275,8 +316,97 @@
 	}else{
 		echo 'schedule table empty';
 	}
+	
+	if(!empty($newsResult)){
+		
+		//create table and populate them with data from info table in server
+		?>
+			<div class="panel panel-info">
+				<div class="panel-heading" style="padding : 20px;">News Table <button type="button" class="btn btn-info pull-right" id = "addNews" >Add</button></div>
+				<div class="panel-body">
+					<div class = "table-responsive">
+						<table class="table table-hover">
+							<thead>
+								<tr>
+									<th>ID</th>
+									<th>News Title</th>
+									<th>News Description</th>
+									<th>News Content</th>
+									<th>Date</th>
+									<th>Options</th>
+								</tr>
+							</thead>
+							<tbody>
+							<?php
+							while($row = mysqli_fetch_array($newsResult)){
+							?>
+							
+								<tr class = "newsClickable">
+									<td class = "newsId"><?php echo $row['id'];?></td>
+									<td class = "newsNewsTitle"><?php echo $row['newsTitle'];?></td>
+									<td class = "newsNewsDesc"><?php echo $row['newsDesc'];?></td>
+									<td class = "newsNewsContent"><?php echo $row['newsContent'];?></td>
+									<td class = "newsDate"><?php echo $row['date'];?></td>
+									<td class = ""><button type="button" class="btn btn-default newsEdit">Edit</button> <button type="button" class="btn btn-default newsDelete" data-toggle="modal" data-target="#newsModal">Delete</button></td>
+								</tr>
+								
+							<?php
+							}?>
+							</tbody>
+						</table>
+					</div>
+				</div>
+			</div>
+		<?php
+	}else{
+		echo 'news table empty';
+	}
 ?>
 		</div>
+		
+		<!-- routeModal -->
+		  <div class="modal fade" id="routeModal" role="dialog">
+			<div class="modal-dialog">
+			
+			  <!-- Modal content-->
+			  <div class="modal-content">
+				<div class="modal-header">
+				  <button type="button" class="close" data-dismiss="modal">&times;</button>
+				  <h4 class="modal-title">Delete Route</h4>
+				</div>
+				<div class="modal-body">
+				  <p id = "routeModalMessage">Some text in the modal.</p>
+				</div>
+				<div class="modal-footer">
+				  <button type="button" class="btn btn-info" id = "deleteRoute" >Delete</button>
+				  <button type="button" class="btn btn-default" data-dismiss="modal">Cancel</button>
+				</div>
+			  </div>
+			  
+			</div>
+		  </div>
+		  
+		  <!-- busModal -->
+		  <div class="modal fade" id="busModal" role="dialog">
+			<div class="modal-dialog">
+			
+			  <!-- Modal content-->
+			  <div class="modal-content">
+				<div class="modal-header">
+				  <button type="button" class="close" data-dismiss="modal">&times;</button>
+				  <h4 class="modal-title">Delete Bus</h4>
+				</div>
+				<div class="modal-body">
+				  <p id = "busModalMessage">Some text in the modal.</p>
+				</div>
+				<div class="modal-footer">
+				  <button type="button" class="btn btn-info" id = "deleteBus" >Delete</button>
+				  <button type="button" class="btn btn-default" data-dismiss="modal">Cancel</button>
+				</div>
+			  </div>
+			  
+			</div>
+		  </div>
 		
 		<!-- userModal -->
 		  <div class="modal fade" id="userModal" role="dialog">
@@ -368,8 +498,8 @@
 		  
 	</body>
 </html>
-
 <script>
+
 	var infoId = '';
 	var routeNo = '';
 	var routeName = '';
@@ -398,7 +528,33 @@
 	var userDefaultRoute = '';
 	var userDefaultBus = '';
 	
+	var routeRouteId = '';
+	var routeRouteNo = '';
+	var routeRouteName = '';
+	
+	var busBusId = '';
+	var busBusNo = '';
+	var busBusNoPlate = '';
+	
 	var sessionLink;
+	
+	$('.routeEdit').click(function(){
+		routeRouteId = $(this).closest('tr').children('td.routeRouteId').text();
+		routeRouteNo = $(this).closest('tr').children('td.routeRouteNo').text();
+		routeRouteName = $(this).closest('tr').children('td.routeRouteName').text();
+		sessionLink = 'route';
+		$.post("setSession.php", {routeRouteId:routeRouteId, routeRouteNo:routeRouteNo, routeRouteName:routeRouteName, sessionLink:sessionLink});
+		window.location.href = "routeForm.php";
+	});
+	
+	$('.busEdit').click(function(){
+		busBusId = $(this).closest('tr').children('td.busBusId').text();
+		busBusNo = $(this).closest('tr').children('td.busBusNo').text();
+		busBusNoPlate = $(this).closest('tr').children('td.busBusNoPlate').text();
+		sessionLink = 'bus';
+		$.post("setSession.php", {busBusId:busBusId, busBusNo:busBusNo, busBusNoPlate:busBusNoPlate, sessionLink:sessionLink});
+		window.location.href = "busForm.php";
+	});
 	
 	$('.userEdit').click(function(){
 		userId = $(this).closest('tr').children('td.userId').text();
@@ -448,6 +604,20 @@
 		window.location.href = "scheduleForm.php";
 	});
 	
+	$('.routeDelete').click(function(){
+		routeRouteId = $(this).closest('tr').children('td.routeRouteId').text();
+		routeRouteNo = $(this).closest('tr').children('td.routeRouteNo').text();
+		routeRouteName = $(this).closest('tr').children('td.routeRouteName').text();
+		$('#routeModalMessage').text("Delete route no. " + routeRouteNo + " (" + routeRouteName + ") ?");
+	});
+	
+	$('.busDelete').click(function(){
+		busBusId = $(this).closest('tr').children('td.busBusId').text();
+		busBusNo = $(this).closest('tr').children('td.busBusNo').text();
+		busBusNoPlate = $(this).closest('tr').children('td.busBusNoPlate').text();
+		$('#busModalMessage').text("Delete bus no. " + busBusNo + " (" + busBusNoPlate + ") ?");
+	});
+	
 	$('.userDelete').click(function(){
 		userId = $(this).closest('tr').children('td.userId').text();
 		userUsername = $(this).closest('tr').children('td.userUsername').text();
@@ -484,6 +654,16 @@
 		$('#scheduleModalMessage').text("Delete schedule no. " + scheduleId + " for " + scheduleRoute + " ?");
 	});
 	
+	$('#deleteRoute').click(function(){
+		$.post("deleteRow.php", {routeRouteId:routeRouteId});
+		window.location.href = "home.php";
+	});
+	
+	$('#deleteBus').click(function(){
+		$.post("deleteRow.php", {busBusId:busBusId});
+		window.location.href = "home.php";
+	});
+	
 	$('#deleteUser').click(function(){
 		$.post("deleteRow.php", {userId:userId, userUsername:userUsername, userPassword:userPassword, userPrivilege:userPrivilege});
 		window.location.href = "home.php";
@@ -502,6 +682,18 @@
 	$('#deleteSchedule').click(function(){
 		$.post("deleteRow.php", {scheduleId:scheduleId, scheduleRoute:scheduleRoute, scheduleBus:scheduleBus, scheduleTopNote:scheduleTopNote, scheduleBottomNote:scheduleBottomNote, scheduleTimetable:scheduleTimetable, scheduleDate:scheduleDate});
 		window.location.href = "home.php";
+	});
+	
+	$('#addRoute').click(function(){
+		sessionLink = 'route';
+		$.post("setSession.php", {sessionLink:sessionLink});
+		window.location.href = "routeForm.php";
+	});
+	
+	$('#addBus').click(function(){
+		sessionLink = 'bus';
+		$.post("setSession.php", {sessionLink:sessionLink});
+		window.location.href = "busForm.php";
 	});
 	
 	$('#addUser').click(function(){

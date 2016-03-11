@@ -17,8 +17,28 @@
       <ul class="nav navbar-nav">
 	  <?php
 		if(isset($_SESSION['link'])){
-			if($_SESSION['link'] == 'info'){
+			if($_SESSION['link'] == 'route'){
 				?>
+					<li id = "routeLi" class = "active"><a href="routeForm.php" id = "routeLink">Route Form</a></li>
+					<li id = "busLi" ><a href="busForm.php" id = "busLink">Bus Form</a></li>
+					<li id = "infoLi"><a href="infoForm.php" id = "infoLink">Info Form</a></li>
+					<li id = "newsLi" ><a href="newsForm.php" id = "newsLink">News Form</a></li>
+					<li id = "scheduleLi" ><a href="scheduleForm.php" id = "scheduleLink">Schedule Form</a></li>
+					<li id = "userLi" ><a href="userForm.php" id = "userLink">User Form</a></li>
+				<?php
+			}else if($_SESSION['link'] == 'bus'){
+				?>
+					<li id = "routeLi" ><a href="routeForm.php" id = "routeLink">Route Form</a></li>
+					<li id = "busLi" class = "active"><a href="busForm.php" id = "busLink">Bus Form</a></li>
+					<li id = "infoLi"><a href="infoForm.php" id = "infoLink">Info Form</a></li>
+					<li id = "newsLi" ><a href="newsForm.php" id = "newsLink">News Form</a></li>
+					<li id = "scheduleLi" ><a href="scheduleForm.php" id = "scheduleLink">Schedule Form</a></li>
+					<li id = "userLi" ><a href="userForm.php" id = "userLink">User Form</a></li>
+				<?php
+			}else if($_SESSION['link'] == 'info'){
+				?>
+					<li id = "routeLi" ><a href="routeForm.php" id = "routeLink">Route Form</a></li>
+					<li id = "busLi" ><a href="busForm.php" id = "busLink">Bus Form</a></li>
 					<li id = "infoLi" class = "active"><a href="infoForm.php" id = "infoLink">Info Form</a></li>
 					<li id = "newsLi" ><a href="newsForm.php" id = "newsLink">News Form</a></li>
 					<li id = "scheduleLi" ><a href="scheduleForm.php" id = "scheduleLink">Schedule Form</a></li>
@@ -26,6 +46,8 @@
 				<?php
 			}else if($_SESSION['link'] == 'news'){
 				?>
+					<li id = "routeLi" ><a href="routeForm.php" id = "routeLink">Route Form</a></li>
+					<li id = "busLi" ><a href="busForm.php" id = "busLink">Bus Form</a></li>
 					<li id = "infoLi" ><a href="infoForm.php" id = "infoLink">Info Form</a></li>
 					<li id = "newsLi" class = "active"><a href="newsForm.php" id = "newsLink">News Form</a></li>
 					<li id = "scheduleLi" ><a href="scheduleForm.php" id = "scheduleLink">Schedule Form</a></li>
@@ -33,6 +55,8 @@
 				<?php
 			}else if($_SESSION['link'] == 'schedule'){
 				?>
+					<li id = "routeLi" ><a href="routeForm.php" id = "routeLink">Route Form</a></li>
+					<li id = "busLi" ><a href="busForm.php" id = "busLink">Bus Form</a></li>
 					<li id = "infoLi" ><a href="infoForm.php" id = "infoLink">Info Form</a></li>
 					<li id = "newsLi"><a href="newsForm.php" id = "newsLink">News Form</a></li>
 					<li id = "scheduleLi" class = "active"><a href="scheduleForm.php" id = "scheduleLink">Schedule Form</a></li>
@@ -40,6 +64,8 @@
 				<?php
 			}else if($_SESSION['link'] == 'user'){
 				?>
+					<li id = "routeLi" ><a href="routeForm.php" id = "routeLink">Route Form</a></li>
+					<li id = "busLi" ><a href="busForm.php" id = "busLink">Bus Form</a></li>
 					<li id = "infoLi" ><a href="infoForm.php" id = "infoLink">Info Form</a></li>
 					<li id = "newsLi"><a href="newsForm.php" id = "newsLink">News Form</a></li>
 					<li id = "scheduleLi" ><a href="scheduleForm.php" id = "scheduleLink">Schedule Form</a></li>
@@ -47,6 +73,8 @@
 				<?php
 			}else{
 			?>
+				<li id = "routeLi" ><a href="routeForm.php" id = "routeLink">Route Form</a></li>
+				<li id = "busLi" ><a href="busForm.php" id = "busLink">Bus Form</a></li>
 				<li id = "infoLi" ><a href="infoForm.php" id = "infoLink">Info Form</a></li>
 				<li id = "newsLi" ><a href="newsForm.php" id = "newsLink">News Form</a></li>
 				<li id = "scheduleLi" ><a href="scheduleForm.php" id = "scheduleLink">Schedule Form</a></li>
@@ -55,6 +83,8 @@
 		}
 		}else{
 			?>
+				<li id = "routeLi" ><a href="routeForm.php" id = "routeLink">Route Form</a></li>
+				<li id = "busLi" ><a href="busForm.php" id = "busLink">Bus Form</a></li>
 				<li id = "infoLi" ><a href="infoForm.php" id = "infoLink">Info Form</a></li>
 				<li id = "newsLi" ><a href="newsForm.php" id = "newsLink">News Form</a></li>
 				<li id = "scheduleLi" ><a href="scheduleForm.php" id = "scheduleLink">Schedule Form</a></li>
@@ -95,6 +125,14 @@
 	var userUsername = '';
 	var userPassword = '';
 	var userPrivilege = '';
+	
+	var routeRouteId = '';
+	var routeRouteNo = '';
+	var routeRouteName = '';
+	
+	var busBusId = '';
+	var busBusNo = '';
+	var busBusNoPlate = '';
 
 	var sessionLink;
 	
@@ -103,13 +141,13 @@
 	$('#infoLink').click(function(){
 		sessionLink = 'info';
 		$.post("unsetSession.php", {});
-		$.post("setSession.php", {routeNo:routeNo, routeName:routeName, bus:bus, waypoint:waypoint, stopNames:stopNames, newsTitle:newsTitle, newsDesc:newsDesc, newsContent:newsContent, date:date, sessionLink:sessionLink});
+		$.post("setSession.php", {routeNo:routeNo, routeName:routeName, bus:bus, waypoint:waypoint, stopNames:stopNames, newsTitle:newsTitle, sessionLink:sessionLink});
 	});
 	
 	$('#newsLink').click(function(){
 		sessionLink = 'news';
 		$.post("unsetSession.php", {});
-		$.post("setSession.php", {routeNo:routeNo, routeName:routeName, bus:bus, waypoint:waypoint, stopNames:stopNames, newsTitle:newsTitle, newsDesc:newsDesc, newsContent:newsContent, date:date, sessionLink:sessionLink});
+		$.post("setSession.php", {newsTitle:newsTitle, newsDesc:newsDesc, newsContent:newsContent, date:date, sessionLink:sessionLink});
 	});
 	
 	$('#scheduleLink').click(function(){
@@ -122,6 +160,18 @@
 		sessionLink = 'user';
 		$.post("unsetSession.php", {});
 		$.post("setSession.php", {userId:userId, userUsername:userUsername, userPassword:userPassword, userPrivilege:userPrivilege, sessionLink:sessionLink});
+	});
+	
+	$('#routeLink').click(function(){
+		sessionLink = 'route';
+		$.post("unsetSession.php", {});
+		$.post("setSession.php", {routeRouteId:routeRouteId, routeRouteNo:routeRouteNo, routeRouteName:routeRouteName, sessionLink:sessionLink});
+	});
+	
+	$('#busLink').click(function(){
+		sessionLink = 'route';
+		$.post("unsetSession.php", {});
+		$.post("setSession.php", {busBusId:busBusId, busBusNo:busBusNo, busBusNoPlate:busBusNoPlate, sessionLink:sessionLink});
 	});
 	
 	$('#home').click(function(){

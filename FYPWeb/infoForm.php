@@ -92,7 +92,7 @@ enctype="multipart/form-data">
 					<input type="text" name="infoId" id="infoId" class="form-control" value = "<?php echo $infoId; ?>" readonly>
 				</div>
 			</div>
-			<div class = "row form-group has-feedback">
+			<!--<div class = "row form-group has-feedback">
 				<label for="file" class="col-sm-2">Route No.</label>
 				<div class="col-sm-4">
 					<input type="text" name="routeNo" id="routeNo" class="form-control" value = "<?php echo $routeNo; ?>">
@@ -117,6 +117,51 @@ enctype="multipart/form-data">
 				</div>
 			</div>
 		  </div>
+		</div>-->
+		
+		<div class = "row form-group has-feedback">
+			<label for="file" class="col-sm-2">Route</label>
+			<div class="col-sm-4 controls">
+				<label for="route">Select Route (select one):</label>
+				<select class="form-control" name = "route" id="route" required>
+			<?php
+				$con=mysqli_connect('localhost', 'root', '', 'bustrackerdb');
+				mysqli_select_db($con, "bustrackerdb");
+				
+				//get updated data in info table
+				$routeResult = mysqli_query($con, "SELECT routeNo, routeName FROM route");
+				$busResult = mysqli_query($con, "SELECT busNo, busNoPlate FROM bus");
+				
+				if(!empty($routeResult)){
+					while($row = mysqli_fetch_array($routeResult)){
+				?>
+						<option value = "<?php echo 'Route '.$row['routeNo'].' : '.$row['routeName'];?>" <?php if(('Route '.$routeNo.' : '.$routeName) == ('Route '.$row['routeNo'].' : '.$row['routeName'])) echo 'selected';?>><?php echo 'Route '.$row['routeNo'].' : '.$row['routeName'];?></option>
+				<?php
+					}
+				}
+				?>
+				</select>
+			</div>
+		</div>
+				
+		<div class = "row form-group has-feedback">
+			<label for="file" class="col-sm-2">Bus</label>
+			<div class="col-sm-4 controls">
+				<label for="route">Select Bus (select one):</label>
+				<select class="form-control" name = "bus" id="bus" required>
+				<?php
+				if(!empty($busResult)){
+					while($row2 = mysqli_fetch_array($busResult)){
+				?>
+						<option value = "<?php echo $row2['busNo'].' ('.$row2['busNoPlate'].')';?>" <?php if($bus == $row2['busNo'].' ('.$row2['busNoPlate'].')') echo 'selected';?>><?php echo 'Bus '.$row2['busNo'].' ('.$row2['busNoPlate'].')';?></option>
+				<?php
+					}
+				?>
+				</select>
+				<?php
+				}
+				?>
+			</div>
 		</div>
 
 		<div class="panel panel-info">

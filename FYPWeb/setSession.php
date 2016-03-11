@@ -1,4 +1,6 @@
 <?php
+
+	//header('Location:userForm.php');
 	
 	if (session_status() == PHP_SESSION_NONE) {
 		session_start();
@@ -40,8 +42,19 @@
 		$_SESSION['userDefaultBus'] = $_POST['userDefaultBus'];
 	}
 	
+	if(isset($_POST['routeRouteId']) && isset($_POST['routeRouteNo']) && isset($_POST['routeRouteName'])){
+		$_SESSION['routeRouteId'] = $_POST['routeRouteId'];
+		$_SESSION['routeRouteNo'] = $_POST['routeRouteNo'];
+		$_SESSION['routeRouteName'] = $_POST['routeRouteName'];
+	}
+	
+	if(isset($_POST['busBusId']) && isset($_POST['busBusNo']) && isset($_POST['busBusNoPlate'])){
+		$_SESSION['busBusId'] = $_POST['busBusId'];
+		$_SESSION['busBusNo'] = $_POST['busBusNo'];
+		$_SESSION['busBusNoPlate'] = $_POST['busBusNoPlate'];
+	}
+	
 	if(isset($_POST['sessionLink'])){
 		$_SESSION['link'] = $_POST['sessionLink'];
 	}
-	
 ?>

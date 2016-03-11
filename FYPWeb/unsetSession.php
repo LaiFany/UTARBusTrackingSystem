@@ -31,6 +31,14 @@
 		unset($_SESSION['userDefaultRoute']);
 		unset($_SESSION['userDefaultBus']);
 		
+		unset($_SESSION['routeRouteId']);
+		unset($_SESSION['routeRouteNo']);
+		unset($_SESSION['routeRouteName']);
+		
+		unset($_SESSION['busBusId']);
+		unset($_SESSION['busBusNo']);
+		unset($_SESSION['busBusNoPlate']);
+		
 		unset($_SESSION['link']);
 		
 		unset($_SESSION['usernameDuplicate']);

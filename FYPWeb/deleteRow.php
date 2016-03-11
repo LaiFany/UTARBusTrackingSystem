@@ -30,5 +30,13 @@
 		$userId = $_POST['userId'];
 		
 		mysqli_query($con, "DELETE FROM user WHERE id='".$userId."'");
+	}else if(isset($_POST['routeRouteId'])){
+		$routeRouteId = $_POST['routeRouteId'];
+		
+		mysqli_query($con, "DELETE FROM route WHERE id='".$routeRouteId."'");
+	}else if(isset($_POST['busBusId'])){
+		$busBusId = $_POST['busBusId'];
+		
+		mysqli_query($con, "DELETE FROM bus WHERE id='".$busBusId."'");
 	}
 ?>
