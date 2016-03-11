@@ -1,8 +1,91 @@
 <?php
 
+	if (session_status() == PHP_SESSION_NONE) {
+		session_start();
+	}
+	
 	$con=mysqli_connect('localhost', 'root', '', 'bustrackerdb');
 	mysqli_select_db($con, "bustrackerdb");
 	
+	//login
+	if(isset($_POST['username']) && isset($_POST['password'])){
+		$username = testInput($_POST['username']);
+		$password = testInput($_POST['password']);
+		
+		$result = mysqli_query($con, "SELECT * FROM user WHERE username='".$username."' AND password='".$password."' AND privilege='admin'");
+		if(mysqli_fetch_array($result) != false){
+			$_SESSION['user'] = $username;
+			header('Location:home.php');
+		}else{
+			$_SESSION['loginNotFound'] = 'true';
+			header('Location:login.php');
+		}
+	}
+	
+	//route table
+	if(isset($_POST['routeRouteId']) && isset($_POST['routeRouteNo']) && isset($_POST['routeRouteName'])){
+		$routeRouteId = $_POST['routeRouteId'];
+		$routeRouteNo = $_POST['routeRouteNo'];
+		$routeRouteName = $_POST['routeRouteName'];
+		
+		$result = mysqli_query($con, "SELECT * FROM route WHERE id='".$routeRouteId."'");
+		if(mysqli_fetch_array($result) != false){
+			mysqli_query($con, "UPDATE route SET routeNo='".$routeRouteNo."', routeName='".$routeRouteName."'WHERE id='".$routeRouteId."'");
+		}else{
+			mysqli_query($con, "insert into route(routeNo, routeName) values('{$routeRouteNo}', '{$routeRouteName}')");
+		}
+		
+		header('Location:home.php');
+	}
+	
+	//bus table
+	if(isset($_POST['busBusId']) && isset($_POST['busBusNo']) && isset($_POST['busBusNoPlate'])){
+		$busBusId = $_POST['busBusId'];
+		$busBusNo = $_POST['busBusNo'];
+		$busBusNoPlate = $_POST['busBusNoPlate'];
+		
+		$result = mysqli_query($con, "SELECT * FROM bus WHERE id='".$busBusId."'");
+		if(mysqli_fetch_array($result) != false){
+			mysqli_query($con, "UPDATE bus SET busNo='".$busBusNo."', busNoPlate='".$busBusNoPlate."'WHERE id='".$busBusId."'");
+		}else{
+			mysqli_query($con, "insert into bus(busNo, busNoPlate) values('{$busBusNo}', '{$busBusNoPlate}')");
+		}
+		
+		header('Location:home.php');
+	}
+	
+	//user table
+	if(isset($_POST['userId']) && isset($_POST['username']) && isset($_POST['password']) && isset($_POST['privilege'])){
+		$userId = $_POST['userId'];
+		$username = $_POST['username'];
+		$password = $_POST['password'];
+		$privilege = $_POST['privilege'];
+		$defaultRoute = '';
+		$defaultBus = '';
+		if(isset($_POST['defaultRoute'])){
+			$defaultRoute = $_POST['defaultRoute'];
+		}
+		if(isset($_POST['defaultBus'])){
+			$defaultBus = $_POST['defaultBus'];
+		}
+		
+		$editResult = mysqli_query($con, "SELECT * FROM user WHERE id='".$userId."'");
+		$addResult = mysqli_query($con, "SELECT * FROM user WHERE username='".$username."'");
+		if(mysqli_fetch_array($editResult) != false){
+			mysqli_query($con, "UPDATE user SET username='".$username."', password='".$password."', privilege='".$privilege."', defaultRoute='".$defaultRoute."', defaultBus='".$defaultBus."' WHERE id='".$userId."'");
+			header('Location:home.php');
+		}else{
+			if(mysqli_fetch_array($addResult) != false){
+				$_SESSION['usernameDuplicate'] = 'true';
+				header('Location:userForm.php');
+			}else{
+				mysqli_query($con, "insert into user(username, password, privilege, defaultRoute, defaultBus) values('{$username}', '{$password}', '{$privilege}', '{$defaultRoute}', '{$defaultBus}')");
+				header('Location:home.php');
+			}
+		}
+	}
+	
+	//info table
 	if(isset($_POST["infoId"]) && isset($_POST["route"]) && isset($_POST["bus"])){
 		$infoId = trim($_POST['infoId']);
 		$route = trim($_POST['route']);
@@ -30,6 +113,85 @@
 	}
 	else{
 		echo "Missing required fields";
+	}
+	
+	//schedule table
+	if(isset($_POST["scheduleId"]) && isset($_POST["route"]) && isset($_POST["bus"])){
+		$scheduleId = trim($_POST['scheduleId']);
+		$route = trim($_POST['route']);
+		$bus = trim($_POST['bus']);
+		$topNote = trim($_POST['topNote']);
+		$bottomNote = trim($_POST['bottomNote']);
+		$timetable = '';
+		
+		//schedule boxes
+		
+		for($i = 1; $i < 16; $i++){
+			if($timetable != '' && substr($timetable, -1) != '|' && substr($timetable, -1) != '/'){
+				$timetable .= '/';
+			}
+			$row = 'r'.$i;
+			for($j = 1; $j < 12; $j++){
+				$col = 'c'.$j;
+				${$row.$col} = trim($_POST[$row.$col]);
+				if(${$row.$col} != ''){
+					if($timetable != '' && substr($timetable, -1) != '|' && substr($timetable, -1) != '/'){
+						$timetable .= '|'.${$row.$col};
+					}else{
+						$timetable .= ${$row.$col};
+					}
+				}
+			}
+		}
+		
+		//get current date
+		// Return date/time info of a timestamp; then format the output
+		$mydate=getdate(date("U"));
+		$date = $mydate[month]." ".$mydate[mday].", ". $mydate[year];
+		
+		$result = mysqli_query($con, "SELECT * FROM schedule WHERE id='".$scheduleId."'");
+		if(mysqli_fetch_array($result) != false){
+			mysqli_query($con, "UPDATE schedule SET route='".$route."', bus='".$bus."', date='".$date."', topNote='".$topNote."', bottomNote='".$bottomNote."', timetable='".$timetable."' WHERE id='".$scheduleId."'");
+		}else{
+			mysqli_query($con, "insert into schedule(route, bus, date, topNote, bottomNote, timetable) values('{$route}', '{$bus}', '{$date}', '{$topNote}', '{$bottomNote}', '{$timetable}')");
+		}
+		
+		header("Location:home.php");
+	}
+	else{
+		echo "Missing required fields";
+	}
+	
+	//news table
+	if(isset($_POST["newsId"]) && isset($_POST["newsTitle"]) && isset($_POST["newsContent"])){
+		$newsId = trim($_POST['newsId']);
+		$newsTitle = trim($_POST['newsTitle']);
+		$newsContent = trim($_POST['newsContent']);
+		$newsDesc = trim($_POST['newsDesc']);
+		
+		//get current date
+		// Return date/time info of a timestamp; then format the output
+		$mydate=getdate(date("U"));
+		$date = $mydate[month]." ".$mydate[mday].", ". $mydate[year];
+		
+		$result = mysqli_query($con, "SELECT * FROM news WHERE id='".$newsId."'");
+		if(mysqli_fetch_array($result) != false){
+			mysqli_query($con, "UPDATE news SET newsTitle='".$newsTitle."', newsDesc='".$newsDesc."', newsContent='".$newsContent."', date='".$date."' WHERE id='".$newsId."'");
+		}else{
+			mysqli_query($con, "insert into news(newsTitle, newsDesc, newsContent, date) values('{$newsTitle}', '{$newsDesc}', '{$newsContent}', '{$date}')");
+		}
+		
+		header("Location:home.php");
+	}
+	else{
+		echo "Missing required fields";
+	}
+	
+	function testInput($data) {
+		 $data = trim($data);
+		 $data = stripslashes($data);
+	     $data = htmlspecialchars($data);
+		 return $data;
 	}
 	
 	function parseWaypoint($waypoint){

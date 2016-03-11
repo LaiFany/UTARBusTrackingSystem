@@ -47,7 +47,7 @@
 	<div class="panel panel-primary">
       <div class="panel-heading">Adding User</div>
       <div class="panel-body">
-		<form id = "userForm" action="postUserWeb.php" method="post"
+		<form id = "userForm" action="postWebOperation.php" method="post"
 		enctype="multipart/form-data">
 		<div class = "row form-group has-feedback">
 			<label for="file" class="col-sm-2">ID No.</label>

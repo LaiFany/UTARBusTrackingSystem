@@ -35,7 +35,7 @@
 	<div class="panel panel-primary">
       <div class="panel-heading">Adding Route</div>
       <div class="panel-body">
-		<form id = "routeForm" action="postRouteWeb.php" method="post"
+		<form id = "routeForm" action="postWebOperation.php" method="post"
 		enctype="multipart/form-data">
 		<div class = "row form-group has-feedback">
 			<label for="file" class="col-sm-2">ID No.</label>

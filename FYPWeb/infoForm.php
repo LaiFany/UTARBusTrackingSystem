@@ -80,7 +80,7 @@ enctype="multipart/form-data">
 <div class="panel panel-primary" >
       <div class="panel-heading">Adding a new Route, Bus and Waypoint</div>
       <div class="panel-body">
-		<form action="postInfoWeb.php" method="post"
+		<form action="postWebOperation.php" method="post"
 		enctype="multipart/form-data">
 		
 		<div class="panel panel-info">

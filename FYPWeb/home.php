@@ -17,6 +17,7 @@
 	if(!isset($_SESSION['user'])){
 		header('Location:login.php');
 	}
+	include 'unsetSession.php';
 	
 	//navbar
 	include 'navBar.php';
