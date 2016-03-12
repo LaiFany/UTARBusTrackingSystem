@@ -195,8 +195,6 @@
 					}
 				}
 			}
-		}else{
-			$cancelledRoute = 'wtf';
 		}
 		
 		//get current date
