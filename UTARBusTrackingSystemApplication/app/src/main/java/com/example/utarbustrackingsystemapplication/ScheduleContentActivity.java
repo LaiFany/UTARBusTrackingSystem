@@ -19,6 +19,9 @@ import android.widget.TableLayout;
 import android.widget.TableRow;
 import android.widget.TextView;
 
+import java.text.SimpleDateFormat;
+import java.util.Calendar;
+
 public class ScheduleContentActivity extends AppCompatActivity {
 
     WebView webView;
@@ -135,6 +138,7 @@ public class ScheduleContentActivity extends AppCompatActivity {
         else{
             System.out.println("No extra passed to this activity");
         }
+        getDateTime();
 
         /*webView = (WebView) findViewById(R.id.webView);
         webView.setBackgroundColor(0x00000000);
@@ -164,6 +168,15 @@ public class ScheduleContentActivity extends AppCompatActivity {
         busTv = (TextView) findViewById(R.id.bus);
         topNoteTv = (TextView) findViewById(R.id.topNote);
         bottomNoteTv = (TextView) findViewById(R.id.bottomNote);
+    }
+
+    public void getDateTime(){
+        Calendar c = Calendar.getInstance();
+        SimpleDateFormat date = new SimpleDateFormat("dd MMMM yyyy");
+        SimpleDateFormat time = new SimpleDateFormat("HH:mm");
+        String strDate = date.format(c.getTime());
+        String strTime = time.format(c.getTime());
+        System.out.println(strDate + "/" + strTime);
     }
 
     @Override

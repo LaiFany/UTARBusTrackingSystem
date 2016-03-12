@@ -439,13 +439,13 @@
 			  <div class="modal-content">
 				<div class="modal-header">
 				  <button type="button" class="close" data-dismiss="modal">&times;</button>
-				  <h4 class="modal-title">Delete Route</h4>
+				  <h4 class="modal-title">Delete Info</h4>
 				</div>
 				<div class="modal-body">
 				  <p id = "infoModalMessage">Some text in the modal.</p>
 				</div>
 				<div class="modal-footer">
-				  <button type="button" class="btn btn-info" id = "deleteRoute" >Delete</button>
+				  <button type="button" class="btn btn-info" id = "deleteInfo" >Delete</button>
 				  <button type="button" class="btn btn-default" data-dismiss="modal">Cancel</button>
 				</div>
 			  </div>
@@ -670,7 +670,7 @@
 		window.location.href = "home.php";
 	});
 	
-	$('#deleteRoute').click(function(){
+	$('#deleteInfo').click(function(){
 		$.post("deleteRow.php", {infoId:infoId, routeNo:routeNo, routeName:routeName, bus:bus});
 		window.location.href = "home.php";
 	});

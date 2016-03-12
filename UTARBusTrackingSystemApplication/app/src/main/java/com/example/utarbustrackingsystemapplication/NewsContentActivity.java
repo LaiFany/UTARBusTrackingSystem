@@ -14,6 +14,9 @@ import android.view.Window;
 import android.view.WindowManager;
 import android.widget.TextView;
 
+import java.text.SimpleDateFormat;
+import java.util.Calendar;
+
 public class NewsContentActivity extends AppCompatActivity {
 
     public String newsId;
