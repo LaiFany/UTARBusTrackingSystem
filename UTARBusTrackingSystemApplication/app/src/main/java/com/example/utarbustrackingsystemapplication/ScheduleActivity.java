@@ -50,7 +50,11 @@ import java.io.IOException;
 import java.io.InputStream;
 import java.net.HttpURLConnection;
 import java.net.URL;
+import java.text.ParseException;
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
+import java.util.Calendar;
+import java.util.Date;
 import java.util.List;
 
 
@@ -69,6 +73,17 @@ public class ScheduleActivity extends ActionBarActivity {
     public String[] bottomNote;
     public String[] timetable;
     public String[] date;
+
+    public String[] cancelledRoute;
+    public String[] cancelledBus;
+    public String[] fromDate;
+    public String[] toDate;
+    public String[] fromTime;
+    public String[] toTime;
+
+    public Date currentDate;
+    public Date currentTime;
+
     public DownloadTask dt = new DownloadTask();
     private ProgressDialog pd;
 
@@ -237,6 +252,16 @@ public class ScheduleActivity extends ActionBarActivity {
                 TextView routeTextView = (TextView) view.findViewById(R.id.route);
                 String routeStr = routeTextView.getText().toString();
 
+                int cancelledIndex = 999999999;
+
+                getDateTime();
+
+                for(int i = 0; i < cancelledRoute.length; i++){
+                    if(cancelledRoute[i].equals(routeStr) && cancelledBus[i].equals(busNo[position]) && (parseDate(fromDate[i]).equals(currentDate) || parseDate(toDate[i]).equals(currentDate) || (currentDate.after(parseDate(fromDate[i])) && currentDate.before(parseDate(toDate[i]))))){
+                        cancelledIndex = i;
+                    }
+                }
+
                 Intent intent = new Intent(ScheduleActivity.this, ScheduleContentActivity.class);
                 intent.putExtra("route", routeStr);
                 intent.putExtra("bus", busNo[position]);
@@ -244,7 +269,18 @@ public class ScheduleActivity extends ActionBarActivity {
                 intent.putExtra("bottomNote", bottomNote[position]);
                 intent.putExtra("timetable", timetable[position]);
                 intent.putExtra("date", date[position]);
+                try{
+                    intent.putExtra("cancelledRoute", cancelledRoute[cancelledIndex]);
+                    intent.putExtra("cancelledBus", cancelledBus[cancelledIndex]);
+                    intent.putExtra("fromDate", fromDate[cancelledIndex]);
+                    intent.putExtra("toDate", toDate[cancelledIndex]);
+                    intent.putExtra("fromTime", fromTime[cancelledIndex]);
+                    intent.putExtra("toTime", toTime[cancelledIndex]);
+                }catch(Exception e){
+
+                }
                 startActivity(intent);
+                finish();
             }
         });
 
@@ -322,6 +358,74 @@ public class ScheduleActivity extends ActionBarActivity {
                 if(scheduleId == null){
                     new DownloadTask().execute("");
                 }else{
+                    new CancelledRouteDownloadTask().execute("");
+                }
+            }
+        }
+    }
+
+    //async task to download cancelled routes from db
+    private class CancelledRouteDownloadTask extends AsyncTask<String, Void, String> {
+        protected String doInBackground(String... args) {
+            if(!isCancelled()){
+                Log.i("MyApp", "Background thread starting");
+
+                try{
+                    List<NameValuePair> param = new ArrayList<NameValuePair>();
+                    param.add(new BasicNameValuePair("route", String.valueOf("1"))); //simply put a value for parameter purposes
+
+                    // getting JSON string from URL
+                    JSONObject json = jParser.makeHttpRequest(Constant.retrieveNewsURL, "GET", param);
+
+                    // Check your log cat for JSON reponse
+                    //Log.d("All Products: ", json.toString());
+                    // Checking for SUCCESS TAG
+                    int success = json.getInt("success");
+
+                    if (success == 1) {
+                        // products found
+                        // Getting Array of Products
+                        JSONArray data = json.getJSONArray("data");
+
+                        //initialize size of arrays
+                        cancelledRoute = new String[data.length()];
+                        cancelledBus = new String[data.length()];
+                        fromDate = new String[data.length()];
+                        toDate = new String[data.length()];
+                        fromTime = new String[data.length()];
+                        toTime = new String[data.length()];
+
+                        // looping through All Products
+                        for (int i = 0; i < data.length(); i++) {
+                            JSONObject c = data.getJSONObject(i);
+
+                            // Storing each json item in variable
+                            cancelledRoute[i] = c.getString("cancelledRoute");
+                            cancelledBus[i] = c.getString("cancelledBus");
+                            fromDate[i] = c.getString("fromDate");
+                            toDate[i] = c.getString("toDate");
+                            fromTime[i] = c.getString("fromTime");
+                            toTime[i] = c.getString("toTime");
+                        }
+                    }
+                    else{
+                        Toast.makeText(getBaseContext(), "No products found", Toast.LENGTH_LONG).show();
+                    }
+                }catch(Exception e){
+                    e.printStackTrace();
+                }
+
+                return "Done";
+            }else{
+                return "Cancelled";
+            }
+        }
+
+        protected void onPostExecute(String result) {
+            if(result == "Done"){
+                if(cancelledRoute == null){
+                    new CancelledRouteDownloadTask().execute("");
+                }else{
                     initializeListView();
                     if (ScheduleActivity.this.pd != null) {
                         ScheduleActivity.this.pd.dismiss();
@@ -332,6 +436,41 @@ public class ScheduleActivity extends ActionBarActivity {
                 }
             }
         }
+    }
+
+    public void getDateTime(){
+        Calendar c = Calendar.getInstance();
+        SimpleDateFormat date = new SimpleDateFormat("dd MMMM yyyy");
+        SimpleDateFormat time = new SimpleDateFormat("HH:mm");
+        String strDate = date.format(c.getTime());
+        String strTime = time.format(c.getTime());
+
+        currentDate = parseDate(strDate);
+        currentTime = parseTime(strTime);
+
+        System.out.println(strDate + "/" + strTime);
+    }
+
+    public Date parseDate(String date){
+        Date d = new Date();
+        try {
+            SimpleDateFormat dateFormat = new SimpleDateFormat ("dd MMMM yyyy");
+            d = dateFormat.parse(date);
+        } catch (ParseException e) {
+            e.printStackTrace();
+        }
+        return d;
+    }
+
+    public Date parseTime(String time){
+        Date t = new Date();
+        try {
+            SimpleDateFormat dateFormat = new SimpleDateFormat ("HH:mm");
+            t = dateFormat.parse(time);
+        } catch (ParseException e) {
+            e.printStackTrace();
+        }
+        return t;
     }
 
     private void buildAlertMessageNoInternet() {

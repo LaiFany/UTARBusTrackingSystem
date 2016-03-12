@@ -15,12 +15,18 @@
 		$_SESSION['stopNames'] = $_POST['stopNames'];
 	}
 	
-	if(isset($_POST['newsId']) && isset($_POST['newsTitle']) && isset($_POST['newsDesc']) && isset($_POST['newsContent']) && isset($_POST['date'])){
+	if(isset($_POST['newsId']) && isset($_POST['newsTitle']) && isset($_POST['newsDesc']) && isset($_POST['newsContent']) && isset($_POST['date']) && isset($_POST['cancelledRoute']) && isset($_POST['cancelledBus']) && isset($_POST['fromDate']) && isset($_POST['toDate']) && isset($_POST['fromTime']) && isset($_POST['toTime'])){
 		$_SESSION['newsId'] = $_POST['newsId'];
 		$_SESSION['newsTitle'] = $_POST['newsTitle'];
 		$_SESSION['newsDesc'] = $_POST['newsDesc'];
 		$_SESSION['newsContent'] = $_POST['newsContent'];
 		$_SESSION['date'] = $_POST['date'];
+		$_SESSION['cancelledRoute'] = $_POST['cancelledRoute'];
+		$_SESSION['cancelledBus'] = $_POST['cancelledBus'];
+		$_SESSION['fromDate'] = $_POST['fromDate'];
+		$_SESSION['toDate'] = $_POST['toDate'];
+		$_SESSION['fromTime'] = $_POST['fromTime'];
+		$_SESSION['toTime'] = $_POST['toTime'];
 	}
 	
 	if(isset($_POST['scheduleId']) && isset($_POST['scheduleRoute']) && isset($_POST['scheduleBus']) && isset($_POST['scheduleTopNote']) && isset($_POST['scheduleBottomNote']) && isset($_POST['scheduleTimetable']) && isset($_POST['scheduleDate'])){

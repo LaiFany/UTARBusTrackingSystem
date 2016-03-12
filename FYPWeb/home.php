@@ -334,6 +334,12 @@
 									<th>News Description</th>
 									<th>News Content</th>
 									<th>Date</th>
+									<th>Cancelled Route</th>
+									<th>Cancelled Bus</th>
+									<th>From Date</th>
+									<th>To Date</th>
+									<th>From Time</th>
+									<th>To Time</th>
 									<th>Options</th>
 								</tr>
 							</thead>
@@ -348,6 +354,12 @@
 									<td class = "newsNewsDesc"><?php echo $row['newsDesc'];?></td>
 									<td class = "newsNewsContent"><?php echo $row['newsContent'];?></td>
 									<td class = "newsDate"><?php echo $row['date'];?></td>
+									<td class = "cancelledRoute"><?php echo $row['cancelledRoute'];?></td>
+									<td class = "cancelledBus"><?php echo $row['cancelledBus'];?></td>
+									<td class = "fromDate"><?php echo $row['fromDate'];?></td>
+									<td class = "toDate"><?php echo $row['toDate'];?></td>
+									<td class = "fromTime"><?php echo $row['fromTime'];?></td>
+									<td class = "toTime"><?php echo $row['toTime'];?></td>
 									<td class = ""><button type="button" class="btn btn-default newsEdit">Edit</button> <button type="button" class="btn btn-default newsDelete" data-toggle="modal" data-target="#newsModal">Delete</button></td>
 								</tr>
 								
@@ -513,6 +525,12 @@
 	var newsDesc = '';
 	var newsContent = '';
 	var date = '';
+	var cancelledRoute = '';
+	var cancelledBus = '';
+	var fromDate = '';
+	var toDate = '';
+	var fromTime = '';
+	var toTime = '';
 	
 	var scheduleId = '';
 	var scheduleRoute = '';
@@ -587,8 +605,14 @@
 		newsDesc = $(this).closest('tr').children('td.newsNewsDesc').text();
 		newsContent = $(this).closest('tr').children('td.newsNewsContent').text();
 		date = $(this).closest('tr').children('td.newsDate').text();
+		cancelledRoute = $(this).closest('tr').children('td.cancelledRoute').text();
+		cancelledBus = $(this).closest('tr').children('td.cancelledBus').text();
+		fromDate = $(this).closest('tr').children('td.fromDate').text();
+		toDate = $(this).closest('tr').children('td.toDate').text();
+		fromTime = $(this).closest('tr').children('td.fromTime').text();
+		toTime = $(this).closest('tr').children('td.toTime').text();
 		sessionLink = 'news';
-		$.post("setSession.php", {newsId:newsId, newsTitle:newsTitle, newsDesc:newsDesc, newsContent:newsContent, date:date, sessionLink:sessionLink});
+		$.post("setSession.php", {newsId:newsId, newsTitle:newsTitle, newsDesc:newsDesc, newsContent:newsContent, date:date, cancelledRoute:cancelledRoute, cancelledBus:cancelledBus, fromDate:fromDate, toDate:toDate, fromTime:fromTime, toTime:toTime, sessionLink:sessionLink});
 		window.location.href = "newsForm.php";
 	});
 	

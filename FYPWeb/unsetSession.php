@@ -15,6 +15,12 @@
 		unset($_SESSION['newsDesc']);
 		unset($_SESSION['newsContent']);
 		unset($_SESSION['date']);
+		unset($_SESSION['cancelledRoute']);
+		unset($_SESSION['cancelledBus']);
+		unset($_SESSION['fromDate']);
+		unset($_SESSION['toDate']);
+		unset($_SESSION['fromTime']);
+		unset($_SESSION['toTime']);
 		
 		unset($_SESSION['scheduleId']);
 		unset($_SESSION['scheduleRoute']);

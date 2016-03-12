@@ -168,6 +168,36 @@
 		$newsTitle = trim($_POST['newsTitle']);
 		$newsContent = trim($_POST['newsContent']);
 		$newsDesc = trim($_POST['newsDesc']);
+		$cancelledRoute = '';
+		$cancelledBus = '';
+		$fromDate = '';
+		$toDate = '';
+		$fromTime = '';
+		$toTime = '';
+		
+		if(isset($_POST['cancelledRoute']) && isset($_POST['cancelledBus']) && isset($_POST['fromDate'])){
+			$cancelledRoute = $_POST['cancelledRoute'];
+			$cancelledBus = $_POST['cancelledBus'];
+			$fromDate = $_POST['fromDate'];
+			if(!isset($_POST['toDate']) || $_POST['toDate'] == ''){
+				$toDate = $fromDate;
+			}else{
+				$toDate = $_POST['toDate'];
+			}
+			if(isset($_POST['fromTime']) && isset($_POST['toTime'])){
+				$fromTime = $_POST['fromTime'];
+				$toTime = $_POST['toTime'];
+				
+				if($fromDate == $toDate){
+					if($fromTime > $toTime){
+						$fromTime = '';
+						$toTime = '';
+					}
+				}
+			}
+		}else{
+			$cancelledRoute = 'wtf';
+		}
 		
 		//get current date
 		// Return date/time info of a timestamp; then format the output
@@ -176,9 +206,9 @@
 		
 		$result = mysqli_query($con, "SELECT * FROM news WHERE id='".$newsId."'");
 		if(mysqli_fetch_array($result) != false){
-			mysqli_query($con, "UPDATE news SET newsTitle='".$newsTitle."', newsDesc='".$newsDesc."', newsContent='".$newsContent."', date='".$date."' WHERE id='".$newsId."'");
+			mysqli_query($con, "UPDATE news SET newsTitle='".$newsTitle."', newsDesc='".$newsDesc."', newsContent='".$newsContent."', date='".$date."', cancelledRoute='".$cancelledRoute."', cancelledBus='".$cancelledBus."', fromDate='".$fromDate."', toDate='".$toDate."', fromTime='".$fromTime."', toTime='".$toTime."' WHERE id='".$newsId."'");
 		}else{
-			mysqli_query($con, "insert into news(newsTitle, newsDesc, newsContent, date) values('{$newsTitle}', '{$newsDesc}', '{$newsContent}', '{$date}')");
+			mysqli_query($con, "insert into news(newsTitle, newsDesc, newsContent, date, cancelledRoute, cancelledBus, fromDate, toDate, fromTime, toTime) values('{$newsTitle}', '{$newsDesc}', '{$newsContent}', '{$date}', '{$cancelledRoute}', '{$cancelledBus}', '{$fromDate}', '{$toDate}', '{$fromTime}', '{$toTime}')");
 		}
 		
 		header("Location:home.php");

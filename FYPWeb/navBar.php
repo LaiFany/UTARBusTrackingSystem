@@ -112,6 +112,12 @@
 	var newsDesc = '';
 	var newsContent = '';
 	var date = '';
+	var cancelledRoute = '';
+	var cancelledBus = '';
+	var fromDate = '';
+	var toDate = '';
+	var fromTime = '';
+	var toTime = '';
 	
 	var scheduleId = '';
 	var scheduleRoute = '';
@@ -147,7 +153,7 @@
 	$('#newsLink').click(function(){
 		sessionLink = 'news';
 		$.post("unsetSession.php", {});
-		$.post("setSession.php", {newsTitle:newsTitle, newsDesc:newsDesc, newsContent:newsContent, date:date, sessionLink:sessionLink});
+		$.post("setSession.php", {newsId:newsId, newsTitle:newsTitle, newsDesc:newsDesc, newsContent:newsContent, date:date, cancelledRoute:cancelledRoute, cancelledBus:cancelledBus, fromDate:fromDate, toDate:toDate, fromTime:fromTime, toTime:toTime, sessionLink:sessionLink});
 	});
 	
 	$('#scheduleLink').click(function(){

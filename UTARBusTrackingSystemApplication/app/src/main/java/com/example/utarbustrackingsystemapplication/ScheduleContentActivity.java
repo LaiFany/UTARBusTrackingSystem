@@ -3,10 +3,12 @@ package com.example.utarbustrackingsystemapplication;
 import android.content.Intent;
 import android.graphics.Color;
 import android.graphics.drawable.ColorDrawable;
+import android.os.AsyncTask;
 import android.os.Build;
 import android.support.v7.app.ActionBar;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
+import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.Window;
@@ -18,9 +20,19 @@ import android.widget.ImageButton;
 import android.widget.TableLayout;
 import android.widget.TableRow;
 import android.widget.TextView;
+import android.widget.Toast;
 
+import org.apache.http.NameValuePair;
+import org.apache.http.message.BasicNameValuePair;
+import org.json.JSONArray;
+import org.json.JSONObject;
+
+import java.text.ParseException;
 import java.text.SimpleDateFormat;
+import java.util.ArrayList;
 import java.util.Calendar;
+import java.util.Date;
+import java.util.List;
 
 public class ScheduleContentActivity extends AppCompatActivity {
 
@@ -34,10 +46,20 @@ public class ScheduleContentActivity extends AppCompatActivity {
     public String[] row;
     public String[] col;
 
+    public String cancelledRoute = "";
+    public String cancelledBus = "";
+    public String fromDate = "";
+    public String toDate = "";
+    public String fromTime = "";
+    public String toTime = "";
+
     public TextView routeTv;
     public TextView busTv;
     public TextView topNoteTv;
     public TextView bottomNoteTv;
+
+    public Date currentDate;
+    public Date currentTime;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -67,6 +89,18 @@ public class ScheduleContentActivity extends AppCompatActivity {
         initializeView();
 
         if(getIntent().hasExtra("route") && getIntent().hasExtra("bus") && getIntent().hasExtra("topNote") && getIntent().hasExtra("bottomNote") && getIntent().hasExtra("timetable") && getIntent().hasExtra("date")){
+
+            if(getIntent().hasExtra("cancelledRoute") && getIntent().hasExtra("cancelledBus") && getIntent().hasExtra("fromDate") && getIntent().hasExtra("toDate") && getIntent().hasExtra("fromTime") && getIntent().hasExtra("toTime")){
+                cancelledRoute = getIntent().getStringExtra("cancelledRoute");
+                cancelledBus = getIntent().getStringExtra("cancelledBus");
+                fromDate = getIntent().getStringExtra("fromDate");
+                toDate = getIntent().getStringExtra("toDate");
+                fromTime = getIntent().getStringExtra("fromTime");
+                toTime = getIntent().getStringExtra("toTime");
+
+                System.out.println(cancelledRoute + "  " + cancelledBus + "  " + fromDate + "  " + toDate + "  " + fromTime + "  " + toTime);
+            }
+
             route = getIntent().getStringExtra("route");
             busNo = getIntent().getStringExtra("bus");
             topNote = getIntent().getStringExtra("topNote");
@@ -103,14 +137,6 @@ public class ScheduleContentActivity extends AppCompatActivity {
                     tv[j].setText(col[j]);
                     tv[j].setEms(6);
                     tv[j].setBackgroundResource(R.drawable.border);
-                    if(tv[j].getText().equals("LUNCH")){
-                        tv[j].setBackgroundResource(R.drawable.borderlunch);
-                        tv[j].setTextColor(Color.WHITE);
-                    }
-                    if(i == 0){
-                        tv[j].setBackgroundResource(R.drawable.borderheader);
-                        tv[j].setTextColor(Color.WHITE);
-                    }
                     tv[j].measure(0, 0);
                     if(maxHeight < tv[j].getMeasuredHeight()){
                         maxHeight = tv[j].getMeasuredHeight();
@@ -130,15 +156,29 @@ public class ScheduleContentActivity extends AppCompatActivity {
                         tv[j].setBackgroundResource(R.drawable.borderfriday);
                         tv[j].setTextColor(Color.WHITE);
                     }
+                    if(getIntent().hasExtra("cancelledRoute") && getIntent().hasExtra("cancelledBus") && getIntent().hasExtra("fromDate") && getIntent().hasExtra("toDate") && getIntent().hasExtra("fromTime") && getIntent().hasExtra("toTime")){
+                        getDateTime();
+
+                        if(parseDate(fromDate).equals(currentDate)){
+                            tv[j].setBackgroundResource(R.drawable.bordercancelled);
+                            tv[j].setTextColor(Color.WHITE);
+                        }
+                    }
+                    if(tv[j].getText().equals("LUNCH")){
+                        tv[j].setBackgroundResource(R.drawable.borderlunch);
+                        tv[j].setTextColor(Color.WHITE);
+                    }
+                    if(i == 0){
+                        tv[j].setBackgroundResource(R.drawable.borderheader);
+                        tv[j].setTextColor(Color.WHITE);
+                    }
                     tableRow.addView(tv[j]);
                 }
                 ll.addView(tableRow,i);
             }
-        }
-        else{
+        } else {
             System.out.println("No extra passed to this activity");
         }
-        getDateTime();
 
         /*webView = (WebView) findViewById(R.id.webView);
         webView.setBackgroundColor(0x00000000);
@@ -176,7 +216,33 @@ public class ScheduleContentActivity extends AppCompatActivity {
         SimpleDateFormat time = new SimpleDateFormat("HH:mm");
         String strDate = date.format(c.getTime());
         String strTime = time.format(c.getTime());
+
+        currentDate = parseDate(strDate);
+        currentTime = parseTime(strTime);
+
         System.out.println(strDate + "/" + strTime);
+    }
+
+    public Date parseDate(String date){
+        Date d = new Date();
+        try {
+            SimpleDateFormat dateFormat = new SimpleDateFormat ("dd MMMM yyyy");
+            d = dateFormat.parse(date);
+        } catch (ParseException e) {
+            e.printStackTrace();
+        }
+        return d;
+    }
+
+    public Date parseTime(String time){
+        Date t = new Date();
+        try {
+            SimpleDateFormat dateFormat = new SimpleDateFormat ("HH:mm");
+            t = dateFormat.parse(time);
+        } catch (ParseException e) {
+            e.printStackTrace();
+        }
+        return t;
     }
 
     @Override
@@ -199,15 +265,17 @@ public class ScheduleContentActivity extends AppCompatActivity {
         }*/
         switch (item.getItemId()) {
             case android.R.id.home:
+                Intent i = new Intent(this, ScheduleActivity.class);
+                startActivity(i);
                 finish();
         }
 
-        if(id == R.id.map){
+        if (id == R.id.map) {
             Intent i = new Intent(this, MapActivity.class);
             startActivity(i);
             finish();
         }
-        if(id == R.id.news){
+        if (id == R.id.news) {
             Intent i = new Intent(this, NewsActivity.class);
             startActivity(i);
             finish();

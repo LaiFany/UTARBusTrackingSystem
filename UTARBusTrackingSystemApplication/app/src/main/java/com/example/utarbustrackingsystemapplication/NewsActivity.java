@@ -509,6 +509,7 @@ public class NewsActivity extends ActionBarActivity {
                 intent.putExtra("newsContent", newsContent[pos]);
                 intent.putExtra("date", date[pos]);
                 startActivity(intent);
+                finish();
             }
         });
 

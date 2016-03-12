@@ -102,6 +102,8 @@ public class NewsContentActivity extends AppCompatActivity {
         }*/
         switch (item.getItemId()) {
             case android.R.id.home:
+                Intent i = new Intent(this, NewsActivity.class);
+                startActivity(i);
                 finish();
         }
 

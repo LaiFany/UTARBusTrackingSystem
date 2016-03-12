@@ -63,7 +63,11 @@ package com.example.utarbustrackingsystemapplication;
         import org.json.JSONObject;
 
         import java.text.DecimalFormat;
+        import java.text.ParseException;
+        import java.text.SimpleDateFormat;
         import java.util.ArrayList;
+        import java.util.Calendar;
+        import java.util.Date;
         import java.util.HashMap;
         import java.util.List;
         import java.util.Map;
@@ -156,6 +160,16 @@ public class MapActivity extends ActionBarActivity implements GoogleMap.OnMarker
     public int activeBusMarker = 100;
     public int activeMarkerClickCount = 0;
     public int markerVisibilityCount = 0;
+
+    public String[] cancelledRoute;
+    public String[] cancelledBus;
+    public String[] fromDate;
+    public String[] toDate;
+    public String[] fromTime;
+    public String[] toTime;
+
+    public Date currentDate;
+    public Date currentTime;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -352,10 +366,10 @@ public class MapActivity extends ActionBarActivity implements GoogleMap.OnMarker
         rlp.setMargins(0, 0, 30, 30);
 
         //add marker to position of UTAR
-        final Marker marker = map.addMarker(new MarkerOptions().position(UtarPos).title("UTAR").icon(BitmapDescriptorFactory.fromResource(R.mipmap.greenmarker)));
+        final Marker marker = map.addMarker(new MarkerOptions().position(UtarPos).title("UTAR").icon(BitmapDescriptorFactory.fromResource(R.mipmap.redmarker)));
 
         //set position of marker // originally is R.drawable.busicon4
-        MarkerOptions mo = new MarkerOptions().position(UtarPos).icon(BitmapDescriptorFactory.fromResource(R.mipmap.redmarker));
+        MarkerOptions mo = new MarkerOptions().position(UtarPos).icon(BitmapDescriptorFactory.fromResource(R.mipmap.greenmarker));
         for(int i = 0; i < noOfRouteInTable; i++){
             m[i] = map.addMarker(mo);
         }
@@ -619,6 +633,53 @@ public class MapActivity extends ActionBarActivity implements GoogleMap.OnMarker
                         e.printStackTrace();
                     }
                 }
+
+                //trying to combine another asynctask here
+                try{
+                    List<NameValuePair> param = new ArrayList<NameValuePair>();
+                    param.add(new BasicNameValuePair("route", String.valueOf("1"))); //simply put a value for parameter purposes
+
+                    // getting JSON string from URL
+                    JSONObject json = jParser.makeHttpRequest(Constant.retrieveNewsURL, "GET", param);
+
+                    // Check your log cat for JSON reponse
+                    //Log.d("All Products: ", json.toString());
+                    // Checking for SUCCESS TAG
+                    int success = json.getInt("success");
+
+                    if (success == 1) {
+                        // products found
+                        // Getting Array of Products
+                        JSONArray data = json.getJSONArray("data");
+
+                        //initialize size of arrays
+                        cancelledRoute = new String[data.length()];
+                        cancelledBus = new String[data.length()];
+                        fromDate = new String[data.length()];
+                        toDate = new String[data.length()];
+                        fromTime = new String[data.length()];
+                        toTime = new String[data.length()];
+
+                        // looping through All Products
+                        for (int i = 0; i < data.length(); i++) {
+                            JSONObject c = data.getJSONObject(i);
+
+                            // Storing each json item in variable
+                            cancelledRoute[i] = c.getString("cancelledRoute");
+                            cancelledBus[i] = c.getString("cancelledBus");
+                            fromDate[i] = c.getString("fromDate");
+                            toDate[i] = c.getString("toDate");
+                            fromTime[i] = c.getString("fromTime");
+                            toTime[i] = c.getString("toTime");
+                        }
+                    }
+                    else{
+                        Toast.makeText(getBaseContext(), "No products found", Toast.LENGTH_LONG).show();
+                    }
+                }catch(Exception e){
+                    e.printStackTrace();
+                }
+
                 return routeNumber;
             }else{
                 return null;
@@ -630,6 +691,30 @@ public class MapActivity extends ActionBarActivity implements GoogleMap.OnMarker
         protected void onPostExecute(String[] number) {
             if(number != null){
                 for(int i = 0; i < number.length; i++) {
+                    try{
+                        //check if route cancelled today
+
+                        getDateTime();
+
+                        for(int j = 0; j < cancelledRoute.length; j++){
+                            if(!fromTime[j].equals("") && !toTime[j].equals("")){
+                                if(cancelledRoute[j].equals("Route " + asyncRouteNo[i] + " : " + asyncRouteName[i]) && cancelledBus[j].equals("Bus " + asyncBus[i]) && (parseDate(fromDate[j]).equals(currentDate) || parseDate(toDate[j]).equals(currentDate) || (currentDate.after(parseDate(fromDate[j])) && currentDate.before(parseDate(toDate[j])))) && (currentTime.equals(parseTime(toTime[j])) || currentTime.equals(parseTime(fromTime[j])) || (currentTime.before(parseTime(toTime[j])) && currentTime.after(parseTime(fromTime[j]))))){
+                                    m[i].setIcon(BitmapDescriptorFactory.fromResource(R.mipmap.redmarker));
+                                }else {
+                                    m[i].setIcon(BitmapDescriptorFactory.fromResource(R.mipmap.greenmarker));
+                                }
+                            }else{
+                                if(cancelledRoute[j].equals("Route " + asyncRouteNo[i] + " : " + asyncRouteName[i]) && cancelledBus[j].equals("Bus " + asyncBus[i]) && (parseDate(fromDate[j]).equals(currentDate) || parseDate(toDate[j]).equals(currentDate) || (currentDate.after(parseDate(fromDate[j])) && currentDate.before(parseDate(toDate[j]))))){
+                                    m[i].setIcon(BitmapDescriptorFactory.fromResource(R.mipmap.redmarker));
+                                }else {
+                                    m[i].setIcon(BitmapDescriptorFactory.fromResource(R.mipmap.greenmarker));
+                                }
+                            }
+                        }
+                    }catch(Exception e){
+
+                    }
+
                     try {
                         LatLng busPos = new LatLng(Double.parseDouble(asyncLat[i]), Double.parseDouble(asyncLng[i]));
                         //m[i].setPosition(busPos);
@@ -657,7 +742,7 @@ public class MapActivity extends ActionBarActivity implements GoogleMap.OnMarker
                             }else{
                                 distanceToUtar.setText(String.valueOf(roundTwoDecimals(currentLocation.distanceTo(utarLoc) / 1000)) + " km");
                             }
-                            noOfPassengers.setText(asyncPassengers[selectedRoute-1]);
+                            noOfPassengers.setText(asyncPassengers[selectedRoute - 1]);
                             if (busLoc[selectedRoute - 1].hasSpeed()) {
                                 etaToUser.setText(String.valueOf(userETA[selectedRoute - 1]) + " seconds");
                             }else{
@@ -676,7 +761,6 @@ public class MapActivity extends ActionBarActivity implements GoogleMap.OnMarker
             }else{
                 System.out.println("Cancelled");
             }
-
         }
 
         @Override
@@ -900,7 +984,7 @@ public class MapActivity extends ActionBarActivity implements GoogleMap.OnMarker
                                                         //.bearing(90)                // Sets the orientation of the camera to east
                                                         //.tilt(30)                   // Sets the tilt of the camera to 30 degrees
                                                 .build();                   // Creates a CameraPosition from the builder
-                                        map.animateCamera(CameraUpdateFactory.newCameraPosition(cameraPosition), 800, null);
+                                        map.animateCamera(CameraUpdateFactory.newCameraPosition(cameraPosition), 400, null);
 
                                         //set data to textviews
                                         if (selectedRoute != 100 ) {
@@ -972,11 +1056,12 @@ public class MapActivity extends ActionBarActivity implements GoogleMap.OnMarker
                         asyncParam[i] = itemRouteNo[i+1];
                     }
 
-                    //lck
-                    //new busAsyncTask().execute(asyncParam);
+                    //calling 2 asynctask in parallel
                     busAsyncTask = new busAsyncTask(asyncParam, true);
                     busAsyncTask.execute();
-                    //lck
+
+                    //busAsyncTask.execute();
+                    //crdt.execute();
 
                     if (MapActivity.this.pd != null) {
                         MapActivity.this.pd.dismiss();
@@ -984,6 +1069,105 @@ public class MapActivity extends ActionBarActivity implements GoogleMap.OnMarker
                 }
             }
         }
+    }
+
+    //async task to download cancelled routes from db ------ joined with busAsyncTask
+    /*private class CancelledRouteDownloadTask extends AsyncTask<String, Void, String> {
+        protected String doInBackground(String... args) {
+            if(!isCancelled()){
+                Log.i("MyApp", "Background thread starting");
+
+                try{
+                    List<NameValuePair> param = new ArrayList<NameValuePair>();
+                    param.add(new BasicNameValuePair("route", String.valueOf("1"))); //simply put a value for parameter purposes
+
+                    // getting JSON string from URL
+                    JSONObject json = jParser.makeHttpRequest(Constant.retrieveNewsURL, "GET", param);
+
+                    // Check your log cat for JSON reponse
+                    //Log.d("All Products: ", json.toString());
+                    // Checking for SUCCESS TAG
+                    int success = json.getInt("success");
+
+                    if (success == 1) {
+                        // products found
+                        // Getting Array of Products
+                        JSONArray data = json.getJSONArray("data");
+
+                        //initialize size of arrays
+                        cancelledRoute = new String[data.length()];
+                        cancelledBus = new String[data.length()];
+                        fromDate = new String[data.length()];
+                        toDate = new String[data.length()];
+                        fromTime = new String[data.length()];
+                        toTime = new String[data.length()];
+
+                        // looping through All Products
+                        for (int i = 0; i < data.length(); i++) {
+                            JSONObject c = data.getJSONObject(i);
+
+                            // Storing each json item in variable
+                            cancelledRoute[i] = c.getString("cancelledRoute");
+                            cancelledBus[i] = c.getString("cancelledBus");
+                            fromDate[i] = c.getString("fromDate");
+                            toDate[i] = c.getString("toDate");
+                            fromTime[i] = c.getString("fromTime");
+                            toTime[i] = c.getString("toTime");
+                        }
+                    }
+                    else{
+                        Toast.makeText(getBaseContext(), "No products found", Toast.LENGTH_LONG).show();
+                    }
+                }catch(Exception e){
+                    e.printStackTrace();
+                }
+                return "Done";
+            }else{
+                return "Cancelled";
+            }
+        }
+
+        protected void onPostExecute(String result) {
+            if(result == "Done"){
+                crdt = new CancelledRouteDownloadTask();
+                crdt.execute("");
+            }
+        }
+    }*/
+
+    public void getDateTime(){
+        Calendar c = Calendar.getInstance();
+        SimpleDateFormat date = new SimpleDateFormat("dd MMMM yyyy");
+        SimpleDateFormat time = new SimpleDateFormat("HH:mm");
+        String strDate = date.format(c.getTime());
+        String strTime = time.format(c.getTime());
+
+        currentDate = parseDate(strDate);
+        currentTime = parseTime(strTime);
+
+        System.out.println(strDate + "/" + strTime);
+    }
+
+    public Date parseDate(String date){
+        Date d = new Date();
+        try {
+            SimpleDateFormat dateFormat = new SimpleDateFormat ("dd MMMM yyyy");
+            d = dateFormat.parse(date);
+        } catch (ParseException e) {
+            e.printStackTrace();
+        }
+        return d;
+    }
+
+    public Date parseTime(String time){
+        Date t = new Date();
+        try {
+            SimpleDateFormat dateFormat = new SimpleDateFormat ("HH:mm");
+            t = dateFormat.parse(time);
+        } catch (ParseException e) {
+            e.printStackTrace();
+        }
+        return t;
     }
 
     public void animateMarker(final Marker marker, final LatLng toPosition) {
@@ -1172,10 +1356,12 @@ public class MapActivity extends ActionBarActivity implements GoogleMap.OnMarker
                 }
                 activeMarkerClickCount++;
             }
+            //trying to just disable infowindow from showing.
+            bool = true;
         }
 
         //if clicked 2 times on the same marker, hide the info window.
-        if(code == "success"){
+        /*if(code == "success"){
             if(activeBusMarker != 100 && j == activeBusMarker && activeMarkerClickCount == 2){
                 bool = true;
                 activeMarkerClickCount = 0;
@@ -1184,7 +1370,7 @@ public class MapActivity extends ActionBarActivity implements GoogleMap.OnMarker
             System.out.println("markerClickTest out activeBusMarker = " + activeBusMarker + " j = " + j + " activeMarkerClickCount = " + activeMarkerClickCount);
         }else{
             bool = false;
-        }
+        }*/
 
         activeBusMarker = j;
 
