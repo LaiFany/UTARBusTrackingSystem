@@ -87,13 +87,16 @@ public class JourneyActivity extends AppCompatActivity {
     public int code = 0;
     public busAsyncTask busAsyncTask = new busAsyncTask();
 
+    String defaultRoute;
+    String defaultBus;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_journey);
 
         // Show the ProgressDialog on this thread
-        this.pd = ProgressDialog.show(this, "Working..", "Getting GPS", true, true,
+        this.pd = ProgressDialog.show(this, "", "Initializing GPS", true, true,
                 new DialogInterface.OnCancelListener(){
                     @Override
                     public void onCancel(DialogInterface dialog) {
@@ -121,41 +124,9 @@ public class JourneyActivity extends AppCompatActivity {
             window.setStatusBarColor(Color.parseColor("#2fb144"));
         }
 
-        /*final RippleBackground rippleBackground=(RippleBackground)findViewById(R.id.content);
-        ImageView imageView=(ImageView)findViewById(R.id.centerImage);
-        imageView.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                rippleBackground.startRippleAnimation();
-            }
-        });
-
-        imageView.performClick();*/
-
-        /*TextView tv = (TextView) findViewById(R.id.display);
-        TextView tv1 = (TextView) findViewById(R.id.display1);*/
-
-        SharedPreferences sp = getSharedPreferences("abc", Context.MODE_PRIVATE);
-        String busDisplay = sp.getString("bus", "gg");
-        String routeDisplay = sp.getString("route", "gg");
-        if(busDisplay == "Bus 3 (BHG 7344)"){
-            //tv.setText("No item selected");
-        }
-        else if(routeDisplay == "Route 1 : Bandar Sg Long and Palm Walk 1"){
-            //v1.setText("No item selected");
-        }
-        else{
-            /*tv.setText(busDisplay);
-            tv1.setText(routeDisplay);*/
-            routeNo = routeDisplay.substring(6, 7);
-            routeName = routeDisplay.substring(10);
-            busNo = busDisplay.substring(4);
-            System.out.println(routeNo);
-
-            initializeViews();
-
-            sendAndGetGPS();
-        }
+        initializeIntent();
+        initializeViews();
+        sendAndGetGPS();
     }
 
     public void initializeViews(){
@@ -258,12 +229,12 @@ public class JourneyActivity extends AppCompatActivity {
                nvp.add(new BasicNameValuePair("bus", String.valueOf(busNo)));
                nvp.add(new BasicNameValuePair("lat", String.valueOf(lat)));
                nvp.add(new BasicNameValuePair("lng", String.valueOf(lng)));
-               nvp.add(new BasicNameValuePair("time", String.valueOf(time)));
-               nvp.add(new BasicNameValuePair("passengers", String.valueOf(noOfPassengers)));
+               //nvp.add(new BasicNameValuePair("time", String.valueOf(time)));
+               //nvp.add(new BasicNameValuePair("passengers", String.valueOf(noOfPassengers)));
                try {
                    //insert data to db
                    HttpClient hc = new DefaultHttpClient();
-                   HttpPost hp = new HttpPost(Constant.uploadDataURL);
+                   HttpPost hp = new HttpPost(Constant.postOperationsURL);
                    hp.setEntity(new UrlEncodedFormEntity(nvp));
                    HttpResponse hr = hc.execute(hp);
                    HttpEntity entity = hr.getEntity();
@@ -290,7 +261,7 @@ public class JourneyActivity extends AppCompatActivity {
                    param.add(new BasicNameValuePair("routeNo", String.valueOf(routeNo)));
 
                    // getting JSON string from URL
-                   JSONObject json = jParser.makeHttpRequest(Constant.retrieveDataURL, "GET", param);
+                   JSONObject json = jParser.makeHttpRequest(Constant.getOperationsURL, "GET", param);
 
                    // Check your log cat for JSON reponse
                    //Log.d("All Products: ", json.toString());
@@ -354,6 +325,24 @@ public class JourneyActivity extends AppCompatActivity {
         }
     }
 
+    public void initializeIntent(){
+        if(getIntent().hasExtra("route") && getIntent().hasExtra("bus") && getIntent().hasExtra("defaultRoute") && getIntent().hasExtra("defaultBus")){
+            defaultRoute = getIntent().getStringExtra("defaultRoute");
+            defaultBus = getIntent().getStringExtra("defaultBus");
+
+            String busDisplay = getIntent().getStringExtra("bus");
+            String routeDisplay = getIntent().getStringExtra("route");
+            routeNo = routeDisplay.substring(6, 7);
+            routeName = routeDisplay.substring(10);
+            busNo = busDisplay.substring(4);
+            System.out.println(routeNo);
+        }
+        else{
+            System.out.println("No extra passed to this activity");
+        }
+    }
+
+    //passengers operations
     /*public void add(View v){
         noOfPassengers++;
         no.setText(String.valueOf(noOfPassengers));
@@ -434,6 +423,8 @@ public class JourneyActivity extends AppCompatActivity {
 
     public void completeJourney(View v){
         Intent i = new Intent(this, CompleteActivity.class);
+        i.putExtra("defaultRoute", defaultRoute);
+        i.putExtra("defaultBus", defaultBus);
         startActivity(i);
         cancelAsyncTask();
     }

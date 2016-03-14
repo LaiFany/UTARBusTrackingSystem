@@ -69,7 +69,7 @@ public class MainActivity extends AppCompatActivity {
         setContentView(R.layout.activity_main);
 
         // Show the ProgressDialog on this thread
-        this.pd = ProgressDialog.show(this, "Working..", "Download data..", true, true,
+        this.pd = ProgressDialog.show(this, "", "Initializing Content", true, true,
                 new DialogInterface.OnCancelListener(){
                     @Override
                     public void onCancel(DialogInterface dialog) {
@@ -155,10 +155,10 @@ public class MainActivity extends AppCompatActivity {
                 try{
                     checkInternetConnection();
                     List<NameValuePair> param = new ArrayList<NameValuePair>();
-                    param.add(new BasicNameValuePair("route", String.valueOf("1"))); //simply put a value for parameter purposes
+                    param.add(new BasicNameValuePair("info", String.valueOf("1"))); //simply put a value for parameter purposes
 
                     // getting JSON string from URL
-                    JSONObject json = jParser.makeHttpRequest(Constant.retrieveInfoURL, "GET", param);
+                    JSONObject json = jParser.makeHttpRequest(Constant.getOperationsURL, "GET", param);
 
                     // Check your log cat for JSON reponse
                     //Log.d("All Products: ", json.toString());

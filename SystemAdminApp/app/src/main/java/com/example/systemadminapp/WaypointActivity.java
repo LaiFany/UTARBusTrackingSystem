@@ -95,7 +95,7 @@ public class WaypointActivity extends AppCompatActivity {
         setContentView(R.layout.activity_waypoint);
 
         // Show the ProgressDialog on this thread
-        this.pd = ProgressDialog.show(this, "Working..", "Getting GPS", true, true,
+        this.pd = ProgressDialog.show(this, "", "Initializing GPS", true, true,
                 new DialogInterface.OnCancelListener(){
                     @Override
                     public void onCancel(DialogInterface dialog) {
@@ -221,6 +221,7 @@ public class WaypointActivity extends AppCompatActivity {
         lngCV[i] = new CardView(this);*/
 
         //set text if there is
+        tv[i].setTextColor(Color.parseColor("#ffffff"));
         wpNameEditText[i].setText(name);
         latEditText[i].setText(latitude);
         lngEditText[i].setText(longitude);
@@ -569,7 +570,7 @@ public class WaypointActivity extends AppCompatActivity {
             try {
                 //insert data to db
                 HttpClient hc = new DefaultHttpClient();
-                HttpPost hp = new HttpPost(Constant.uploadInfoURL);
+                HttpPost hp = new HttpPost(Constant.postOperationsURL);
                 hp.setEntity(new UrlEncodedFormEntity(nvp));
                 HttpResponse hr = hc.execute(hp);
                 HttpEntity entity = hr.getEntity();

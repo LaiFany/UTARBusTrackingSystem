@@ -95,7 +95,7 @@ public class ScheduleActivity extends ActionBarActivity {
         setContentView(R.layout.activity_schedule);
 
         // Show the ProgressDialog on this thread
-        this.pd = ProgressDialog.show(this, "Working..", "Download data..", true, true,
+        this.pd = ProgressDialog.show(this, "", "Initializing Content", true, true,
                 new DialogInterface.OnCancelListener() {
                     @Override
                     public void onCancel(DialogInterface dialog) {
@@ -302,10 +302,10 @@ public class ScheduleActivity extends ActionBarActivity {
 
                 try{
                     List<NameValuePair> param = new ArrayList<NameValuePair>();
-                    param.add(new BasicNameValuePair("route", String.valueOf("1"))); //simply put a value for parameter purposes
+                    param.add(new BasicNameValuePair("schedule", String.valueOf("1"))); //simply put a value for parameter purposes
 
                     // getting JSON string from URL
-                    JSONObject json = jParser.makeHttpRequest(Constant.retrieveScheduleURL, "GET", param);
+                    JSONObject json = jParser.makeHttpRequest(Constant.getOperationsURL, "GET", param);
 
                     // Check your log cat for JSON reponse
                     //Log.d("All Products: ", json.toString());
@@ -372,10 +372,10 @@ public class ScheduleActivity extends ActionBarActivity {
 
                 try{
                     List<NameValuePair> param = new ArrayList<NameValuePair>();
-                    param.add(new BasicNameValuePair("route", String.valueOf("1"))); //simply put a value for parameter purposes
+                    param.add(new BasicNameValuePair("news", String.valueOf("1"))); //simply put a value for parameter purposes
 
                     // getting JSON string from URL
-                    JSONObject json = jParser.makeHttpRequest(Constant.retrieveNewsURL, "GET", param);
+                    JSONObject json = jParser.makeHttpRequest(Constant.getOperationsURL, "GET", param);
 
                     // Check your log cat for JSON reponse
                     //Log.d("All Products: ", json.toString());

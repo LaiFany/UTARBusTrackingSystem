@@ -64,7 +64,9 @@ public class NewsContentActivity extends AppCompatActivity {
             newsContent = getIntent().getStringExtra("newsContent");
             date = getIntent().getStringExtra("date");
 
-            title.setText(Html.fromHtml("<u>" + newsTitle + "</u>"));
+            //underline text
+            //title.setText(Html.fromHtml("<u>" + newsTitle + "</u>"));
+            title.setText(newsTitle);
             desc.setText(newsDesc);
             content.setText(newsContent);
             dateTextView.setText(date);

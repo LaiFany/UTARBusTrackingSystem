@@ -100,7 +100,7 @@ public class MapActivity extends ActionBarActivity implements GoogleMap.OnMarker
     String[] asyncBus;
     String[] asyncLat;
     String[] asyncLng;
-    String[] asyncPassengers;
+    //String[] asyncPassengers;
     String[] waypoint;
     String[] stopNamesUnconverted;
     float[] userETA;
@@ -117,7 +117,7 @@ public class MapActivity extends ActionBarActivity implements GoogleMap.OnMarker
     public EditText distanceToUser;
     public EditText distanceToUtar;
     public EditText etaToUser;
-    public EditText noOfPassengers;
+    //public EditText noOfPassengers;
 
     public MaterialTextField mtfId;
     public MaterialTextField mtfRoute;
@@ -125,7 +125,7 @@ public class MapActivity extends ActionBarActivity implements GoogleMap.OnMarker
     public MaterialTextField mtfDistanceToUser;
     public MaterialTextField mtfDistanceToUtar;
     public MaterialTextField mtfEtaToUser;
-    public MaterialTextField mtfNoOfPassengers;
+    //public MaterialTextField mtfNoOfPassengers;
 
     public Location currentLocation;
     public int selectedRoute = 100;
@@ -177,7 +177,7 @@ public class MapActivity extends ActionBarActivity implements GoogleMap.OnMarker
         setContentView(R.layout.activity_map);
 
         // Show the ProgressDialog on this thread
-        this.pd = ProgressDialog.show(this, "Working..", "Download data..", true, true,
+        this.pd = ProgressDialog.show(this, "", "Initializing Content", true, true,
                 new DialogInterface.OnCancelListener(){
                     @Override
                     public void onCancel(DialogInterface dialog) {
@@ -528,7 +528,7 @@ public class MapActivity extends ActionBarActivity implements GoogleMap.OnMarker
         distanceToUser = (EditText) findViewById(R.id.distanceToUser);
         distanceToUtar = (EditText) findViewById(R.id.distanceToUtar);
         etaToUser = (EditText) findViewById(R.id.etaToUser);
-        noOfPassengers = (EditText) findViewById(R.id.noOfPassengers);
+        //noOfPassengers = (EditText) findViewById(R.id.noOfPassengers);
 
         //mtfId = (MaterialTextField) findViewById(R.id.mtfId);
         mtfRoute = (MaterialTextField) findViewById(R.id.mtfRoute);
@@ -536,7 +536,7 @@ public class MapActivity extends ActionBarActivity implements GoogleMap.OnMarker
         mtfDistanceToUser = (MaterialTextField) findViewById(R.id.mtfDistanceToUser);
         mtfDistanceToUtar = (MaterialTextField) findViewById(R.id.mtfDistanceToUtar);
         mtfEtaToUser = (MaterialTextField) findViewById(R.id.mtfEtaToUser);
-        mtfNoOfPassengers = (MaterialTextField) findViewById(R.id.mtfNoOfPassengers);
+        //mtfNoOfPassengers = (MaterialTextField) findViewById(R.id.mtfNoOfPassengers);
     }
 
     public void mtfClick(){
@@ -548,7 +548,7 @@ public class MapActivity extends ActionBarActivity implements GoogleMap.OnMarker
         mtfDistanceToUser.performClick();
         mtfDistanceToUtar.performClick();
         mtfEtaToUser.performClick();
-        mtfNoOfPassengers.performClick();
+        //mtfNoOfPassengers.performClick();
 
         //disable click
         mtfRoute.setClickable(false);
@@ -556,7 +556,7 @@ public class MapActivity extends ActionBarActivity implements GoogleMap.OnMarker
         mtfDistanceToUser.setClickable(false);
         mtfDistanceToUtar.setClickable(false);
         mtfEtaToUser.setClickable(false);
-        mtfNoOfPassengers.setClickable(false);
+        //mtfNoOfPassengers.setClickable(false);
     }
 
     //async tasks to obtain the last position of all registered bus in db
@@ -585,7 +585,7 @@ public class MapActivity extends ActionBarActivity implements GoogleMap.OnMarker
                         param.add(new BasicNameValuePair("routeNo", String.valueOf(routeNumber[i])));
                         //String param = String.valueOf(number[i]);
                         // getting JSON string from URL
-                        JSONObject json = jParser.makeHttpRequest(Constant.retrieveDataURL, "GET", param);
+                        JSONObject json = jParser.makeHttpRequest(Constant.getOperationsURL, "GET", param);
 
                         // Check your log cat for JSON reponse
                         //Log.d("All Products: ", json.toString());
@@ -608,7 +608,7 @@ public class MapActivity extends ActionBarActivity implements GoogleMap.OnMarker
                                 asyncBus[i] = c.getString("bus");
                                 asyncLat[i] = c.getString("lat");
                                 asyncLng[i] = c.getString("lng");
-                                asyncPassengers[i] = c.getString("passengers");
+                                //asyncPassengers[i] = c.getString("passengers");
                             }
 
                             utarLoc = new Location("utarCoordinates");
@@ -637,10 +637,10 @@ public class MapActivity extends ActionBarActivity implements GoogleMap.OnMarker
                 //trying to combine another asynctask here
                 try{
                     List<NameValuePair> param = new ArrayList<NameValuePair>();
-                    param.add(new BasicNameValuePair("route", String.valueOf("1"))); //simply put a value for parameter purposes
+                    param.add(new BasicNameValuePair("news", String.valueOf("1"))); //simply put a value for parameter purposes
 
                     // getting JSON string from URL
-                    JSONObject json = jParser.makeHttpRequest(Constant.retrieveNewsURL, "GET", param);
+                    JSONObject json = jParser.makeHttpRequest(Constant.getOperationsURL, "GET", param);
 
                     // Check your log cat for JSON reponse
                     //Log.d("All Products: ", json.toString());
@@ -742,7 +742,7 @@ public class MapActivity extends ActionBarActivity implements GoogleMap.OnMarker
                             }else{
                                 distanceToUtar.setText(String.valueOf(roundTwoDecimals(currentLocation.distanceTo(utarLoc) / 1000)) + " km");
                             }
-                            noOfPassengers.setText(asyncPassengers[selectedRoute - 1]);
+                            //noOfPassengers.setText(asyncPassengers[selectedRoute - 1]);
                             if (busLoc[selectedRoute - 1].hasSpeed()) {
                                 etaToUser.setText(String.valueOf(userETA[selectedRoute - 1]) + " seconds");
                             }else{
@@ -778,10 +778,10 @@ public class MapActivity extends ActionBarActivity implements GoogleMap.OnMarker
 
                 try{
                     List<NameValuePair> param = new ArrayList<NameValuePair>();
-                    param.add(new BasicNameValuePair("route", String.valueOf("1"))); //simply put a value for parameter purposes
+                    param.add(new BasicNameValuePair("info", String.valueOf("1"))); //simply put a value for parameter purposes
 
                     // getting JSON string from URL
-                    JSONObject json = jParser.makeHttpRequest(Constant.retrieveInfoURL, "GET", param);
+                    JSONObject json = jParser.makeHttpRequest(Constant.getOperationsURL, "GET", param);
 
                     // Check your log cat for JSON reponse
                     //Log.d("All Products: ", json.toString());
@@ -803,7 +803,7 @@ public class MapActivity extends ActionBarActivity implements GoogleMap.OnMarker
                         asyncBus = new String[data.length()+1];
                         asyncLat = new String[data.length()+1];
                         asyncLng = new String[data.length()+1];
-                        asyncPassengers = new String[data.length()+1];
+                        //asyncPassengers = new String[data.length()+1];
                         userETA = new float[data.length()+1];
                         m = new Marker[data.length()+1];
                         busLoc = new Location[data.length()+1];
@@ -965,7 +965,7 @@ public class MapActivity extends ActionBarActivity implements GoogleMap.OnMarker
                                     distanceToUser.setText("");
                                     distanceToUtar.setText("");
                                     etaToUser.setText("");
-                                    noOfPassengers.setText("");
+                                    //noOfPassengers.setText("");
                                     imageId[position - 1] = R.drawable.all;
 
                                 }else if (selecteditem != "All Routes") {
@@ -987,25 +987,6 @@ public class MapActivity extends ActionBarActivity implements GoogleMap.OnMarker
                                         map.animateCamera(CameraUpdateFactory.newCameraPosition(cameraPosition), 400, null);
 
                                         //set data to textviews
-                                        if (selectedRoute != 100 ) {
-                                            /*//idView.setText(asyncId[selectedRoute - 1]);
-                                            route.setText("Route " + asyncRouteNo[selectedRoute - 1] + " : " + asyncRouteName[selectedRoute - 1]);
-                                            bus.setText("Bus " + asyncBus[selectedRoute - 1]);
-                                            System.out.println("abc here");
-                                            distanceToUser.setText(String.valueOf(roundTwoDecimals(currentLocation.distanceTo(busLoc[selectedRoute - 1]) / 1000)) + " km");
-                                            System.out.println("abc here distanceToUser");
-                                            distanceToUtar.setText(String.valueOf(roundTwoDecimals(currentLocation.distanceTo(utarLoc) / 1000)) + " km");
-                                            System.out.println("abc here distanceToUTAR");
-                                            noOfPassengers.setText(asyncPassengers[selectedRoute - 1]);
-                                            System.out.println("abc here passengers");
-                                            if (busLoc[selectedRoute - 1].hasSpeed()) {
-                                                etaToUser.setText(String.valueOf(userETA[selectedRoute - 1]) + " seconds");
-                                            } else {
-                                                etaToUser.setText("Not available");
-                                            }
-                                            System.out.println("abc here speed");*/
-                                        }
-                                        //set data to textviews
                                         if(selectedRoute != 100) {
                                             route.setText("Route " + asyncRouteNo[selectedRoute - 1] + " : " + asyncRouteName[selectedRoute - 1]);
                                             bus.setText("Bus " + asyncBus[selectedRoute - 1]);
@@ -1025,7 +1006,7 @@ public class MapActivity extends ActionBarActivity implements GoogleMap.OnMarker
                                             }else{
                                                 distanceToUtar.setText(String.valueOf(roundTwoDecimals(currentLocation.distanceTo(utarLoc) / 1000)) + " km");
                                             }
-                                            noOfPassengers.setText(asyncPassengers[selectedRoute-1]);
+                                            //noOfPassengers.setText(asyncPassengers[selectedRoute-1]);
                                             if (busLoc[selectedRoute - 1].hasSpeed()) {
                                                 etaToUser.setText(String.valueOf(userETA[selectedRoute - 1]) + " seconds");
                                             }else{

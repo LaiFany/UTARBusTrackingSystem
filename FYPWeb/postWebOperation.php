@@ -15,7 +15,7 @@
 		$result = mysqli_query($con, "SELECT * FROM user WHERE username='".$username."' AND password='".$password."' AND privilege='admin'");
 		if(mysqli_fetch_array($result) != false){
 			$_SESSION['user'] = $username;
-			header('Location:home.php');
+			header('Location:index.php');
 		}else{
 			$_SESSION['loginNotFound'] = 'true';
 			header('Location:login.php');
@@ -35,7 +35,7 @@
 			mysqli_query($con, "insert into route(routeNo, routeName) values('{$routeRouteNo}', '{$routeRouteName}')");
 		}
 		
-		header('Location:home.php');
+		header('Location:index.php');
 	}
 	
 	//bus table
@@ -51,7 +51,7 @@
 			mysqli_query($con, "insert into bus(busNo, busNoPlate) values('{$busBusNo}', '{$busBusNoPlate}')");
 		}
 		
-		header('Location:home.php');
+		header('Location:index.php');
 	}
 	
 	//user table
@@ -73,14 +73,14 @@
 		$addResult = mysqli_query($con, "SELECT * FROM user WHERE username='".$username."'");
 		if(mysqli_fetch_array($editResult) != false){
 			mysqli_query($con, "UPDATE user SET username='".$username."', password='".$password."', privilege='".$privilege."', defaultRoute='".$defaultRoute."', defaultBus='".$defaultBus."' WHERE id='".$userId."'");
-			header('Location:home.php');
+			header('Location:index.php');
 		}else{
 			if(mysqli_fetch_array($addResult) != false){
 				$_SESSION['usernameDuplicate'] = 'true';
 				header('Location:userForm.php');
 			}else{
 				mysqli_query($con, "insert into user(username, password, privilege, defaultRoute, defaultBus) values('{$username}', '{$password}', '{$privilege}', '{$defaultRoute}', '{$defaultBus}')");
-				header('Location:home.php');
+				header('Location:index.php');
 			}
 		}
 	}
@@ -109,7 +109,7 @@
 			mysqli_query($con, "insert into info(routeNo, routeName, bus, waypoint, stopNames) values('{$routeNo}', '{$routeName}', '{$bus}', '{$waypoint}', '{$name}')");
 		}
 
-		header("Location:home.php");
+		header("Location:index.php");
 	}
 	else{
 		echo "Missing required fields";
@@ -156,7 +156,7 @@
 			mysqli_query($con, "insert into schedule(route, bus, date, topNote, bottomNote, timetable) values('{$route}', '{$bus}', '{$date}', '{$topNote}', '{$bottomNote}', '{$timetable}')");
 		}
 		
-		header("Location:home.php");
+		header("Location:index.php");
 	}
 	else{
 		echo "Missing required fields";
@@ -209,7 +209,7 @@
 			mysqli_query($con, "insert into news(newsTitle, newsDesc, newsContent, date, cancelledRoute, cancelledBus, fromDate, toDate, fromTime, toTime) values('{$newsTitle}', '{$newsDesc}', '{$newsContent}', '{$date}', '{$cancelledRoute}', '{$cancelledBus}', '{$fromDate}', '{$toDate}', '{$fromTime}', '{$toTime}')");
 		}
 		
-		header("Location:home.php");
+		header("Location:index.php");
 	}
 	else{
 		echo "Missing required fields";

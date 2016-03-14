@@ -47,7 +47,7 @@
             android:name=".ScheduleActivity"
             android:label="@string/title_activity_schedule" android:screenOrientation="portrait"/>
         <activity android:name=".NewsContentActivity" android:screenOrientation="portrait"/>
-        <activity android:name=".ScheduleContentActivity" android:screenOrientation="landscape"></activity>
+        <activity android:name=".ScheduleContentActivity" ></activity>
     </application>
 
 </manifest>

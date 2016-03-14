@@ -11,30 +11,73 @@
     android:background="#b172b2"
     tools:context="com.example.utarbustrackingsystemapplication.NewsContentActivity">
 
-    <TextView
-        android:id="@+id/newsTitle"
-        android:textColor="#ffffff"
-        android:textSize="36sp"
+    <android.support.v7.widget.CardView
+        xmlns:card_view="http://schemas.android.com/apk/res-auto"
+        card_view:cardBackgroundColor="#ffffff"
+        android:gravity="center"
         android:layout_width="match_parent"
-        android:layout_height="wrap_content" />
-
-    <TextView
-        android:id="@+id/newsDesc"
-        android:textColor="#ffffff"
-        android:textSize="25sp"
+        android:layout_height="wrap_content"
         android:layout_marginTop="10dp"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content" />
+        android:layout_marginBottom="5dp"
+        card_view:cardCornerRadius="3dp"
+        card_view:cardElevation="0dp"
+        card_view:cardPreventCornerOverlap="false">
 
-    <TextView
-        android:id="@+id/date"
-        android:textColor="#ffffff"
-        android:textSize="18sp"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content" />
+        <TextView
+            android:id="@+id/newsTitle"
+            android:textColor="#b172b2"
+            android:textSize="20sp"
+            android:layout_margin="15dp"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content" />
+
+    </android.support.v7.widget.CardView>
 
     <android.support.v7.widget.CardView
-        android:id="@+id/cv"
+        xmlns:card_view="http://schemas.android.com/apk/res-auto"
+        card_view:cardBackgroundColor="#ffffff"
+        android:gravity="center"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="10dp"
+        android:layout_marginBottom="5dp"
+        card_view:cardCornerRadius="3dp"
+        card_view:cardElevation="0dp"
+        card_view:cardPreventCornerOverlap="false">
+
+        <TextView
+            android:id="@+id/newsDesc"
+            android:textColor="#b172b2"
+            android:textSize="16sp"
+            android:layout_margin="15dp"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content" />
+
+    </android.support.v7.widget.CardView>
+
+    <android.support.v7.widget.CardView
+        xmlns:card_view="http://schemas.android.com/apk/res-auto"
+        card_view:cardBackgroundColor="#ffffff"
+        android:gravity="center"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="10dp"
+        android:layout_marginBottom="5dp"
+        card_view:cardCornerRadius="3dp"
+        card_view:cardElevation="0dp"
+        card_view:cardPreventCornerOverlap="false">
+
+        <TextView
+            android:id="@+id/date"
+            android:textColor="#b172b2"
+            android:textSize="15sp"
+            android:layout_margin="15dp"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content" />
+
+    </android.support.v7.widget.CardView>
+
+    <android.support.v7.widget.CardView
         xmlns:card_view="http://schemas.android.com/apk/res-auto"
         card_view:cardBackgroundColor="#ffffff"
         android:gravity="center"
@@ -48,8 +91,8 @@
 
         <TextView
             android:id="@+id/newsContent"
-            android:textSize="13sp"
-            android:layout_marginTop="20dp"
+            android:textSize="15sp"
+            android:layout_margin="15dp"
             android:layout_width="match_parent"
             android:layout_height="wrap_content" />
 

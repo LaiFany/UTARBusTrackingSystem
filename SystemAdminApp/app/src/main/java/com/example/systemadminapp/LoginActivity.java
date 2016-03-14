@@ -153,10 +153,10 @@ public class LoginActivity extends AppCompatActivity {
                 try{
                     checkInternetConnection();
                     List<NameValuePair> param = new ArrayList<NameValuePair>();
-                    param.add(new BasicNameValuePair("route", String.valueOf("1"))); //simply put a value for parameter purposes
+                    param.add(new BasicNameValuePair("user", String.valueOf("1"))); //simply put a value for parameter purposes
 
                     // getting JSON string from URL
-                    JSONObject json = jParser.makeHttpRequest(Constant.retrieveUserURL, "GET", param);
+                    JSONObject json = jParser.makeHttpRequest(Constant.getOperationsURL, "GET", param);
 
                     // Check your log cat for JSON reponse
                     // Checking for SUCCESS TAG

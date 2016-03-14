@@ -13,6 +13,9 @@ import android.view.WindowManager;
 
 public class CompleteActivity extends AppCompatActivity {
 
+    String defaultRoute;
+    String defaultBus;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -34,12 +37,25 @@ public class CompleteActivity extends AppCompatActivity {
 
     }
 
+    public void initializeIntent(){
+        if(getIntent().hasExtra("defaultRoute") && getIntent().hasExtra("defaultBus")){
+            defaultRoute = getIntent().getStringExtra("defaultRoute");
+            defaultBus = getIntent().getStringExtra("defaultBus");
+        }
+        else{
+            System.out.println("No extra passed to this activity");
+        }
+    }
+
     public void exitApp(View v){
         finish();
     }
 
     public void startNewJourney(View v){
+        initializeIntent();
         Intent i = new Intent(this, MainActivity.class);
+        i.putExtra("defaultRoute", defaultRoute);
+        i.putExtra("defaultBus", defaultBus);
         startActivity(i);
         finish();
     }

@@ -70,7 +70,10 @@ public class MainActivity extends AppCompatActivity {
     String busText;
     String routeText;
 
-    final DownloadTask dt = new DownloadTask();
+    String defaultRoute;
+    String defaultBus;
+
+    DownloadTask dt = new DownloadTask();
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -78,7 +81,7 @@ public class MainActivity extends AppCompatActivity {
         setContentView(R.layout.activity_main);
 
         // Show the ProgressDialog on this thread
-        this.pd = ProgressDialog.show(this, "Working..", "Download data..", true, true,
+        this.pd = ProgressDialog.show(this, "", "Initializing Content", true, true,
                 new DialogInterface.OnCancelListener(){
                     @Override
                     public void onCancel(DialogInterface dialog) {
@@ -164,10 +167,10 @@ public class MainActivity extends AppCompatActivity {
                 try{
                     checkInternetConnection();
                     List<NameValuePair> param = new ArrayList<NameValuePair>();
-                    param.add(new BasicNameValuePair("route", String.valueOf("1"))); //simply put a value for parameter purposes
+                    param.add(new BasicNameValuePair("info", String.valueOf("1"))); //simply put a value for parameter purposes
 
                     // getting JSON string from URL
-                    JSONObject json = jParser.makeHttpRequest(Constant.retrieveInfoURL, "GET", param);
+                    JSONObject json = jParser.makeHttpRequest(Constant.getOperationsURL, "GET", param);
 
                     // Check your log cat for JSON reponse
                     //Log.d("All Products: ", json.toString());
@@ -211,7 +214,8 @@ public class MainActivity extends AppCompatActivity {
             if(result == "Done"){
                 if(routeNo == null || routeName == null || bus == null){
                     // Start a new thread that will download all the data
-                    new DownloadTask().execute("");
+                    dt = new DownloadTask();
+                    dt.execute();
                 }else{
                     //update spinner
                     for(int i = 0; i < routeNo.length; i++) {
@@ -246,14 +250,16 @@ public class MainActivity extends AppCompatActivity {
 
     public void initializeIntent(){
         if(getIntent().hasExtra("defaultRoute") && getIntent().hasExtra("defaultBus")){
+            defaultRoute = getIntent().getStringExtra("defaultRoute");
+            defaultBus = getIntent().getStringExtra("defaultBus");
             for(int i = 0; i < routeSpinner.getCount(); i++){
-                if(routeSpinner.getItemAtPosition(i).toString().equals(getIntent().getStringExtra("defaultRoute"))){
+                if(routeSpinner.getItemAtPosition(i).toString().equals(defaultRoute)){
                     routeSpinner.setSelection(i);
                     break;
                 }
             }
             for(int i = 0; i < busSpinner.getCount(); i++) {
-                if (busSpinner.getItemAtPosition(i).toString().equals(getIntent().getStringExtra("defaultBus"))){
+                if (busSpinner.getItemAtPosition(i).toString().equals(defaultBus)){
                     busSpinner.setSelection(i);
                     break;
                 }
@@ -265,28 +271,26 @@ public class MainActivity extends AppCompatActivity {
     }
 
     public void start(View v){
-        SharedPreferences sp = getSharedPreferences("abc", Context.MODE_PRIVATE);
+        /*SharedPreferences sp = getSharedPreferences("abc", Context.MODE_PRIVATE);
         SharedPreferences.Editor e = sp.edit();
         busText = busSpinner.getSelectedItem().toString();
         routeText = routeSpinner.getSelectedItem().toString();
 
         e.putString("bus", busText);
         e.putString("route", routeText);
-        e.commit();
+        e.commit();*/
+
+        busText = busSpinner.getSelectedItem().toString();
+        routeText = routeSpinner.getSelectedItem().toString();
 
         Intent intent = new Intent(this, JourneyActivity.class);
+        intent.putExtra("bus", busText);
+        intent.putExtra("route", routeText);
+        intent.putExtra("defaultRoute", defaultRoute);
+        intent.putExtra("defaultBus", defaultBus);
         startActivity(intent);
         finish();
     }
-
-    /*public void setWayPoint(View v){
-        busText = busSpinner.getSelectedItem().toString();
-        routeText = routeSpinner.getSelectedItem().toString();
-        Intent i = new Intent(this, WaypointActivity.class);
-        i.putExtra("bus", busText);
-        i.putExtra("route", routeText);
-        startActivity(i);
-    }*/
 
     private void buildAlertMessageNoInternet() {
         if( alert != null && alert.isShowing() ) return;

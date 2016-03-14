@@ -21,7 +21,7 @@
 		$result = mysqli_query($con, "SELECT * FROM user WHERE username='".$username."' AND password='".$password."' AND privilege='admin'");
 		if(mysqli_fetch_array($result) != false){
 			$_SESSION['user'] = $username;
-			header('Location:home.php');
+			header('Location:index.php');
 		}else{
 			$_SESSION['loginNotFound'] = 'true';
 			header('Location:login.php');

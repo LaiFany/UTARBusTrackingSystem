@@ -31,9 +31,6 @@
             android:name=".JourneyActivity"
             android:screenOrientation="portrait" />
         <activity
-            android:name=".WaypointActivity"
-            android:screenOrientation="portrait" />
-        <activity
             android:name=".CompleteActivity"
             android:screenOrientation="portrait" />
         <activity android:name=".LoginActivity"

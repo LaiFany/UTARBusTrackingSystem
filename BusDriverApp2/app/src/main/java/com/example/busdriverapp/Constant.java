@@ -6,13 +6,9 @@ package com.example.busdriverapp;
 public class Constant {
 
     public static String ipAddress = "utarbts.sytes.net";
+    public static String folder = "/utarbts";
 
-    public static String retrieveDataURL = "http://" + ipAddress + "/getData.php";
-    public static String retrieveUserURL = "http://" + ipAddress + "/getUser.php";
-    public static String uploadDataURL = "http://" + ipAddress + "/postLocationApp.php";
-    public static String retrieveInfoURL = "http://" + ipAddress + "/getInfo.php";
-    public static String uploadInfoURL = "http://"+ ipAddress + "/postInfoApp.php";
-    /*public static String retrieveDataURL = "http://192.168.0.5/getData.php";
-    public static String uploadDataURL = "http://192.168.0.5/dbcon.php";*/
+    public static String getOperationsURL = "http://" + ipAddress + folder + "/getAppOperations.php";
+    public static String postOperationsURL = "http://" + ipAddress + folder + "/postAppOperations.php";
 
 }
