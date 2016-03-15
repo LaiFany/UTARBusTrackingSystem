@@ -100,11 +100,12 @@ $beginTime = array();
 											if(strpos($timetableCol[$k], 'AM') || strpos($timetableCol[$k], 'PM')){
 												$startTime = strtotime($timetableCol[$k]);
 												$notifyTime30 = strtotime('+30 minutes');
-												$notifyTime29 = strtotime('+29 minutes');
+												//$notifyTime29 = strtotime('+29 minutes');
 												//$notifyTime30 = strtotime('3:00 PM');
 												//$notifyTime29 = strtotime('3:00 PM');
 												//echo date('g:i A', $notifyTime30).'='.date('g:i A', $startTime).' ';
-												if(date('g:i A', $notifyTime30) == date('g:i A', $startTime) || date('g:i A', $notifyTime29) == date('g:i A', $startTime)){
+												//if(date('g:i A', $notifyTime30) == date('g:i A', $startTime) || date('g:i A', $notifyTime29) == date('g:i A', $startTime)){
+												if(date('g:i A', $notifyTime30) == date('g:i A', $startTime)){
 													for($i = 0; $i < count($regIdArray); $i++){
 														if($notifyRouteNoArray[$i] != ''){
 															echo sendMessageToPhone($regIdArray[$i], "lol", "Route ".$routeNo[$z][$y]." will begin in 30 minutes.", $APIKey);
