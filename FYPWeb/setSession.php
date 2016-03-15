@@ -2,9 +2,9 @@
 
 	//header('Location:userForm.php');
 	
-	if (session_status() == PHP_SESSION_NONE) {
-		session_start();
-	}
+	if(!isset($_SESSION)){ 
+			session_start(); 
+	} 
 	
 	if(isset($_POST['infoId']) && isset($_POST['routeNo']) && isset($_POST['routeName']) && isset($_POST['bus']) && isset($_POST['waypoint']) && isset($_POST['stopNames'])){
 		$_SESSION['infoId'] = $_POST['infoId'];

@@ -26,7 +26,8 @@ android {
 dependencies {
     compile fileTree(include: ['*.jar'], dir: 'libs')
     compile 'com.android.support:appcompat-v7:22.1.1'
-    compile 'com.google.android.gms:play-services:7.3.0'
+    //compile 'com.google.android.gms:play-services:7.3.0'
+    compile 'com.google.android.gms:play-services:8.1.0'
 
     //download material design for edittext
     compile 'com.github.florent37:materialtextfield:1.0.1@aar'

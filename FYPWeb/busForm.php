@@ -1,6 +1,8 @@
 <?php
 	//session
-	session_start();
+	if(!isset($_SESSION)){ 
+			session_start(); 
+	} 
 	
 	$_SESSION['link'] = 'bus';
 	
@@ -35,7 +37,7 @@
 	<div class="panel panel-primary">
       <div class="panel-heading">Adding Bus</div>
       <div class="panel-body">
-		<form id = "busForm" action="postWebOperation.php" method="post"
+		<form id = "busForm" action="postWebOperations.php" method="post"
 		enctype="multipart/form-data">
 		<div class = "row form-group has-feedback">
 			<label for="file" class="col-sm-2">ID No.</label>

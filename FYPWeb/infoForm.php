@@ -1,6 +1,8 @@
 <?php
 	//session
-	session_start();
+	if(!isset($_SESSION)){ 
+		session_start(); 
+	} 
 	
 	$_SESSION['link'] = 'info';
 	
@@ -80,7 +82,7 @@ enctype="multipart/form-data">
 <div class="panel panel-primary" >
       <div class="panel-heading">Adding a new Route, Bus and Waypoint</div>
       <div class="panel-body">
-		<form action="postWebOperation.php" method="post"
+		<form action="postWebOperations.php" method="post"
 		enctype="multipart/form-data">
 		
 		<div class="panel panel-info">

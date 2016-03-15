@@ -9,6 +9,8 @@ public class Constant {
     public static String folder = "/utarbts";
 
     public static String getOperationsURL = "http://" + ipAddress + folder + "/getAppOperations.php";
+    public static String postOperationsURL = "http://" + ipAddress + folder + "/postAppOperations.php";
     public static String googleMapDirectionsURL = "https://maps.googleapis.com/maps/api/directions/";
     public static String waypointAPIKey = "AIzaSyAqYuCawKFN0WjbSfQXq7Q29afG3G4jlY0";
+    public static String PROJECT_NUMBER = "383551513316";
 }

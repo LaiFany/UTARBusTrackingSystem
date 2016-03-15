@@ -1,6 +1,8 @@
 <?php
 	//session
-	session_start();
+	if(!isset($_SESSION)){ 
+			session_start(); 
+	} 
 	
 	$_SESSION['link'] = 'schedule';
 	
@@ -69,7 +71,7 @@
 <div class="panel panel-primary">
       <div class="panel-heading">Schedule</div>
       <div class="panel-body">
-	  <form id = "noteForm" action="postScheduleWeb.php" method="post"
+	  <form id = "noteForm" action="postWebOperations.php" method="post"
 		enctype="multipart/form-data">
 		<div class="panel panel-info">
 		  <div class="panel-heading">Information</div>

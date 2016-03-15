@@ -1,8 +1,6 @@
 <?php
 
-	if (session_status() == PHP_SESSION_NONE) {
-		session_start();
-	}
+	session_start();
 	
 	$con=mysqli_connect('localhost', 'root', '', 'bustrackerdb');
 	mysqli_select_db($con, "bustrackerdb");
