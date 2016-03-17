@@ -7,7 +7,7 @@
 	$con=mysqli_connect('localhost', 'root', '', 'bustrackerdb');
 		mysqli_select_db($con, "bustrackerdb");
 
-	if(isset($_GET['info']) || isset($_GET['news']) || isset($_GET['schedule']) ||  isset($_GET['user'])){
+	if(isset($_GET['info']) || isset($_GET['news']) || isset($_GET['schedule']) ||  isset($_GET['user']) || isset($_GET['regId'])){
 		//get from info table
 		if(isset($_GET['info'])){
 			$result = mysqli_query($con, "SELECT * FROM info");
@@ -26,6 +26,11 @@
 		//get from user table
 		if(isset($_GET['user'])){
 			$result = mysqli_query($con, "SELECT * FROM user");
+		}
+		
+		//get from gcm table
+		if(isset($_GET['regId'])){
+			$result = mysqli_query($con, "SELECT * FROM gcm");
 		}
 		
 		if (!empty($result)) {

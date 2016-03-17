@@ -1,11 +1,13 @@
 package com.example.utarbustrackingsystemapplication;
 
+import android.app.Notification;
 import android.app.NotificationManager;
 import android.app.PendingIntent;
 import android.app.TaskStackBuilder;
 import android.content.Context;
 import android.content.Intent;
 import android.os.Bundle;
+import android.os.PowerManager;
 import android.support.v7.app.NotificationCompat;
 
 import com.google.android.gms.gcm.GcmListenerService;
@@ -19,14 +21,24 @@ public class PushNotificationService extends GcmListenerService{
     public void onMessageReceived(String from, Bundle data) {
         String message = data.getString("message");
         System.out.println("received push notification");
+
+        PowerManager pm = (PowerManager) this.getSystemService(Context.POWER_SERVICE);
+        PowerManager.WakeLock wl = pm.newWakeLock(PowerManager.FULL_WAKE_LOCK | PowerManager.ACQUIRE_CAUSES_WAKEUP, "YOUR TAG");
+        //Acquire the lock
+        wl.acquire();
+
         generateNotification(this, message);
+
+        //Release the lock
+        wl.release();
     }
 
     private static void generateNotification(Context context, String message) {
         NotificationCompat.Builder mBuilder = new NotificationCompat.Builder(context);
-        mBuilder.setSmallIcon(R.mipmap.ic_launcher);
-        mBuilder.setContentTitle("Notification Alert, Click Me!");
+        mBuilder.setSmallIcon(R.mipmap.bluebusmarker);
+        mBuilder.setContentTitle("Bus Update");
         mBuilder.setContentText(message);
+        mBuilder.setDefaults(Notification.DEFAULT_ALL);
         Intent resultIntent = new Intent(context, HomeActivity.class);
         TaskStackBuilder stackBuilder = TaskStackBuilder.create(context);
         stackBuilder.addParentStack(HomeActivity.class);

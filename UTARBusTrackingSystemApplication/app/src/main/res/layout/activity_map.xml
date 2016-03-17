@@ -164,6 +164,30 @@
 
                 <com.github.florent37.materialtextfield.MaterialTextField
 
+                    android:id="@+id/mtfStatus"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:paddingTop="15dp"
+                    android:layout_marginLeft="15dp"
+                    android:layout_marginRight="15dp"
+                    app:mtf_image="@mipmap/status"
+                    >
+                    <EditText
+                        android:id="@+id/status"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:hint="Status"
+                        android:textColor="#333"
+                        android:textColorHint="#666"
+                        android:textSize="20sp"
+                        android:cursorVisible="false"
+                        android:focusable="false"
+                        android:focusableInTouchMode="false"/>
+
+                </com.github.florent37.materialtextfield.MaterialTextField>
+
+                <com.github.florent37.materialtextfield.MaterialTextField
+
                     android:id="@+id/mtfEtaToUser"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"

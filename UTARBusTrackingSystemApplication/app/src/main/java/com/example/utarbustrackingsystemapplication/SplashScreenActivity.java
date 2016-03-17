@@ -33,7 +33,7 @@ import java.io.InputStream;
 import java.util.ArrayList;
 import java.util.List;
 
-public class SplashScreenActivity extends AppCompatActivity {
+public class SplashScreenActivity extends Activity {
 
     public AlertDialog alert;
     public PostRegIdAsyncTask postRegIdAsyncTask = new PostRegIdAsyncTask();
@@ -47,7 +47,7 @@ public class SplashScreenActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_splash_screen);
 
-        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.JELLY_BEAN) {
+        /*if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.JELLY_BEAN) {
             View decorView = getWindow().getDecorView();
             // Hide the status bar.
             int uiOptions = View.SYSTEM_UI_FLAG_FULLSCREEN;
@@ -55,7 +55,7 @@ public class SplashScreenActivity extends AppCompatActivity {
             // Remember that you should never show the action bar if the
             // status bar is hidden, so hide that too if necessary.
             getSupportActionBar().hide();
-        }
+        }*/
 
         if(isConnected()){
         }
@@ -72,6 +72,7 @@ public class SplashScreenActivity extends AppCompatActivity {
             @Override
             public void onSuccess(String registrationId, boolean isNewRegistration) {
                 regId = registrationId;
+                Constant.regId = regId;
                 Log.d("Registration id", regId);
             }
 
@@ -92,7 +93,7 @@ public class SplashScreenActivity extends AppCompatActivity {
                 //var for inserting data into db
                 List<NameValuePair> nvp = new ArrayList<NameValuePair>(1);
                 nvp.add(new BasicNameValuePair("regId", regId));
-                nvp.add(new BasicNameValuePair("notifyRouteNo", "1|2|3|4|5"));
+                //nvp.add(new BasicNameValuePair("notifyRouteNo", "1|2|3|4|5"));
                 try {
                     //insert data to db
                     HttpClient hc = new DefaultHttpClient();

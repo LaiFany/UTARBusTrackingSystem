@@ -117,6 +117,7 @@ public class MapActivity extends ActionBarActivity implements GoogleMap.OnMarker
     public EditText distanceToUser;
     public EditText distanceToUtar;
     public EditText etaToUser;
+    public EditText status;
     //public EditText noOfPassengers;
 
     public MaterialTextField mtfId;
@@ -125,6 +126,7 @@ public class MapActivity extends ActionBarActivity implements GoogleMap.OnMarker
     public MaterialTextField mtfDistanceToUser;
     public MaterialTextField mtfDistanceToUtar;
     public MaterialTextField mtfEtaToUser;
+    public MaterialTextField mtfStatus;
     //public MaterialTextField mtfNoOfPassengers;
 
     public Location currentLocation;
@@ -170,6 +172,8 @@ public class MapActivity extends ActionBarActivity implements GoogleMap.OnMarker
 
     public Date currentDate;
     public Date currentTime;
+
+    public String[] busStatus;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -366,7 +370,7 @@ public class MapActivity extends ActionBarActivity implements GoogleMap.OnMarker
         rlp.setMargins(0, 0, 30, 30);
 
         //add marker to position of UTAR
-        final Marker marker = map.addMarker(new MarkerOptions().position(UtarPos).title("UTAR").icon(BitmapDescriptorFactory.fromResource(R.mipmap.redmarker)));
+        final Marker marker = map.addMarker(new MarkerOptions().position(UtarPos).title("UTAR").icon(BitmapDescriptorFactory.fromResource(R.mipmap.unimarker)));
 
         //set position of marker // originally is R.drawable.busicon4
         MarkerOptions mo = new MarkerOptions().position(UtarPos).icon(BitmapDescriptorFactory.fromResource(R.mipmap.greenmarker));
@@ -389,7 +393,7 @@ public class MapActivity extends ActionBarActivity implements GoogleMap.OnMarker
                     String[] coordinates = wayPointStops[j].split(",");
                     Double lat = Double.parseDouble(coordinates[0]);
                     Double lng = Double.parseDouble(coordinates[1]);
-                    MarkerOptions wmo = new MarkerOptions().position(new LatLng(lat, lng)).title(wayPointStopNames[j]).icon(BitmapDescriptorFactory.fromResource(R.mipmap.greenmarker));
+                    MarkerOptions wmo = new MarkerOptions().position(new LatLng(lat, lng)).title(wayPointStopNames[j]).icon(BitmapDescriptorFactory.fromResource(R.mipmap.stopmarker));
                     mWayPoint[j] = map.addMarker(wmo);
                 }
                 mWayPointList.add(mWayPoint);
@@ -528,6 +532,7 @@ public class MapActivity extends ActionBarActivity implements GoogleMap.OnMarker
         distanceToUser = (EditText) findViewById(R.id.distanceToUser);
         distanceToUtar = (EditText) findViewById(R.id.distanceToUtar);
         etaToUser = (EditText) findViewById(R.id.etaToUser);
+        status = (EditText) findViewById(R.id.status);
         //noOfPassengers = (EditText) findViewById(R.id.noOfPassengers);
 
         //mtfId = (MaterialTextField) findViewById(R.id.mtfId);
@@ -536,6 +541,7 @@ public class MapActivity extends ActionBarActivity implements GoogleMap.OnMarker
         mtfDistanceToUser = (MaterialTextField) findViewById(R.id.mtfDistanceToUser);
         mtfDistanceToUtar = (MaterialTextField) findViewById(R.id.mtfDistanceToUtar);
         mtfEtaToUser = (MaterialTextField) findViewById(R.id.mtfEtaToUser);
+        mtfStatus = (MaterialTextField) findViewById(R.id.mtfStatus);
         //mtfNoOfPassengers = (MaterialTextField) findViewById(R.id.mtfNoOfPassengers);
     }
 
@@ -548,6 +554,7 @@ public class MapActivity extends ActionBarActivity implements GoogleMap.OnMarker
         mtfDistanceToUser.performClick();
         mtfDistanceToUtar.performClick();
         mtfEtaToUser.performClick();
+        mtfStatus.performClick();
         //mtfNoOfPassengers.performClick();
 
         //disable click
@@ -556,6 +563,7 @@ public class MapActivity extends ActionBarActivity implements GoogleMap.OnMarker
         mtfDistanceToUser.setClickable(false);
         mtfDistanceToUtar.setClickable(false);
         mtfEtaToUser.setClickable(false);
+        mtfStatus.setClickable(false);
         //mtfNoOfPassengers.setClickable(false);
     }
 
@@ -659,6 +667,7 @@ public class MapActivity extends ActionBarActivity implements GoogleMap.OnMarker
                         toDate = new String[data.length()];
                         fromTime = new String[data.length()];
                         toTime = new String[data.length()];
+                        busStatus = new String[data.length()];
 
                         // looping through All Products
                         for (int i = 0; i < data.length(); i++) {
@@ -691,29 +700,6 @@ public class MapActivity extends ActionBarActivity implements GoogleMap.OnMarker
         protected void onPostExecute(String[] number) {
             if(number != null){
                 for(int i = 0; i < number.length; i++) {
-                    try{
-                        //check if route cancelled today
-
-                        getDateTime();
-
-                        for(int j = 0; j < cancelledRoute.length; j++){
-                            if(!fromTime[j].equals("") && !toTime[j].equals("")){
-                                if(cancelledRoute[j].equals("Route " + asyncRouteNo[i] + " : " + asyncRouteName[i]) && cancelledBus[j].equals("Bus " + asyncBus[i]) && (parseDate(fromDate[j]).equals(currentDate) || parseDate(toDate[j]).equals(currentDate) || (currentDate.after(parseDate(fromDate[j])) && currentDate.before(parseDate(toDate[j])))) && (currentTime.equals(parseTime(toTime[j])) || currentTime.equals(parseTime(fromTime[j])) || (currentTime.before(parseTime(toTime[j])) && currentTime.after(parseTime(fromTime[j]))))){
-                                    m[i].setIcon(BitmapDescriptorFactory.fromResource(R.mipmap.redmarker));
-                                }else {
-                                    m[i].setIcon(BitmapDescriptorFactory.fromResource(R.mipmap.greenmarker));
-                                }
-                            }else{
-                                if(cancelledRoute[j].equals("Route " + asyncRouteNo[i] + " : " + asyncRouteName[i]) && cancelledBus[j].equals("Bus " + asyncBus[i]) && (parseDate(fromDate[j]).equals(currentDate) || parseDate(toDate[j]).equals(currentDate) || (currentDate.after(parseDate(fromDate[j])) && currentDate.before(parseDate(toDate[j]))))){
-                                    m[i].setIcon(BitmapDescriptorFactory.fromResource(R.mipmap.redmarker));
-                                }else {
-                                    m[i].setIcon(BitmapDescriptorFactory.fromResource(R.mipmap.greenmarker));
-                                }
-                            }
-                        }
-                    }catch(Exception e){
-
-                    }
 
                     try {
                         LatLng busPos = new LatLng(Double.parseDouble(asyncLat[i]), Double.parseDouble(asyncLng[i]));
@@ -742,6 +728,7 @@ public class MapActivity extends ActionBarActivity implements GoogleMap.OnMarker
                             }else{
                                 distanceToUtar.setText(String.valueOf(roundTwoDecimals(currentLocation.distanceTo(utarLoc) / 1000)) + " km");
                             }
+                            status.setText(busStatus[selectedRoute - 1]);
                             //noOfPassengers.setText(asyncPassengers[selectedRoute - 1]);
                             if (busLoc[selectedRoute - 1].hasSpeed()) {
                                 etaToUser.setText(String.valueOf(userETA[selectedRoute - 1]) + " seconds");
@@ -751,6 +738,41 @@ public class MapActivity extends ActionBarActivity implements GoogleMap.OnMarker
                         }
                     } catch (Exception e) {
                         e.printStackTrace();
+                    }
+                    try{
+                        //check if route cancelled today
+
+                        getDateTime();
+
+                        for(int j = 0; j < cancelledRoute.length; j++) {
+                            //if(cancelledRoute[j].equals("Route " + asyncRouteNo[i] + " : " + asyncRouteName[i]) && cancelledBus[j].equals("Bus " + asyncBus[i]) && (parseDate(fromDate[j]).equals(currentDate) || parseDate(toDate[j]).equals(currentDate) || (currentDate.after(parseDate(fromDate[j])) && currentDate.before(parseDate(toDate[j])))) && (currentTime.equals(parseTime(toTime[j])) || currentTime.equals(parseTime(fromTime[j])) || (currentTime.before(parseTime(toTime[j])) && currentTime.after(parseTime(fromTime[j]))))){
+                            if (cancelledRoute[j].equals("Route " + asyncRouteNo[i] + " : " + asyncRouteName[i]) && cancelledBus[j].equals("Bus " + asyncBus[i])) {
+                                if (parseDate(fromDate[j]).equals(currentDate) || parseDate(toDate[j]).equals(currentDate) || (currentDate.after(parseDate(fromDate[j])) && currentDate.before(parseDate(toDate[j])))) {
+                                    if (!fromTime[j].equals("") && !toTime[j].equals("")) {
+                                        if (currentTime.equals(parseTime(toTime[j])) || currentTime.equals(parseTime(fromTime[j])) || (currentTime.before(parseTime(toTime[j])) && currentTime.after(parseTime(fromTime[j])))) {
+                                            m[i].setIcon(BitmapDescriptorFactory.fromResource(R.mipmap.redmarker));
+                                            busStatus[i] = "Cancelled";
+                                            break;
+                                        } else {
+                                            m[i].setIcon(BitmapDescriptorFactory.fromResource(R.mipmap.greenmarker));
+                                            busStatus[i] = "Available";
+                                        }
+                                    }else{
+                                        m[i].setIcon(BitmapDescriptorFactory.fromResource(R.mipmap.redmarker));
+                                        busStatus[i] = "Cancelled";
+                                        break;
+                                    }
+                                }else{
+                                    m[i].setIcon(BitmapDescriptorFactory.fromResource(R.mipmap.greenmarker));
+                                    busStatus[i] = "Available";
+                                }
+                            }else{
+                                m[i].setIcon(BitmapDescriptorFactory.fromResource(R.mipmap.greenmarker));
+                                busStatus[i] = "Available";
+                            }
+                        }
+                    }catch(Exception e){
+
                     }
                 }
                 //lck
@@ -957,6 +979,15 @@ public class MapActivity extends ActionBarActivity implements GoogleMap.OnMarker
                                         }
                                     }*/
 
+                                    //centers and zooms camera to utar
+                                    CameraPosition cameraPosition = new CameraPosition.Builder()
+                                            .target(UTAR)      // Sets the center of the map to Mountain View
+                                            .zoom(15)                   // Sets the zoom
+                                                    // .bearing(90)                // Sets the orientation of the camera to east
+                                                    // .tilt(30)                   // Sets the tilt of the camera to 30 degrees
+                                            .build();                   // Creates a CameraPosition from the builder
+                                    map.animateCamera(CameraUpdateFactory.newCameraPosition(cameraPosition), 400, null);
+
                                     //set data to textviews
                                     selectedRoute = 100;
                                     //idView.setText("");
@@ -965,6 +996,7 @@ public class MapActivity extends ActionBarActivity implements GoogleMap.OnMarker
                                     distanceToUser.setText("");
                                     distanceToUtar.setText("");
                                     etaToUser.setText("");
+                                    status.setText("");
                                     //noOfPassengers.setText("");
                                     imageId[position - 1] = R.drawable.all;
 
@@ -981,8 +1013,8 @@ public class MapActivity extends ActionBarActivity implements GoogleMap.OnMarker
                                         CameraPosition cameraPosition = new CameraPosition.Builder()
                                                 .target(busPosition)      // Sets the center of the map to Mountain View
                                                 .zoom(15)                   // Sets the zoom
-                                                        //.bearing(90)                // Sets the orientation of the camera to east
-                                                        //.tilt(30)                   // Sets the tilt of the camera to 30 degrees
+                                                // .bearing(90)                // Sets the orientation of the camera to east
+                                                // .tilt(30)                   // Sets the tilt of the camera to 30 degrees
                                                 .build();                   // Creates a CameraPosition from the builder
                                         map.animateCamera(CameraUpdateFactory.newCameraPosition(cameraPosition), 400, null);
 
