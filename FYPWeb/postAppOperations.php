@@ -31,16 +31,19 @@
 	
 	if(isset($_POST['regId'])){
 		$regId = $_POST['regId'];
-		$notifyRouteNo = '';
 		if(isset($_POST['notifyRouteNo'])){
 			$notifyRouteNo = $_POST['notifyRouteNo'];
-		}
-		
-		$result = mysqli_query($con, "SELECT * FROM gcm WHERE regId='".$regId."'");
-		if(mysqli_fetch_array($result) != false){
-			mysqli_query($con, "UPDATE gcm SET notifyRouteNo='".$notifyRouteNo."' WHERE regId='".$regId."'");
+			$result = mysqli_query($con, "SELECT * FROM gcm WHERE regId='".$regId."'");
+			if(mysqli_fetch_array($result) != false){
+				mysqli_query($con, "UPDATE gcm SET notifyRouteNo='".$notifyRouteNo."' WHERE regId='".$regId."'");
+			}else{
+				mysqli_query($con, "insert into gcm(regId, notifyRouteNo) values('{$regId}', '{$notifyRouteNo}')");
+			}
 		}else{
-			mysqli_query($con, "insert into gcm(regId, notifyRouteNo) values('{$regId}', '{$notifyRouteNo}')");
+			$result = mysqli_query($con, "SELECT * FROM gcm WHERE regId='".$regId."'");
+			if(mysqli_fetch_array($result) == false){
+				mysqli_query($con, "insert into gcm(regId) values('{$regId}')");
+			}
 		}
 	}else{
 		echo "Missing required fields";

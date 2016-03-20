@@ -15,4 +15,5 @@ public class Constant {
     public static String PROJECT_NUMBER = "383551513316";
 
     public static String regId = "";
+    public static String notifiedRoute = "";
 }

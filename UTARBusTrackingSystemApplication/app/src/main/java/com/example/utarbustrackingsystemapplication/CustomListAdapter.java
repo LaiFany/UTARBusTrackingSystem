@@ -30,6 +30,7 @@ import org.w3c.dom.Text;
 
 import java.io.InputStream;
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.List;
 
 public class CustomListAdapter extends ArrayAdapter<String> {
@@ -38,21 +39,22 @@ public class CustomListAdapter extends ArrayAdapter<String> {
     InputStream is = null;
     String status = "fail";
     public PostRegIdAsyncTask postRegIdAsyncTask = new PostRegIdAsyncTask();
-    public GetNotifiedRouteAsyncTask getNotifiedRouteAsyncTask;
+    //public GetNotifiedRouteAsyncTask getNotifiedRouteAsyncTask;
     public String regId;
-    public String notifiedRoute;
+    public String notifiedRoute = Constant.notifiedRoute;
     public String[] notifyRoute;
 
     private final Activity context;
     private final String[] itemRouteNo;
     private final String[] itemRouteName;
     private final int pos;
+    private ArrayList<Integer> imgid;
 
     public ImageView imageView;
 
     public int tempPosition;
 
-    public CustomListAdapter(Activity context, String[] itemRouteNo, String[] itemRouteName, int pos) {
+    public CustomListAdapter(Activity context, String[] itemRouteNo, String[] itemRouteName, int pos, ArrayList<Integer> imgid) {
         super(context, R.layout.drawer_listview_item, itemRouteNo);
         // TODO Auto-generated constructor stub
 
@@ -60,9 +62,10 @@ public class CustomListAdapter extends ArrayAdapter<String> {
         this.itemRouteNo=itemRouteNo;
         this.itemRouteName=itemRouteName;
         this.pos=pos;
+        this.imgid=imgid;
     }
 
-    public View getView(int position,View view,ViewGroup parent) {
+    public View getView(final int position,View view,ViewGroup parent) {
         LayoutInflater inflater=context.getLayoutInflater();
         View rowView=inflater.inflate(R.layout.drawer_listview_item, null, true);
 
@@ -75,7 +78,10 @@ public class CustomListAdapter extends ArrayAdapter<String> {
             txtTitle.setText(itemRouteNo[position]);
         }else{
             txtTitle.setText("Route " + itemRouteNo[position]);
-            //imageView.setImageResource(R.drawable.notifygrey);
+        }
+        if(position != 0){
+            System.out.println("hereherehere " + imgid.get(position).toString());
+            imageView.setImageResource(imgid.get(position));
         }
 
         sub.setText(itemRouteName[position]);
@@ -87,23 +93,64 @@ public class CustomListAdapter extends ArrayAdapter<String> {
         }
 
         //execute get asynctask
-        getNotifiedRouteAsyncTask = new GetNotifiedRouteAsyncTask();
-        getNotifiedRouteAsyncTask.execute();
+        /*getNotifiedRouteAsyncTask = new GetNotifiedRouteAsyncTask();
+        getNotifiedRouteAsyncTask.execute();*/
 
         //try to set click listener for notify imagebutton
         imageView.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                System.out.println("hereherehere");
-                notifiedRoute = notifiedRoute + "|" + itemRouteNo[tempPosition];
+                if(notifiedRoute.equals("")){
+                    notifiedRoute = itemRouteNo[position];
+                }else{
+                    if(notifiedRoute.contains("|")){
+                        String[] tempNotifyRoute = notifiedRoute.split("\\|");
+                        List<String> notifyRouteArrayList = new ArrayList<String>(Arrays.asList(tempNotifyRoute));
+                        notifiedRoute = "";
+                        for(int i = 0; i < tempNotifyRoute.length; i++){
+                            if(tempNotifyRoute[i].equals(itemRouteNo[position])){
+                                notifyRouteArrayList.remove(i);
+                                imageView.setImageResource(R.drawable.notifygrey);
+                                break;
+                            }else if(i + 1 == tempNotifyRoute.length){
+                                notifyRouteArrayList.add(itemRouteNo[position]);
+                                imageView.setImageResource(R.drawable.notifyyellow);
+                            }
+                        }
+                        for(int i = 0; i < notifyRouteArrayList.size(); i++){
+                            if(notifiedRoute.equals("")){
+                                notifiedRoute += notifyRouteArrayList.get(i);
+                            }else{
+                                notifiedRoute += "|" + notifyRouteArrayList.get(i);
+                            }
+                        }
+                    }else{
+                        if(notifiedRoute.equals(itemRouteNo[position])){
+                            notifiedRoute = "";
+                            imageView.setImageResource(R.drawable.notifygrey);
+                        }else{
+                            notifiedRoute += "|" + itemRouteNo[position];
+                            imageView.setImageResource(R.drawable.notifyyellow);
+                        }
+                    }
+                }
+
+                postRegIdAsyncTask = new PostRegIdAsyncTask();
                 postRegIdAsyncTask.execute();
+                System.out.println("position = " + position);
             }
         });
         return rowView;
     }
 
-    //get regId to server
+    /*//get regId to server
     private class GetNotifiedRouteAsyncTask extends AsyncTask<String, Void, String> {
+
+        *//*public int position;
+
+        public GetNotifiedRouteAsyncTask(int position){
+            this.position = position;
+        }*//*
 
         @Override
         protected String doInBackground(String... params) {
@@ -129,8 +176,8 @@ public class CustomListAdapter extends ArrayAdapter<String> {
                         JSONArray data = json.getJSONArray("data");
 
                         //initialize size of arrays
-                        /*regId = new String[data.length()];
-                        notifiedRoute = new String[data.length()];*/
+                        *//*regId = new String[data.length()];
+                        notifiedRoute = new String[data.length()];*//*
 
                         // looping through All Products
                         //for (int i = 0; i < data.length(); i++) {
@@ -167,7 +214,7 @@ public class CustomListAdapter extends ArrayAdapter<String> {
                                 if(itemRouteNo[tempPosition].equals(notifyRoute[i])){
                                     imageView.setImageResource(R.drawable.notifyyellow);
                                     break;
-                                }else{
+                                }else if(i + 1 == notifyRoute.length){
                                     imageView.setImageResource(R.drawable.notifygrey);
                                 }
                             }
@@ -179,7 +226,7 @@ public class CustomListAdapter extends ArrayAdapter<String> {
                 }
             }
         }
-    }
+    }*/
 
     //send regId to server
     private class PostRegIdAsyncTask extends AsyncTask<String, Void, String> {
@@ -218,7 +265,10 @@ public class CustomListAdapter extends ArrayAdapter<String> {
         protected void onPostExecute(String result) {
             if(result == "Done"){
                 if(status == "success"){
-
+                    /*MapActivity m = new MapActivity();
+                    m.initializeNavDrawer(imgid, pos);*/
+                    /*getNotifiedRouteAsyncTask = new GetNotifiedRouteAsyncTask();
+                    getNotifiedRouteAsyncTask.execute();*/
                 }else{
                     postRegIdAsyncTask = new PostRegIdAsyncTask();
                     postRegIdAsyncTask.execute();
