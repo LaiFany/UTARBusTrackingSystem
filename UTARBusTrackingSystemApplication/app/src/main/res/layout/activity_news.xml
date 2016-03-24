@@ -3,7 +3,7 @@
     android:layout_height="match_parent"
     android:orientation="vertical"
     android:id="@+id/newsLayout"
-    android:background="#b172b2"
+    android:background="#FF6600"
     tools:context="com.example.utarbustrackingsystemapplication.NewsActivity">
 
     <!--<ListView

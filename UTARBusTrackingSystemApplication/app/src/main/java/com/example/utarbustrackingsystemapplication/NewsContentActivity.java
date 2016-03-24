@@ -38,7 +38,7 @@ public class NewsContentActivity extends AppCompatActivity {
         //set background of action bar
         /*getSupportActionBar().setBackgroundDrawable(new ColorDrawable(Color.argb(200, 0, 0, 0)));
         getSupportActionBar().setElevation(25);*/
-        getSupportActionBar().setBackgroundDrawable(new ColorDrawable(Color.parseColor("#b172b2")));
+        getSupportActionBar().setBackgroundDrawable(new ColorDrawable(Color.parseColor("#FF6600")));
         getSupportActionBar().setElevation(0);
 
         getSupportActionBar().setDisplayOptions(ActionBar.DISPLAY_SHOW_CUSTOM);
@@ -52,7 +52,7 @@ public class NewsContentActivity extends AppCompatActivity {
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
             Window window = getWindow();
             window.addFlags(WindowManager.LayoutParams.FLAG_DRAWS_SYSTEM_BAR_BACKGROUNDS);
-            window.setStatusBarColor(Color.parseColor("#b172b2"));
+            window.setStatusBarColor(Color.parseColor("#FF6600"));
         }
 
         initializeViews();

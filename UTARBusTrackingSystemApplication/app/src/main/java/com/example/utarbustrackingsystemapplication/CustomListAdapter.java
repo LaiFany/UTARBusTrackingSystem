@@ -71,7 +71,7 @@ public class CustomListAdapter extends ArrayAdapter<String> {
         if(position == pos){
             txtTitle.setTextColor(Color.WHITE);
             sub.setTextColor(Color.WHITE);
-            rowView.setBackgroundColor(Color.parseColor("#e94167"));
+            rowView.setBackgroundColor(Color.parseColor("#660099"));
             //rowView.setBackgroundResource(R.drawable.white_navbar_bg_gradient);
         }
         return rowView;

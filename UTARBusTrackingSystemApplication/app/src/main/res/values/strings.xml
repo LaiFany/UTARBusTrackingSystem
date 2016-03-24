@@ -1,5 +1,5 @@
 <resources>
-    <string name="app_name">UTAR Bus Tracking System Application</string>
+    <string name="app_name">UtarBTS</string>
 
     <string name="hello_world">Hello world!</string>
     <string name="map_btn_label">Click for some awesome stuff!</string>

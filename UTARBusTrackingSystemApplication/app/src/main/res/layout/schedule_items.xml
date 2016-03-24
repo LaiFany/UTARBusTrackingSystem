@@ -40,6 +40,7 @@
                 android:scrollHorizontally="true"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
+                android:textColor="#FFD800"
                 android:textSize="20sp"
                 android:gravity="center_vertical"
                 android:singleLine="true"

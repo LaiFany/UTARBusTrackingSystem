@@ -120,7 +120,7 @@ public class SplashScreenActivity extends Activity {
         protected void onPostExecute(String result) {
             if(result == "Done"){
                 if(status == "success"){
-                    Intent i = new Intent(SplashScreenActivity.this, HomeActivity.class);
+                    Intent i = new Intent(SplashScreenActivity.this, MapActivity.class);
                     startActivity(i);
                     finish();
                 }else{

@@ -6,6 +6,7 @@ package com.example.utarbustrackingsystemapplication;
         import android.content.Context;
         import android.content.DialogInterface;
         import android.content.Intent;
+        import android.content.SharedPreferences;
         import android.content.res.Configuration;
         import android.graphics.Color;
         import android.graphics.Point;
@@ -201,6 +202,9 @@ public class MapActivity extends ActionBarActivity implements GoogleMap.OnMarker
                 }
         );
 
+        //login times shared preferences.
+        initializeSharedPreferences();
+
         // Start a new thread that will download all the data
         dt.execute("");
 
@@ -234,7 +238,7 @@ public class MapActivity extends ActionBarActivity implements GoogleMap.OnMarker
 
         //bar.setBackgroundDrawable(new ColorDrawable(Color.argb(200, 0, 0, 0)));
         //bar().setElevation(25);
-        bar.setBackgroundDrawable(new ColorDrawable(Color.parseColor("#e94167")));
+        bar.setBackgroundDrawable(new ColorDrawable(Color.parseColor("#660099")));
         bar.setElevation(0);
 
         bar.setDisplayOptions(ActionBar.DISPLAY_SHOW_CUSTOM);
@@ -244,7 +248,7 @@ public class MapActivity extends ActionBarActivity implements GoogleMap.OnMarker
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
             Window window = getWindow();
             window.addFlags(WindowManager.LayoutParams.FLAG_DRAWS_SYSTEM_BAR_BACKGROUNDS);
-            window.setStatusBarColor(Color.parseColor("#e94167"));
+            window.setStatusBarColor(Color.parseColor("#660099"));
         }
 
         //set background of action bar
@@ -484,7 +488,7 @@ public class MapActivity extends ActionBarActivity implements GoogleMap.OnMarker
 
                 polyLineOptions.addAll(points);
                 polyLineOptions.width(10);
-                polyLineOptions.color(Color.parseColor("#e94167"));
+                polyLineOptions.color(Color.parseColor("#660099"));
             }
 
             //assigned to a var, so that it can be hidden or shown
@@ -1675,6 +1679,27 @@ public class MapActivity extends ActionBarActivity implements GoogleMap.OnMarker
 
         postRegIdAsyncTask = new PostRegIdAsyncTask();
         postRegIdAsyncTask.execute();
+    }
+
+    //number of times logged into the app
+    public void initializeSharedPreferences(){
+
+        int n = 0;
+
+        //get shared preferences
+        SharedPreferences sp = getSharedPreferences("login", Context.MODE_PRIVATE);
+        if(sp.contains("loginNumber")) {
+            n = sp.getInt("loginNumber", 0);
+        }
+
+        //set shared preferences for number of times logged into the app
+        SharedPreferences sp1 = getSharedPreferences("login", Context.MODE_PRIVATE);
+        SharedPreferences.Editor e = sp.edit();
+
+        e.putInt("loginNumber", n + 1);
+        e.commit();
+
+        System.out.println(String.valueOf(n));
     }
 
     @Override
