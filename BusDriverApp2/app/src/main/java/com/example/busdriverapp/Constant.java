@@ -10,5 +10,6 @@ public class Constant {
 
     public static String getOperationsURL = "http://" + ipAddress + folder + "/getAppOperations.php";
     public static String postOperationsURL = "http://" + ipAddress + folder + "/postAppOperations.php";
+    public static String postGCM = "http://" + ipAddress + folder + "/gcm.php";
 
 }

@@ -86,6 +86,7 @@ public class JourneyActivity extends AppCompatActivity {
     private ProgressDialog pd;
     public int code = 0;
     public busAsyncTask busAsyncTask = new busAsyncTask();
+    public notifyRouteAsyncTask notifyRouteAsyncTask = new notifyRouteAsyncTask();
 
     String defaultRoute;
     String defaultBus;
@@ -180,10 +181,10 @@ public class JourneyActivity extends AppCompatActivity {
                     if (JourneyActivity.this.pd != null) {
                         JourneyActivity.this.pd.dismiss();
                     }
-                    if(busAsyncTask.getStatus() == AsyncTask.Status.RUNNING){
+                    if(notifyRouteAsyncTask.getStatus() == AsyncTask.Status.RUNNING){
                         //System.out.println("busAsyncTask running");
-                    }else if(busAsyncTask.getStatus() == AsyncTask.Status.PENDING){
-                        busAsyncTask.execute("");
+                    }else if(notifyRouteAsyncTask.getStatus() == AsyncTask.Status.PENDING){
+                        notifyRouteAsyncTask.execute("");
                     }
                 }
                 code++;
@@ -214,6 +215,48 @@ public class JourneyActivity extends AppCompatActivity {
     {
         DecimalFormat twoDForm = new DecimalFormat("#.##");
         return Double.valueOf(twoDForm.format(d));
+    }
+
+    //async tasks to send gps data and obtain the last position of the bus
+    private class notifyRouteAsyncTask extends AsyncTask<String, Void, String> {
+
+        @Override
+        protected String doInBackground(String... params) {
+            if(!isCancelled()){
+                //var for inserting data into db
+                List<NameValuePair> nvp = new ArrayList<NameValuePair>(1);
+                nvp.add(new BasicNameValuePair("busNotifyRouteNo", String.valueOf(routeNo)));
+                //nvp.add(new BasicNameValuePair("time", String.valueOf(time)));
+                //nvp.add(new BasicNameValuePair("passengers", String.valueOf(noOfPassengers)));
+                try {
+                    //insert data to db
+                    HttpClient hc = new DefaultHttpClient();
+                    HttpPost hp = new HttpPost(Constant.postGCM);
+                    hp.setEntity(new UrlEncodedFormEntity(nvp));
+                    HttpResponse hr = hc.execute(hp);
+                    HttpEntity entity = hr.getEntity();
+                    is = entity.getContent();
+
+                    String msg = "data entered successfully";
+                    System.out.println(msg);
+                } catch (Exception e) {
+                    e.printStackTrace();
+                }
+                return "Done";
+            }else{
+                return "Cancelled";
+            }
+        }
+
+        @Override
+        protected void onPostExecute(String result) {
+            if(result == "Done"){
+                busAsyncTask.execute("");
+            }else{
+                notifyRouteAsyncTask = new notifyRouteAsyncTask();
+                notifyRouteAsyncTask.execute("");
+            }
+        }
     }
 
     //async tasks to send gps data and obtain the last position of the bus

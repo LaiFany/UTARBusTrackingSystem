@@ -560,6 +560,7 @@ public class MapActivity extends ActionBarActivity implements GoogleMap.OnMarker
 
         //bell
         notifyBell = (ImageView) findViewById(R.id.notifyBell);
+        notifyBell.setImageResource(android.R.color.transparent);
     }
 
     public void mtfClick(){
@@ -997,7 +998,6 @@ public class MapActivity extends ActionBarActivity implements GoogleMap.OnMarker
 
         protected void onPostExecute(String result) {
             if(result == "Done"){
-                notifyBell.setImageResource(android.R.color.transparent);
                 //if cannot get data
                 if(itemRouteNo== null){
                     // Start a new thread that will download all the data

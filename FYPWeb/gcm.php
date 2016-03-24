@@ -40,7 +40,24 @@ $beginTime = array();
 			echo 'Empty table';
 		}
 
-	//get all timetables of routes
+	if(isset($_POST['busNotifyRouteNo'])){
+		$busNotifyRouteNo = $_POST['busNotifyRouteNo'];
+		for($k = 0; $k < count($regIdArray); $k++){
+			if(!empty($notifyRouteNoArray[$k])){
+				for($i = 0; $i < count($routeNo); $i++){
+					if(!empty($routeNo[$i])){
+						for($j = 0; $j < count($routeNo[$i]); $j++){
+							if($routeNo[$i][$j] == $busNotifyRouteNo){
+								echo sendMessageToPhone($regIdArray[$k], "lol", "Route ".$routeNo[$i][$j]." has started.", $APIKey);
+							}
+						}
+					}
+				}
+			}
+		}
+		
+	}else{
+		//get all timetables of routes
 	$scheduleResult = mysqli_query($con, "SELECT * from schedule");
 	if(!empty($scheduleResult)){
 			while($row = mysqli_fetch_array($scheduleResult)){
@@ -126,7 +143,8 @@ $beginTime = array();
 		}else{
 			echo 'Empty table';
 		}
-	
+	}
+
 	function sendMessageToPhone($deviceToken, $collapseKey, $messageText, $yourKey) {    
 		echo "DeviceToken:".$deviceToken."Key:".$collapseKey."Message:".$messageText
 				."API Key:".$yourKey."Response"."<br/>";
