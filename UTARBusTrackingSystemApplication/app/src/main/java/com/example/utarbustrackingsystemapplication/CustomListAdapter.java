@@ -35,24 +35,13 @@ import java.util.List;
 
 public class CustomListAdapter extends ArrayAdapter<String> {
 
-    JSONParser jParser = new JSONParser();
-    InputStream is = null;
-    String status = "fail";
-    public PostRegIdAsyncTask postRegIdAsyncTask = new PostRegIdAsyncTask();
-    //public GetNotifiedRouteAsyncTask getNotifiedRouteAsyncTask;
-    public String regId;
-    public String notifiedRoute = Constant.notifiedRoute;
-    public String[] notifyRoute;
-
     private final Activity context;
     private final String[] itemRouteNo;
     private final String[] itemRouteName;
     private final int pos;
     private ArrayList<Integer> imgid;
 
-    public ImageView imageView;
-
-    public int tempPosition;
+    LayoutInflater inflater;
 
     public CustomListAdapter(Activity context, String[] itemRouteNo, String[] itemRouteName, int pos, ArrayList<Integer> imgid) {
         super(context, R.layout.drawer_listview_item, itemRouteNo);
@@ -66,214 +55,25 @@ public class CustomListAdapter extends ArrayAdapter<String> {
     }
 
     public View getView(final int position,View view,ViewGroup parent) {
-        LayoutInflater inflater=context.getLayoutInflater();
+        inflater=context.getLayoutInflater();
         View rowView=inflater.inflate(R.layout.drawer_listview_item, null, true);
-
-        tempPosition = position;
 
         final TextView txtTitle = (TextView) rowView.findViewById(R.id.et1);
         final TextView sub = (TextView) rowView.findViewById(R.id.subet);
-        imageView = (ImageView) rowView.findViewById(R.id.icon);
+        //imageView = (ImageView) rowView.findViewById(R.id.icon);
         if(itemRouteNo[position] == "All Routes"){
             txtTitle.setText(itemRouteNo[position]);
         }else{
             txtTitle.setText("Route " + itemRouteNo[position]);
         }
-        if(position != 0){
-            System.out.println("hereherehere " + imgid.get(position).toString());
-            imageView.setImageResource(imgid.get(position));
-        }
-
         sub.setText(itemRouteName[position]);
+
         if(position == pos){
             txtTitle.setTextColor(Color.WHITE);
             sub.setTextColor(Color.WHITE);
             rowView.setBackgroundColor(Color.parseColor("#e94167"));
             //rowView.setBackgroundResource(R.drawable.white_navbar_bg_gradient);
         }
-
-        //execute get asynctask
-        /*getNotifiedRouteAsyncTask = new GetNotifiedRouteAsyncTask();
-        getNotifiedRouteAsyncTask.execute();*/
-
-        //try to set click listener for notify imagebutton
-        imageView.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                if(notifiedRoute.equals("")){
-                    notifiedRoute = itemRouteNo[position];
-                }else{
-                    if(notifiedRoute.contains("|")){
-                        String[] tempNotifyRoute = notifiedRoute.split("\\|");
-                        List<String> notifyRouteArrayList = new ArrayList<String>(Arrays.asList(tempNotifyRoute));
-                        notifiedRoute = "";
-                        for(int i = 0; i < tempNotifyRoute.length; i++){
-                            if(tempNotifyRoute[i].equals(itemRouteNo[position])){
-                                notifyRouteArrayList.remove(i);
-                                imageView.setImageResource(R.drawable.notifygrey);
-                                break;
-                            }else if(i + 1 == tempNotifyRoute.length){
-                                notifyRouteArrayList.add(itemRouteNo[position]);
-                                imageView.setImageResource(R.drawable.notifyyellow);
-                            }
-                        }
-                        for(int i = 0; i < notifyRouteArrayList.size(); i++){
-                            if(notifiedRoute.equals("")){
-                                notifiedRoute += notifyRouteArrayList.get(i);
-                            }else{
-                                notifiedRoute += "|" + notifyRouteArrayList.get(i);
-                            }
-                        }
-                    }else{
-                        if(notifiedRoute.equals(itemRouteNo[position])){
-                            notifiedRoute = "";
-                            imageView.setImageResource(R.drawable.notifygrey);
-                        }else{
-                            notifiedRoute += "|" + itemRouteNo[position];
-                            imageView.setImageResource(R.drawable.notifyyellow);
-                        }
-                    }
-                }
-
-                postRegIdAsyncTask = new PostRegIdAsyncTask();
-                postRegIdAsyncTask.execute();
-                System.out.println("position = " + position);
-            }
-        });
         return rowView;
-    }
-
-    /*//get regId to server
-    private class GetNotifiedRouteAsyncTask extends AsyncTask<String, Void, String> {
-
-        *//*public int position;
-
-        public GetNotifiedRouteAsyncTask(int position){
-            this.position = position;
-        }*//*
-
-        @Override
-        protected String doInBackground(String... params) {
-            if(!isCancelled()){
-                Log.i("MyApp", "Background thread starting");
-
-                try{
-                    status = "fail";
-                    List<NameValuePair> param = new ArrayList<NameValuePair>();
-                    param.add(new BasicNameValuePair("regId", Constant.regId));
-
-                    // getting JSON string from URL
-                    JSONObject json = jParser.makeHttpRequest(Constant.getOperationsURL, "GET", param);
-
-                    // Check your log cat for JSON reponse
-                    //Log.d("All Products: ", json.toString());
-                    // Checking for SUCCESS TAG
-                    int success = json.getInt("success");
-
-                    if (success == 1) {
-                        // products found
-                        // Getting Array of Products
-                        JSONArray data = json.getJSONArray("data");
-
-                        //initialize size of arrays
-                        *//*regId = new String[data.length()];
-                        notifiedRoute = new String[data.length()];*//*
-
-                        // looping through All Products
-                        //for (int i = 0; i < data.length(); i++) {
-                            JSONObject c = data.getJSONObject(0);
-
-                            // Storing each json item in variable
-                            regId = c.getString("regId");
-                            notifiedRoute = c.getString("notifyRouteNo");
-                        //}
-                        status = "success";
-                    }
-                    else{
-                    }
-                }catch(Exception e){
-                    e.printStackTrace();
-                    status = "fail";
-                }
-
-                return "Done";
-            }else{
-                return "Cancelled";
-            }
-        }
-
-        @Override
-        protected void onPostExecute(String result) {
-            if(result == "Done"){
-                if(status == "success"){
-                    if(!regId.equals("")){
-                        if(!notifiedRoute.equals("")){
-                            notifyRoute = notifiedRoute.split("\\|");
-                            for(int i = 0; i < notifyRoute.length; i++){
-                                System.out.println("here" + " " +notifyRoute[i]);
-                                if(itemRouteNo[tempPosition].equals(notifyRoute[i])){
-                                    imageView.setImageResource(R.drawable.notifyyellow);
-                                    break;
-                                }else if(i + 1 == notifyRoute.length){
-                                    imageView.setImageResource(R.drawable.notifygrey);
-                                }
-                            }
-                        }
-                    }
-                }else{
-                    getNotifiedRouteAsyncTask = new GetNotifiedRouteAsyncTask();
-                    getNotifiedRouteAsyncTask.execute();
-                }
-            }
-        }
-    }*/
-
-    //send regId to server
-    private class PostRegIdAsyncTask extends AsyncTask<String, Void, String> {
-
-        @Override
-        protected String doInBackground(String... params) {
-            if(!isCancelled()) {
-                status = "fail";
-                //var for inserting data into db
-                List<NameValuePair> nvp = new ArrayList<NameValuePair>(1);
-                nvp.add(new BasicNameValuePair("regId", Constant.regId));
-                nvp.add(new BasicNameValuePair("notifyRouteNo", notifiedRoute));
-                try {
-                    //insert data to db
-                    HttpClient hc = new DefaultHttpClient();
-                    HttpPost hp = new HttpPost(Constant.postOperationsURL);
-                    hp.setEntity(new UrlEncodedFormEntity(nvp));
-                    HttpResponse hr = hc.execute(hp);
-                    HttpEntity entity = hr.getEntity();
-                    is = entity.getContent();
-
-                    String msg = "data entered successfully";
-                    System.out.println(msg);
-                    status = "success";
-                } catch (Exception e) {
-                    e.printStackTrace();
-                    status = "fail";
-                }
-                return "Done";
-            }else{
-                return "Cancelled";
-            }
-        }
-
-        @Override
-        protected void onPostExecute(String result) {
-            if(result == "Done"){
-                if(status == "success"){
-                    /*MapActivity m = new MapActivity();
-                    m.initializeNavDrawer(imgid, pos);*/
-                    /*getNotifiedRouteAsyncTask = new GetNotifiedRouteAsyncTask();
-                    getNotifiedRouteAsyncTask.execute();*/
-                }else{
-                    postRegIdAsyncTask = new PostRegIdAsyncTask();
-                    postRegIdAsyncTask.execute();
-                }
-            }
-        }
     }
 }

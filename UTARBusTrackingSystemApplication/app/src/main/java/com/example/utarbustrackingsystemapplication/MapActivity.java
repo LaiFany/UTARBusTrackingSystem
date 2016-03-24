@@ -57,15 +57,23 @@ package com.example.utarbustrackingsystemapplication;
         import com.google.android.gms.maps.model.Polyline;
         import com.google.android.gms.maps.model.PolylineOptions;
 
+        import org.apache.http.HttpEntity;
+        import org.apache.http.HttpResponse;
         import org.apache.http.NameValuePair;
+        import org.apache.http.client.HttpClient;
+        import org.apache.http.client.entity.UrlEncodedFormEntity;
+        import org.apache.http.client.methods.HttpPost;
+        import org.apache.http.impl.client.DefaultHttpClient;
         import org.apache.http.message.BasicNameValuePair;
         import org.json.JSONArray;
         import org.json.JSONObject;
 
+        import java.io.InputStream;
         import java.text.DecimalFormat;
         import java.text.ParseException;
         import java.text.SimpleDateFormat;
         import java.util.ArrayList;
+        import java.util.Arrays;
         import java.util.Calendar;
         import java.util.Date;
         import java.util.HashMap;
@@ -170,6 +178,12 @@ public class MapActivity extends ActionBarActivity implements GoogleMap.OnMarker
     public String regId;
     public String notifiedRoute;
     public String[] notifyRoute;
+
+    public ImageView notifyBell;
+    InputStream is = null;
+    String statusCode = "fail";
+    public PostRegIdAsyncTask postRegIdAsyncTask = new PostRegIdAsyncTask();
+    String gcmResult = "";
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -479,10 +493,10 @@ public class MapActivity extends ActionBarActivity implements GoogleMap.OnMarker
     }
     //lck
 
-    public void initializeNavDrawer(ArrayList<Integer> imageId, final int position){
+    public void initializeNavDrawer(ArrayList<Integer> imageId, final int position, String[] routeNo, String[] routeName){
         //navigation drawer
         // get list items
-        adapter1=new CustomListAdapter(this, itemRouteNo, itemRouteName, position-1, imageId);
+        adapter1=new CustomListAdapter(this, routeNo, routeName, position-1, imageId);
         list=(ListView)findViewById(R.id.drawer);
         list.setAdapter(adapter1);
 
@@ -543,6 +557,9 @@ public class MapActivity extends ActionBarActivity implements GoogleMap.OnMarker
         mtfEtaToUser = (MaterialTextField) findViewById(R.id.mtfEtaToUser);
         mtfStatus = (MaterialTextField) findViewById(R.id.mtfStatus);
         //mtfNoOfPassengers = (MaterialTextField) findViewById(R.id.mtfNoOfPassengers);
+
+        //bell
+        notifyBell = (ImageView) findViewById(R.id.notifyBell);
     }
 
     public void mtfClick(){
@@ -734,7 +751,7 @@ public class MapActivity extends ActionBarActivity implements GoogleMap.OnMarker
         @Override
         protected void onPostExecute(String[] number) {
 
-            //notify route bell image
+            /*//notify route bell image
             if(taskStatus == "success"){
                 if(!regId.equals("")){
                     if(!notifiedRoute.equals("")){
@@ -742,23 +759,26 @@ public class MapActivity extends ActionBarActivity implements GoogleMap.OnMarker
                         for(int i = 0; i < itemRouteNo.length; i++){
                             //System.out.println("hereherehere " + notifiedRoute + " " + notifyRoute[i]);
                             for(int j = 0; j < notifyRoute.length; j++){
-                                System.out.println("hereherehere " + notifiedRoute + " " + notifyRoute[j] + " i = " + i + " j = " + j);
+                                //System.out.println("hereherehere " + notifiedRoute + " " + notifyRoute[j] + " i = " + i + " j = " + j);
                                 if(itemRouteNo[i].equals(notifyRoute[j]) && !itemRouteNo[i].equals("All Routes")){
-                                    imgid.add(R.drawable.notifyyellow);
+                                    //imgid.add(R.drawable.notifyyellow);
                                     break;
                                 }else if(j + 1 == notifyRoute.length){
-                                    imgid.add(R.drawable.notifygrey);
+                                    //imgid.add(R.drawable.notifygrey);
                                 }
                             }
                         }
-                        System.out.println("hereherehere " + imgid.size());
+                        //System.out.println("hereherehere " + imgid.size());
                     }else{
                         for(int i = 0; i < itemRouteNo.length; i++){
-                            imgid.add(R.drawable.notifygrey);
+                            //imgid.add(R.drawable.notifygrey);
                         }
                     }
+
+                    //initialize navigation drawer
+                    //initializeNavDrawer(imgid, 1);
                 }
-            }
+            }*/
 
             if(number != null){
                 for(int i = 0; i < number.length; i++) {
@@ -797,6 +817,13 @@ public class MapActivity extends ActionBarActivity implements GoogleMap.OnMarker
                             }else{
                                 etaToUser.setText("Not available");
                             }
+
+                            //notify bell change colour
+                            /*if(checkNotifiedRouteNo()){
+                                notifyBell.setImageResource(R.mipmap.notifyyellow);
+                            }else{
+                                notifyBell.setImageResource(R.mipmap.notifygrey);
+                            }*/
                         }
                     } catch (Exception e) {
                         e.printStackTrace();
@@ -970,6 +997,7 @@ public class MapActivity extends ActionBarActivity implements GoogleMap.OnMarker
 
         protected void onPostExecute(String result) {
             if(result == "Done"){
+                notifyBell.setImageResource(android.R.color.transparent);
                 //if cannot get data
                 if(itemRouteNo== null){
                     // Start a new thread that will download all the data
@@ -986,19 +1014,19 @@ public class MapActivity extends ActionBarActivity implements GoogleMap.OnMarker
                                 for(int i = 0; i < itemRouteNo.length; i++){
                                     //System.out.println("hereherehere " + notifiedRoute + " " + notifyRoute[i]);
                                     for(int j = 0; j < notifyRoute.length; j++){
-                                        System.out.println("hereherehere " + notifiedRoute + " " + notifyRoute[j] + " i = " + i + " j = " + j);
+                                        //System.out.println("hereherehere " + notifiedRoute + " " + notifyRoute[j] + " i = " + i + " j = " + j);
                                         if(itemRouteNo[i].equals(notifyRoute[j]) && !itemRouteNo[i].equals("All Routes")){
-                                            imgid.add(R.drawable.notifyyellow);
+                                            //imgid.add(R.drawable.notifyyellow);
                                             break;
                                         }else if(j + 1 == notifyRoute.length){
-                                            imgid.add(R.drawable.notifygrey);
+                                            //imgid.add(R.drawable.notifygrey);
                                         }
                                     }
                                 }
-                                System.out.println("hereherehere " + imgid.size());
+                                //System.out.println("hereherehere " + imgid.size());
                             }else{
                                 for(int i = 0; i < itemRouteNo.length; i++){
-                                    imgid.add(R.drawable.notifygrey);
+                                    //imgid.add(R.drawable.notifygrey);
                                 }
                             }
                         }
@@ -1008,7 +1036,7 @@ public class MapActivity extends ActionBarActivity implements GoogleMap.OnMarker
                     initializeMap();
 
                     //initialize navigation drawer
-                    initializeNavDrawer(imgid, 1);
+                    initializeNavDrawer(imgid, 1, itemRouteNo, itemRouteName);
 
                     //add header to nav drawer
                     View headerView = View.inflate(getBaseContext(), R.layout.drawer_header, null);
@@ -1126,6 +1154,8 @@ public class MapActivity extends ActionBarActivity implements GoogleMap.OnMarker
                                     //noOfPassengers.setText("");
                                     //imageId[position - 1] = R.drawable.all;
 
+                                    notifyBell.setImageResource(android.R.color.transparent);
+
                                 }else if (selecteditem != "All Routes") {
                                     //show and hide markers
                                     for (int i = 0; i < noOfRouteInTable; i++) {
@@ -1170,6 +1200,13 @@ public class MapActivity extends ActionBarActivity implements GoogleMap.OnMarker
                                             }else{
                                                 etaToUser.setText("Not available");
                                             }
+
+                                            //notify bell change colour
+                                            if(checkNotifiedRouteNo()){
+                                                notifyBell.setImageResource(R.mipmap.notifyyellow);
+                                            }else{
+                                                notifyBell.setImageResource(R.mipmap.notifygrey);
+                                            }
                                         }
                                     }
                                     //show relevant waypoint markers and route
@@ -1185,7 +1222,7 @@ public class MapActivity extends ActionBarActivity implements GoogleMap.OnMarker
 
                             }
                             drawerLayout.closeDrawer(list);
-                            initializeNavDrawer(imgid, position);
+                            initializeNavDrawer(imgid, position, itemRouteNo, itemRouteName);
                         }
                     });
 
@@ -1205,6 +1242,55 @@ public class MapActivity extends ActionBarActivity implements GoogleMap.OnMarker
                     if (MapActivity.this.pd != null) {
                         MapActivity.this.pd.dismiss();
                     }
+                }
+            }
+        }
+    }
+
+    //send regId to server
+    private class PostRegIdAsyncTask extends AsyncTask<String, Void, String> {
+
+        @Override
+        protected String doInBackground(String... params) {
+            if(!isCancelled()) {
+                statusCode = "fail";
+                //var for inserting data into db
+                List<NameValuePair> nvp = new ArrayList<NameValuePair>(1);
+                nvp.add(new BasicNameValuePair("regId", Constant.regId));
+                nvp.add(new BasicNameValuePair("notifyRouteNo", gcmResult));
+                try {
+                    //insert data to db
+                    HttpClient hc = new DefaultHttpClient();
+                    HttpPost hp = new HttpPost(Constant.postOperationsURL);
+                    hp.setEntity(new UrlEncodedFormEntity(nvp));
+                    HttpResponse hr = hc.execute(hp);
+                    HttpEntity entity = hr.getEntity();
+                    is = entity.getContent();
+
+                    String msg = "data entered successfully";
+                    System.out.println(msg);
+                    statusCode = "success";
+                } catch (Exception e) {
+                    e.printStackTrace();
+                    statusCode = "fail";
+                }
+                return "Done";
+            }else{
+                return "Cancelled";
+            }
+        }
+
+        @Override
+        protected void onPostExecute(String result) {
+            if(result == "Done"){
+                if(statusCode == "success"){
+                    /*MapActivity m = new MapActivity();
+                    m.initializeNavDrawer(imgid, pos);*/
+                    /*getNotifiedRouteAsyncTask = new GetNotifiedRouteAsyncTask();
+                    getNotifiedRouteAsyncTask.execute();*/
+                }else{
+                    postRegIdAsyncTask = new PostRegIdAsyncTask();
+                    postRegIdAsyncTask.execute();
                 }
             }
         }
@@ -1514,6 +1600,81 @@ public class MapActivity extends ActionBarActivity implements GoogleMap.OnMarker
         activeBusMarker = j;
 
         return bool;
+    }
+
+    public boolean checkNotifiedRouteNo(){
+        boolean result = false;
+        if(notifiedRoute.contains("|")){
+            String[] tempNotifyRoute = notifiedRoute.split("\\|");
+            for(int i = 0; i < tempNotifyRoute.length; i++){
+                try{
+                    if(tempNotifyRoute[i].equals(asyncRouteNo[selectedRoute - 1])){
+                        result = true;
+                        break;
+                    }else if(i + 1 == tempNotifyRoute.length){
+                        result = false;
+                    }
+                }catch(Exception e){
+
+                }
+            }
+        }else if(notifiedRoute.equals(asyncRouteNo[selectedRoute - 1])){
+            result = true;
+        }
+
+        return result;
+    }
+
+    //
+    public String changeNotifiedRouteNo(String result){
+        if(result.equals("")){
+            result = asyncRouteNo[selectedRoute - 1];
+            notifyBell.setImageResource(R.mipmap.notifyyellow);
+        }else{
+            if(result.contains("|")){
+                String[] tempNotifyRoute = result.split("\\|");
+                List<String> notifyRouteArrayList = new ArrayList<String>(Arrays.asList(tempNotifyRoute));
+                result = "";
+                for(int i = 0; i < tempNotifyRoute.length; i++){
+                    if(tempNotifyRoute[i].equals(asyncRouteNo[selectedRoute - 1])){
+                        notifyRouteArrayList.remove(i);
+                        notifyBell.setImageResource(R.mipmap.notifygrey);
+                        break;
+                    }else if(i + 1 == tempNotifyRoute.length){
+                        notifyRouteArrayList.add(asyncRouteNo[selectedRoute - 1]);
+                        notifyBell.setImageResource(R.mipmap.notifyyellow);
+                    }
+                }
+                for(int i = 0; i < notifyRouteArrayList.size(); i++){
+                    if(result.equals("")){
+                        result += notifyRouteArrayList.get(i);
+                    }else{
+                        result += "|" + notifyRouteArrayList.get(i);
+                    }
+                }
+            }else{
+                if(result.equals(asyncRouteNo[selectedRoute - 1])){
+                    result = "";
+                    notifyBell.setImageResource(R.mipmap.notifygrey);
+                }else{
+                    result += "|" + asyncRouteNo[selectedRoute - 1];
+                    notifyBell.setImageResource(R.mipmap.notifyyellow);
+                }
+            }
+        }
+
+        System.out.println("abcabc size" + result);
+
+        return result;
+    }
+
+    //notify button method
+    public void notifyRoute(View v){
+
+        gcmResult = changeNotifiedRouteNo(notifiedRoute);
+
+        postRegIdAsyncTask = new PostRegIdAsyncTask();
+        postRegIdAsyncTask.execute();
     }
 
     @Override
