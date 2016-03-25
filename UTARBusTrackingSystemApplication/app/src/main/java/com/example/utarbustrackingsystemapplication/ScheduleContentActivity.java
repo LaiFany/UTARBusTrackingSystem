@@ -110,7 +110,7 @@ public class ScheduleContentActivity extends AppCompatActivity {
 
             routeTv.setText(route);
             busTv.setText(busNo);
-            topNoteTv.setText(topNote);
+            topNoteTv.setText(topNote + "\n\nNote: Greyed out columns indicate cancelled trips at that specific time.");
             bottomNoteTv.setText(bottomNote);
 
             boolean th = false;
@@ -119,6 +119,7 @@ public class ScheduleContentActivity extends AppCompatActivity {
                     //find out how many rows
             row = timetable.split("/");
             for(int i = 0; i < row.length; i++){
+                String cancelled = "unchecked";
                 TableRow tableRow= new TableRow(this);
                 tableRow.setBackgroundResource(R.drawable.border);
                 TableRow.LayoutParams lp = new TableRow.LayoutParams(TableRow.LayoutParams.WRAP_CONTENT);
@@ -156,14 +157,48 @@ public class ScheduleContentActivity extends AppCompatActivity {
                         tv[j].setBackgroundResource(R.drawable.borderfriday);
                         tv[j].setTextColor(Color.WHITE);
                     }
-                    if(getIntent().hasExtra("cancelledRoute") && getIntent().hasExtra("cancelledBus") && getIntent().hasExtra("fromDate") && getIntent().hasExtra("toDate") && getIntent().hasExtra("fromTime") && getIntent().hasExtra("toTime")){
+
+                    if(getIntent().hasExtra("cancelledRoute") && getIntent().hasExtra("cancelledBus") && getIntent().hasExtra("fromDate") && getIntent().hasExtra("toDate")){
                         getDateTime();
 
-                        if(parseDate(fromDate).equals(currentDate)){
+                        if(currentDate.compareTo(parseDate(fromDate)) >= 0 && currentDate.compareTo(parseDate(toDate)) <= 0){
+                            if(getIntent().hasExtra("fromTime") && getIntent().hasExtra("toTime")){
+                                if(!fromTime.equals("") && !toTime.equals("")){
+                                    if(tv[j].getText().toString().contains("AM") || tv[j].getText().toString().contains("PM")){
+                                        if(cancelled.equals("unchecked")){
+                                            String time = tv[j].getText().toString();
+                                            if(currentDate.compareTo(parseDate(fromDate)) >= 0 && parseTime(time).compareTo(parseTime(fromTime)) >= 0 && currentDate.compareTo(parseDate(toDate)) <= 0){
+                                                if(currentDate.compareTo(parseDate(toDate)) == 0){
+                                                    if(parseTime(time).compareTo(parseTime(toTime)) == 0 || parseTime(time).compareTo(parseTime(toTime)) < 0){
+                                                        cancelled = "yes";
+                                                    }else{
+                                                        cancelled = "no";
+                                                    }
+                                                }else{
+                                                    cancelled = "yes";
+                                                }
+                                            }else{
+                                                cancelled = "no";
+                                            }
+                                        }
+                                    }
+                                }else{
+                                    cancelled = "wholeday";
+                                }
+                            }
+                        }
+                        if(cancelled.equals("yes")){
+                            for(int k = 0; k < tv.length; k++){
+                                tv[k].setBackgroundResource(R.drawable.bordercancelled);
+                                tv[k].setTextColor(Color.WHITE);
+                            }
+                        }
+                        if(cancelled.equals("wholeday")){
                             tv[j].setBackgroundResource(R.drawable.bordercancelled);
                             tv[j].setTextColor(Color.WHITE);
                         }
                     }
+
                     if(tv[j].getText().equals("LUNCH")){
                         tv[j].setBackgroundResource(R.drawable.borderlunch);
                         tv[j].setTextColor(Color.WHITE);
@@ -220,7 +255,7 @@ public class ScheduleContentActivity extends AppCompatActivity {
         currentDate = parseDate(strDate);
         currentTime = parseTime(strTime);
 
-        System.out.println(strDate + "/" + strTime);
+        System.out.println(strDate + "/" + convertTime(currentTime));
     }
 
     public Date parseDate(String date){
@@ -236,13 +271,43 @@ public class ScheduleContentActivity extends AppCompatActivity {
 
     public Date parseTime(String time){
         Date t = new Date();
+        SimpleDateFormat dateFormat = new SimpleDateFormat ("HH:mm");
         try {
-            SimpleDateFormat dateFormat = new SimpleDateFormat ("HH:mm");
+            if(time.contains("AM") || time.contains("PM")){
+                if(time.contains(".")){
+                    dateFormat = new SimpleDateFormat ("hh.mma");
+                    if(time.contains(" ")){
+                        dateFormat = new SimpleDateFormat("hh.mm a");
+                    }
+                }else if(time.contains(":")){
+                    dateFormat = new SimpleDateFormat ("hh:mma");
+                    if(time.contains(" ")){
+                        dateFormat = new SimpleDateFormat("hh:mm a");
+                    }
+                }
+            }else{
+                if(time.contains(".")){
+                    dateFormat = new SimpleDateFormat ("HH.mm");
+                }else if(time.contains(":")){
+                    dateFormat = new SimpleDateFormat ("HH:mm");
+                }
+            }
             t = dateFormat.parse(time);
         } catch (ParseException e) {
             e.printStackTrace();
         }
         return t;
+    }
+
+    public String convertTime(Date time){
+        return new SimpleDateFormat("h:mma").format(time);
+    }
+
+    //return day of week in int, sunday = 1, saturday = 7.
+    public int getDayOfWeek(){
+        Calendar calendar = Calendar.getInstance();
+        int day = calendar.get(Calendar.DAY_OF_WEEK);
+        return day;
     }
 
     @Override
