@@ -71,7 +71,7 @@ $beginTime = array();
 							if(!empty($routeNo[$i])){
 								for($j = 0; $j < count($routeArray); $j++){
 									//allocate notifications to correct schedule days. e.g. weekdays or saturdays.
-									if(date("w") == 6 && (strpos($topNoteArray[$j], "Saturday") !== FALSE || strpos($topNoteArray[$j], "Saturdays") !== FALSE) !== FALSE){
+									if(date("w") == 6 && (strpos($topNoteArray[$j], "Saturday") !== FALSE || strpos($topNoteArray[$j], "Saturdays") !== FALSE)){
 										$temp = explode(":", $routeArray[$j]);
 										$route = trim(substr($temp[0], 6));
 										if($routeNo[$i][$j] == $route){
@@ -91,7 +91,7 @@ $beginTime = array();
 												}
 											}
 										}
-									}else if(date("w") != 6 && date("w") != 7 && (strpos($topNoteArray[$j], "Saturday") === FALSE || strpos($topNoteArray[$j], "Saturdays") === FALSE) !== FALSE){
+									}else if(date("w") != 6 && date("w") != 7 && (strpos($topNoteArray[$j], "Saturday") === FALSE || strpos($topNoteArray[$j], "Saturdays") === FALSE)){
 										$temp = explode(":", $routeArray[$j]);
 										$route = trim(substr($temp[0], 6));
 										if($routeNo[$i][$j] == $route){

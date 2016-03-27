@@ -813,7 +813,7 @@ public class MapActivity extends ActionBarActivity implements GoogleMap.OnMarker
                             if(currentLocation == null || utarLoc == null){
                                 distanceToUtar.setText("GPS Initializing");
                             }else{
-                                distanceToUtar.setText(String.valueOf(roundTwoDecimals(currentLocation.distanceTo(utarLoc) / 1000)) + " km");
+                                distanceToUtar.setText(String.valueOf(roundTwoDecimals(busLoc[selectedRoute - 1].distanceTo(utarLoc) / 1000)) + " km");
                             }
                             status.setText(busStatus[selectedRoute - 1]);
                             //noOfPassengers.setText(asyncPassengers[selectedRoute - 1]);
