@@ -26,7 +26,7 @@ public class CompleteActivity extends AppCompatActivity {
         getSupportActionBar().setElevation(0);
 
         getSupportActionBar().setDisplayOptions(ActionBar.DISPLAY_SHOW_CUSTOM);
-        getSupportActionBar().setCustomView(R.layout.home_actionbar_layout);
+        getSupportActionBar().setCustomView(R.layout.complete_actionbar_layout);
 
         // enable status bar tint
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {

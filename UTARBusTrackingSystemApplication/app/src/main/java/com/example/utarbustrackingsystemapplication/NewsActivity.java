@@ -376,7 +376,7 @@ public class NewsActivity extends ActionBarActivity {
                     }
                 }
 
-                //remove empty elements from readNewsIdArray[]
+                //remove empty elements from readNewsId[]
                 for(int i = indexToDelete.length - 1; i >= 0; i--){
                     if(indexToDelete[i] != '\0'){
                         unreadNewsId = ArrayUtils.remove(unreadNewsId, indexToDelete[i]);

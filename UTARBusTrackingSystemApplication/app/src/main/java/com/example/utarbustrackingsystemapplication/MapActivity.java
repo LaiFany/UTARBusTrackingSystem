@@ -109,6 +109,7 @@ public class MapActivity extends ActionBarActivity implements GoogleMap.OnMarker
     String[] asyncBus;
     String[] asyncLat;
     String[] asyncLng;
+    String[] asyncSpeed;
     //String[] asyncPassengers;
     String[] waypoint;
     String[] stopNamesUnconverted;
@@ -638,6 +639,7 @@ public class MapActivity extends ActionBarActivity implements GoogleMap.OnMarker
                                 asyncBus[i] = c.getString("bus");
                                 asyncLat[i] = c.getString("lat");
                                 asyncLng[i] = c.getString("lng");
+                                asyncSpeed[i] = c.getString("speed");
                                 //asyncPassengers[i] = c.getString("passengers");
                             }
 
@@ -650,9 +652,9 @@ public class MapActivity extends ActionBarActivity implements GoogleMap.OnMarker
                             busLoc[i].setLongitude(Double.parseDouble(asyncLng[i]));
 
                             //get ETA
-                            if (busLoc[i].hasSpeed()) {
-                                userETA[i] = (float) roundTwoDecimals(busLoc[i].distanceTo(currentLocation) / busLoc[i].getSpeed());
-                                System.out.println("ETA : " + userETA[i] + " seconds");
+                            if (!asyncSpeed[i].equals("0.0") && !asyncSpeed[i].equals("")) {
+                                userETA[i] = (float) roundTwoDecimals(busLoc[i].distanceTo(currentLocation) / Float.parseFloat(asyncSpeed[i]) / 60);
+                                System.out.println("ETA : " + userETA[i] + " minutes");
                             } else {
                                 System.out.println("ETA not available");
                             }
@@ -804,8 +806,8 @@ public class MapActivity extends ActionBarActivity implements GoogleMap.OnMarker
                                 etaToUser.setText("GPS Initializing");
                             }else{
                                 distanceToUser.setText(String.valueOf(roundTwoDecimals(currentLocation.distanceTo(busLoc[selectedRoute - 1]) / 1000)) + " km");
-                                if (busLoc[selectedRoute - 1].hasSpeed()) {
-                                    etaToUser.setText(String.valueOf(userETA[selectedRoute - 1]) + " seconds");
+                                if (!asyncSpeed[selectedRoute - 1].equals("0.0") && !asyncSpeed[selectedRoute - 1].equals("")) {
+                                    etaToUser.setText(String.valueOf(userETA[selectedRoute - 1]) + " minutes");
                                 }else{
                                     etaToUser.setText("Not available");
                                 }
@@ -817,18 +819,11 @@ public class MapActivity extends ActionBarActivity implements GoogleMap.OnMarker
                             }
                             status.setText(busStatus[selectedRoute - 1]);
                             //noOfPassengers.setText(asyncPassengers[selectedRoute - 1]);
-                            if (busLoc[selectedRoute - 1].hasSpeed()) {
-                                etaToUser.setText(String.valueOf(userETA[selectedRoute - 1]) + " seconds");
+                            if (!asyncSpeed[selectedRoute - 1].equals("0.0") && !asyncSpeed[selectedRoute - 1].equals("")) {
+                                etaToUser.setText(String.valueOf(userETA[selectedRoute - 1]) + " minutes");
                             }else{
                                 etaToUser.setText("Not available");
                             }
-
-                            //notify bell change colour
-                            /*if(checkNotifiedRouteNo()){
-                                notifyBell.setImageResource(R.mipmap.notifyyellow);
-                            }else{
-                                notifyBell.setImageResource(R.mipmap.notifygrey);
-                            }*/
                         }
                     } catch (Exception e) {
                         e.printStackTrace();
@@ -919,6 +914,7 @@ public class MapActivity extends ActionBarActivity implements GoogleMap.OnMarker
                         asyncBus = new String[data.length()+1];
                         asyncLat = new String[data.length()+1];
                         asyncLng = new String[data.length()+1];
+                        asyncSpeed = new String[data.length()+1];
                         //asyncPassengers = new String[data.length()+1];
                         userETA = new float[data.length()+1];
                         m = new Marker[data.length()+1];
@@ -1187,8 +1183,8 @@ public class MapActivity extends ActionBarActivity implements GoogleMap.OnMarker
                                                 etaToUser.setText("GPS Initializing");
                                             }else{
                                                 distanceToUser.setText(String.valueOf(roundTwoDecimals(currentLocation.distanceTo(busLoc[selectedRoute - 1]) / 1000)) + " km");
-                                                if (busLoc[selectedRoute - 1].hasSpeed()) {
-                                                    etaToUser.setText(String.valueOf(userETA[selectedRoute - 1]) + " seconds");
+                                                if (!asyncSpeed[selectedRoute - 1].equals("0.0") && !asyncSpeed[selectedRoute - 1].equals("")) {
+                                                    etaToUser.setText(String.valueOf(userETA[selectedRoute - 1]) + " minutes");
                                                 }else{
                                                     etaToUser.setText("Not available");
                                                 }
@@ -1199,8 +1195,8 @@ public class MapActivity extends ActionBarActivity implements GoogleMap.OnMarker
                                                 distanceToUtar.setText(String.valueOf(roundTwoDecimals(currentLocation.distanceTo(utarLoc) / 1000)) + " km");
                                             }
                                             //noOfPassengers.setText(asyncPassengers[selectedRoute-1]);
-                                            if (busLoc[selectedRoute - 1].hasSpeed()) {
-                                                etaToUser.setText(String.valueOf(userETA[selectedRoute - 1]) + " seconds");
+                                            if (!asyncSpeed[selectedRoute - 1].equals("0.0") && !asyncSpeed[selectedRoute - 1].equals("")) {
+                                                etaToUser.setText(String.valueOf(userETA[selectedRoute - 1]) + " minutes");
                                             }else{
                                                 etaToUser.setText("Not available");
                                             }

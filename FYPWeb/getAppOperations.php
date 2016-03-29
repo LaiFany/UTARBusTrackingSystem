@@ -85,7 +85,7 @@
 				$data["bus"] = $result["bus"];
 				$data["lat"] = $result["lat"];
 				$data["lng"] = $result["lng"];
-				$data["passengers"] = $result["passengers"];
+				$data["speed"] = $result["speed"];
 				// success
 				$response["success"] = 1;
 	 

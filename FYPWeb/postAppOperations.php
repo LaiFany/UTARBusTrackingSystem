@@ -16,14 +16,15 @@
 		}
 	}
 	
-	if(isset($_POST["routeNo"]) && isset($_POST["routeName"]) && isset($_POST["bus"]) && isset($_POST["lat"]) && isset($_POST["lng"])){
+	if(isset($_POST["routeNo"]) && isset($_POST["routeName"]) && isset($_POST["bus"]) && isset($_POST["lat"]) && isset($_POST["lng"]) && isset($_POST["speed"])){
 		$routeNo = $_POST['routeNo'];
 		$routeName = $_POST['routeName'];
 		$bus = $_POST['bus'];
 		$lat = $_POST['lat'];
 		$lng = $_POST['lng'];
+		$speed = $_POST["speed"];
 		
-		mysqli_query($con, "insert into location(routeNo, routeName, bus, lat, lng) values('{$routeNo}', '{$routeName}', '{$bus}', '{$lat}', '{$lng}')");
+		mysqli_query($con, "insert into location(routeNo, routeName, bus, lat, lng, speed) values('{$routeNo}', '{$routeName}', '{$bus}', '{$lat}', '{$lng}', '{$speed}')");
 	}
 	else{
 		echo "Missing required fields";

@@ -273,6 +273,7 @@ public class JourneyActivity extends AppCompatActivity {
                nvp.add(new BasicNameValuePair("bus", String.valueOf(busNo)));
                nvp.add(new BasicNameValuePair("lat", String.valueOf(lat)));
                nvp.add(new BasicNameValuePair("lng", String.valueOf(lng)));
+               nvp.add(new BasicNameValuePair("speed", String.valueOf(currentLocation.getSpeed())));
                //nvp.add(new BasicNameValuePair("time", String.valueOf(time)));
                //nvp.add(new BasicNameValuePair("passengers", String.valueOf(noOfPassengers)));
                try {
@@ -330,7 +331,7 @@ public class JourneyActivity extends AppCompatActivity {
                            bus1 = c.getString("bus");
                            lat1 = c.getString("lat");
                            lng1 = c.getString("lng");
-                           passengers1 = c.getString("passengers");
+                           //passengers1 = c.getString("passengers");
                        }
                    }
                    else{
