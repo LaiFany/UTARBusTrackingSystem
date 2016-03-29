@@ -374,6 +374,13 @@ enctype="multipart/form-data">
 
 <script>
 
+	window.onload = function() {
+		if(!window.location.hash) {
+			window.location = window.location + '#loaded';
+			window.location.reload();
+		}
+	}
+
 	jQuery.validator.addMethod("customNumeric", function(value, element) { 
         return $.isNumeric(value) || value == ''; 
     }, "Value should be numeric"); 

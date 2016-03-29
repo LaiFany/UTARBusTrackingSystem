@@ -39,7 +39,7 @@ public class SplashScreenActivity extends Activity {
     public PostRegIdAsyncTask postRegIdAsyncTask = new PostRegIdAsyncTask();
     private ProgressDialog pd;
     InputStream is = null;
-    String regId;
+    String regId = "aaa";
     String status = "fail";
 
     @Override
@@ -47,22 +47,8 @@ public class SplashScreenActivity extends Activity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_splash_screen);
 
-        /*if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.JELLY_BEAN) {
-            View decorView = getWindow().getDecorView();
-            // Hide the status bar.
-            int uiOptions = View.SYSTEM_UI_FLAG_FULLSCREEN;
-            decorView.setSystemUiVisibility(uiOptions);
-            // Remember that you should never show the action bar if the
-            // status bar is hidden, so hide that too if necessary.
-            getSupportActionBar().hide();
-        }*/
+        checkInternet();
 
-        if(isConnected()){
-        }
-        else{
-            System.out.println("Not connected to internet");
-            buildAlertMessageNoInternet();
-        }
         postRegIdAsyncTask.execute();
     }
 
@@ -89,7 +75,6 @@ public class SplashScreenActivity extends Activity {
         @Override
         protected String doInBackground(String... params) {
             if(!isCancelled()) {
-                getRegId();
                 //var for inserting data into db
                 List<NameValuePair> nvp = new ArrayList<NameValuePair>(1);
                 nvp.add(new BasicNameValuePair("regId", regId));
@@ -128,6 +113,17 @@ public class SplashScreenActivity extends Activity {
                     postRegIdAsyncTask.execute();
                 }
             }
+        }
+    }
+
+    public void checkInternet(){
+        if(isConnected()){
+            getRegId();
+        }
+        else{
+            System.out.println("Not connected to internet");
+            buildAlertMessageNoInternet();
+            checkInternet();
         }
     }
 

@@ -9,6 +9,8 @@ android {
         targetSdkVersion 22
         versionCode 1
         versionName "1.0"
+        //multiDexEnabled true
+        testInstrumentationRunner "android.support.test.runner.AndroidJUnitRunner"
     }
     buildTypes {
         release {
@@ -17,6 +19,11 @@ android {
         }
     }
     productFlavors {
+    }
+    configurations.all {
+        resolutionStrategy {
+            force 'com.android.support:support-annotations:23.0.1'
+        }
     }
 }
 
@@ -34,4 +41,9 @@ dependencies {
 
     //for ArrayUtils
     compile files('libs/commons-lang3-3.4.jar')
+
+    androidTestCompile 'com.android.support.test:runner:0.5'
+    androidTestCompile 'com.android.support.test:rules:0.5'
+    androidTestCompile 'com.android.support.test.espresso:espresso-core:2.2.2'
+    androidTestCompile 'com.android.support.test.espresso:espresso-intents:2.2.2'
 }

@@ -39,7 +39,7 @@ $beginTime = array();
 		}else{
 			echo 'Empty table';
 		}
-
+		
 	if(isset($_POST['busNotifyRouteNo'])){
 		$busNotifyRouteNo = $_POST['busNotifyRouteNo'];
 		for($k = 0; $k < count($regIdArray); $k++){
@@ -74,19 +74,21 @@ $beginTime = array();
 									if(date("w") == 6 && (strpos($topNoteArray[$j], "Saturday") !== FALSE || strpos($topNoteArray[$j], "Saturdays") !== FALSE)){
 										$temp = explode(":", $routeArray[$j]);
 										$route = trim(substr($temp[0], 6));
-										if($routeNo[$i][$j] == $route){
-											$timetableRow = explode("/", $timetableArray[$j]);
-											for($k = 0; $k < count($timetableRow); $k++){
-												$timetableCol = explode("|", $timetableRow[$k]);
-												for($l = 0; $l < count($timetableCol); $l++){
-													if(strpos($timetableCol[$l], "AM") || strpos($timetableCol[$l], "PM")){
-														$startTime = strtotime($timetableCol[$l]);
-														$notifyTime = strtotime("+30 minutes");
-														
-														if(date('g:i A', $notifyTime) == date('g:i A', $startTime)){
-															echo sendMessageToPhone($regIdArray[$n], "lol", "Route ".$routeNo[$i][$j]." will begin in 30 minutes.", $APIKey);
+										for($m = 0; $m < count($routeNo[$i]); $m++){
+											if(!empty($routeNo[$i][$m]) && $routeNo[$i][$m] == $route){
+												$timetableRow = explode("/", $timetableArray[$j]);
+												for($k = 0; $k < count($timetableRow); $k++){
+													$timetableCol = explode("|", $timetableRow[$k]);
+													for($l = 0; $l < count($timetableCol); $l++){
+														if(strpos($timetableCol[$l], "AM") || strpos($timetableCol[$l], "PM")){
+															$startTime = strtotime($timetableCol[$l]);
+															$notifyTime = strtotime("+30 minutes");
+															
+															if(date('g:i A', $notifyTime) == date('g:i A', $startTime)){
+																echo sendMessageToPhone($regIdArray[$n], "lol", "Route ".$routeNo[$i][$m]." will begin in 30 minutes.", $APIKey);
+															}
+															break;
 														}
-														break;
 													}
 												}
 											}
@@ -94,19 +96,21 @@ $beginTime = array();
 									}else if(date("w") != 6 && date("w") != 7 && (strpos($topNoteArray[$j], "Saturday") === FALSE || strpos($topNoteArray[$j], "Saturdays") === FALSE)){
 										$temp = explode(":", $routeArray[$j]);
 										$route = trim(substr($temp[0], 6));
-										if($routeNo[$i][$j] == $route){
-											$timetableRow = explode("/", $timetableArray[$j]);
-											for($k = 0; $k < count($timetableRow); $k++){
-												$timetableCol = explode("|", $timetableRow[$k]);
-												for($l = 0; $l < count($timetableCol); $l++){
-													if(strpos($timetableCol[$l], "AM") || strpos($timetableCol[$l], "PM")){
-														$startTime = strtotime($timetableCol[$l]);
-														$notifyTime = strtotime("+30 minutes");
-														
-														if(date('g:i A', $notifyTime) == date('g:i A', $startTime)){
-															echo sendMessageToPhone($regIdArray[$n], "lol", "Route ".$routeNo[$i][$j]." will begin in 30 minutes.", $APIKey);
+										for($m = 0; $m < count($routeNo[$i]); $m++){
+											if(!empty($routeNo[$i][$m]) && $routeNo[$i][$m] == $route){
+												$timetableRow = explode("/", $timetableArray[$j]);
+												for($k = 0; $k < count($timetableRow); $k++){
+													$timetableCol = explode("|", $timetableRow[$k]);
+													for($l = 0; $l < count($timetableCol); $l++){
+														if(strpos($timetableCol[$l], "AM") || strpos($timetableCol[$l], "PM")){
+															$startTime = strtotime($timetableCol[$l]);
+															$notifyTime = strtotime("+30 minutes");
+															
+															if(date('g:i A', $notifyTime) == date('g:i A', $startTime)){
+																echo sendMessageToPhone($regIdArray[$n], "lol", "Route ".$routeNo[$i][$m]." will begin in 30 minutes.", $APIKey);
+															}
+															break;
 														}
-														break;
 													}
 												}
 											}

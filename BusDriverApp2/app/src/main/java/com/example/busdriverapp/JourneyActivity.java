@@ -96,6 +96,7 @@ public class JourneyActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_journey);
 
+
         // Show the ProgressDialog on this thread
         this.pd = ProgressDialog.show(this, "", "Initializing GPS", true, true,
                 new DialogInterface.OnCancelListener(){

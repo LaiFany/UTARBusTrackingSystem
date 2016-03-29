@@ -51,13 +51,13 @@ import java.util.List;
 
 public class WaypointActivity extends AppCompatActivity {
 
-    String bus;
-    String routeNo;
-    String routeName;
+    String bus = "";
+    String routeNo = "";
+    String routeName = "";
     String routeText;
-    String routeId;
-    String stopNames;
-    String coordinates;
+    String routeId = "";
+    String stopNames = "";
+    String coordinates = "";
     Double lat;
     Double lng;
     TextView busTextView;

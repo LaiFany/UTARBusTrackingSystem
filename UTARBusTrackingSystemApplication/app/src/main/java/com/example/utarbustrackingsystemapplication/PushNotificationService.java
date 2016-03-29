@@ -4,6 +4,7 @@ import android.app.Notification;
 import android.app.NotificationManager;
 import android.app.PendingIntent;
 import android.app.TaskStackBuilder;
+import android.content.ComponentName;
 import android.content.Context;
 import android.content.Intent;
 import android.os.Bundle;
@@ -35,7 +36,7 @@ public class PushNotificationService extends GcmListenerService{
 
     private static void generateNotification(Context context, String message) {
         NotificationCompat.Builder mBuilder = new NotificationCompat.Builder(context);
-        mBuilder.setSmallIcon(R.mipmap.bluebusmarker);
+        mBuilder.setSmallIcon(R.mipmap.ic_launcher);
         mBuilder.setContentTitle("Bus Update");
         mBuilder.setContentText(message);
         mBuilder.setDefaults(Notification.DEFAULT_ALL);
